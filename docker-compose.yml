@@ -13,7 +13,7 @@ services:
     ports:
       - 8025:8025
   nginx:
-    image: shyim/shopware-nginx:php56
+    image: shyim/shopware-nginx:php72
     env_file: .env
     ports:
       - 80:80
@@ -25,3 +25,5 @@ services:
     env_file: .env
     volumes:
       - ~/Code:/var/www/html
+  elastic:
+    image: elasticsearch:5-alpine
