@@ -13,10 +13,15 @@ services:
     ports:
       - 8025:8025
   nginx:
-    image: shyim/shopware-nginx:php72
+    image: shyim/shopware-nginx:php56
     env_file: .env
     ports:
       - 80:80
       - 443:443
     volumes:
-      - ~/Code:/var/www
+      - ~/Code:/var/www/html
+  cli:
+    image: shyim/shopware-cli:php71
+    env_file: .env
+    volumes:
+      - ~/Code:/var/www/html
