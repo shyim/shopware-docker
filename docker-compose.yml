@@ -1,0 +1,22 @@
+version: '2'
+services:
+  mysql:
+    image: yobasystems/alpine-mariadb
+    env_file: .env
+    ports:
+      - 3306:3306
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+    restart: always
+  smtp:
+    image: mailhog/mailhog
+    ports:
+      - 8025:8025
+  nginx:
+    image: shyim/shopware-nginx:php72
+    env_file: .env
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ~/Code:/var/www
