@@ -1,7 +1,7 @@
-#/bin/bash
+#!/usr/bin/env bash
 
 cd cli
-docker build -t shyim/shopware-cli:php71 .
+docker build -t shyim/shopware-cli:php72 .
 
 cd ..
 echo $(pwd)
@@ -15,3 +15,5 @@ docker build -t shyim/shopware-nginx:php72-xdebug .
 cd ..
 cd 56
 docker build -t shyim/shopware-nginx:php56 .
+
+

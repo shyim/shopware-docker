@@ -1,7 +1,7 @@
 version: '2'
 services:
   mysql:
-    image: yobasystems/alpine-mariadb
+    image: mysql:5.7
     env_file: .env
     ports:
       - 3306:3306
@@ -21,9 +21,14 @@ services:
     volumes:
       - ~/Code:/var/www/html
   cli:
-    image: shyim/shopware-cli:php71
+    image: shyim/shopware-cli:php72
     env_file: .env
     volumes:
       - ~/Code:/var/www/html
   elastic:
     image: elasticsearch:5-alpine
+  adminer:
+    image: adminer
+    env_file: .env
+    ports:
+      - 8080:8080
