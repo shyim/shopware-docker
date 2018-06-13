@@ -17,9 +17,9 @@ RUN mkdir -p /usr/share/man/man1/ && \
 	php7.2-gd \
 	php7.2-curl \
 	git \
+	sudo \
 	curl && \
 	curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
-	composer global require hirak/prestissimo && \
 	cd /opt/ && \
 	git clone https://github.com/shopwareLabs/sw-cli-tools.git \
     && cd sw-cli-tools \
@@ -29,7 +29,12 @@ RUN mkdir -p /usr/share/man/man1/ && \
     && useradd dev \
     && mkdir /home/dev \
     && chown -R dev: /home/dev
+    && curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+    && apt-get install nodejs -y
 
 ENV HOME /home/dev
 USER dev
+
+RUN composer global require hirak/prestissimo
+
 WORKDIR /var/www/html

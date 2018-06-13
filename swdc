@@ -11,25 +11,25 @@ SHOPWARE_PROJECT="$2"
 SHOPWARE_FOLDER="$HOME/Code/$SHOPWARE_PROJECT"
 
 # Need to be in docker folder for docker-compose
-cd $DIR
+cd ${DIR}
 
 function fixHooks()
 {
-    rm $SHOPWARE_FOLDER/.git/hooks/pre-commit
-    ln -s $SHOPWARE_FOLDER/build/gitHooks/pre-commit $SHOPWARE_FOLDER/.git/hooks/pre-commit
+    rm ${SHOPWARE_FOLDER}/.git/hooks/pre-commit
+    ln -s ${SHOPWARE_FOLDER}/build/gitHooks/pre-commit ${SHOPWARE_FOLDER}/.git/hooks/pre-commit
     echo "Hooks fixed"
 }
 
 function clearCache()
 {
-    rm -r $SHOPWARE_FOLDER/var/cache/production_*
-    rm -r $SHOPWARE_FOLDER/var/cache/testing_*
-    rm -r $SHOPWARE_FOLDER/var/cache/docker_*
+    rm -r ${SHOPWARE_FOLDER}/var/cache/production_*
+    rm -r ${SHOPWARE_FOLDER}/var/cache/testing_*
+    rm -r ${SHOPWARE_FOLDER}/var/cache/docker_*
 }
 
 function fixDeveloperConfig()
 {
-    php $DIR/utils/fix-config.php "$SHOPWARE_FOLDER/config.php" $1
+    php ${DIR}/utils/fix-config.php "$SHOPWARE_FOLDER/config.php" $1
 }
 
 function checkParameter()
