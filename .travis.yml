@@ -8,3 +8,7 @@ services:
 script:
   - cd ${TRAVIS_BUILD_DIR}
   - ./utils/build.sh
+
+after_success:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
+  - bash ./utils/push.sh
