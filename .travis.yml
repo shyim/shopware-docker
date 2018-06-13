@@ -7,4 +7,4 @@ services:
 
 script:
   - cd ${TRAVIS_BUILD_DIR}
-  - ./util/build.sh
+  - ./utils/build.sh
