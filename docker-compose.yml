@@ -27,6 +27,8 @@ services:
       - ~/Code:/var/www/html
   elastic:
     image: elasticsearch:5-alpine
+    ports:
+      - 9200:9200
   adminer:
     image: adminer
     env_file: .env
