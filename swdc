@@ -15,70 +15,70 @@ cd $DIR
 
 function fixHooks()
 {
-	rm $SHOPWARE_FOLDER/.git/hooks/pre-commit
+    rm $SHOPWARE_FOLDER/.git/hooks/pre-commit
     ln -s $SHOPWARE_FOLDER/build/gitHooks/pre-commit $SHOPWARE_FOLDER/.git/hooks/pre-commit
     echo "Hooks fixed"
 }
 
 function clearCache()
 {
-	rm -r $SHOPWARE_FOLDER/var/cache/production_*
-	rm -r $SHOPWARE_FOLDER/var/cache/testing_*
-	rm -r $SHOPWARE_FOLDER/var/cache/docker_*
+    rm -r $SHOPWARE_FOLDER/var/cache/production_*
+    rm -r $SHOPWARE_FOLDER/var/cache/testing_*
+    rm -r $SHOPWARE_FOLDER/var/cache/docker_*
 }
 
 function fixDeveloperConfig()
 {
-	php $DIR/utils/fix-config.php "$SHOPWARE_FOLDER/config.php" $1
+    php $DIR/utils/fix-config.php "$SHOPWARE_FOLDER/config.php" $1
 }
 
 function checkParameter()
 {
-	if [ -z "$SHOPWARE_PROJECT" ]; then
-		echo "Please enter a shopware folder name"
-		exit 1
-	fi
+    if [ -z "$SHOPWARE_PROJECT" ]; then
+        echo "Please enter a shopware folder name"
+        exit 1
+    fi
 
-	if [ ! -d "$SHOPWARE_FOLDER" ]; then
-		echo "Folder $SHOPWARE_FOLDER does not exists!"
-		exit 1
-	fi
+    if [ ! -d "$SHOPWARE_FOLDER" ]; then
+        echo "Folder $SHOPWARE_FOLDER does not exists!"
+        exit 1
+    fi
 }
 
 case "$1" in
   build)
-	checkParameter
-	clearCache
-    docker-compose run -eANT_OPTS=-D"file.encoding=UTF-8" cli ant -Dapp.host=$SHOPWARE_PROJECT.localhost -Ddb.host=mysql -Ddb.user=root -Ddb.password=root -Ddb.name=$SHOPWARE_PROJECT -f /var/www/html/$SHOPWARE_PROJECT/build/build.xml build-unit
+    checkParameter
+    clearCache
+    docker-compose run --rm -eANT_OPTS=-D"file.encoding=UTF-8" cli ant -Dapp.host=$SHOPWARE_PROJECT.localhost -Ddb.host=mysql -Ddb.user=root -Ddb.password=root -Ddb.name=$SHOPWARE_PROJECT -f /var/www/html/$SHOPWARE_PROJECT/build/build.xml build-unit
     fixHooks
     fixDeveloperConfig
     ;;
   test)
-	checkParameter
-	clearCache
-    docker-compose run -eANT_OPTS=-D"file.encoding=UTF-8" cli ant -Dapp.host=$SHOPWARE_PROJECT.localhost -Ddb.host=mysql -Ddb.user=root -Ddb.password=root -Ddb.name=$SHOPWARE_PROJECT -f /var/www/html/$SHOPWARE_PROJECT/build/build.xml build-continuous
+    checkParameter
+    clearCache
+    docker-compose run --rm -eANT_OPTS=-D"file.encoding=UTF-8" cli ant -Dapp.host=$SHOPWARE_PROJECT.localhost -Ddb.host=mysql -Ddb.user=root -Ddb.password=root -Ddb.name=$SHOPWARE_PROJECT -f /var/www/html/$SHOPWARE_PROJECT/build/build.xml build-continuous
     fixHooks
     ;;
   drop)
-	checkParameter
-	docker-compose run -eANT_OPTS=-D"file.encoding=UTF-8" cli mysql -h mysql -u root -proot -e "DROP DATABASE $SHOPWARE_PROJECT"
-  	;;
+    checkParameter
+    docker-compose run --rm -eANT_OPTS=-D"file.encoding=UTF-8" cli mysql -h mysql -u root -proot -e "DROP DATABASE $SHOPWARE_PROJECT"
+    ;;
   shell)
-  	docker-compose run cli bash
+    docker-compose run --rm cli bash
     ;;
   hooks)
-	checkParameter
-  	fixHooks
-  	;;
+    checkParameter
+      fixHooks
+      ;;
   config)
-	checkParameter
-	fixDeveloperConfig "$3"
-	;;
+    checkParameter
+    fixDeveloperConfig "$3"
+    ;;
   up)
-  	docker-compose up -d
+    docker-compose up -d
     ;;
   down)
-  	docker-compose down
+    docker-compose down
     ;;
 
   *)
