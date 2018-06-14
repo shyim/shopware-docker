@@ -28,8 +28,8 @@ RUN mkdir -p /usr/share/man/man1/ && \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     && useradd dev \
     && mkdir /home/dev \
-    && chown -R dev: /home/dev
-    && curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+    && chown -R dev: /home/dev \
+    && curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash - \
     && apt-get install nodejs -y
 
 ENV HOME /home/dev
