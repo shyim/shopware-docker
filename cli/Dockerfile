@@ -19,6 +19,7 @@ RUN mkdir -p /usr/share/man/man1/ && \
 	git \
 	sudo \
 	gpg \
+	gpg-agent \
 	curl && \
 	curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
 	cd /opt/ && \
