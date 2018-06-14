@@ -18,6 +18,7 @@ RUN mkdir -p /usr/share/man/man1/ && \
 	php7.2-curl \
 	git \
 	sudo \
+	gpg \
 	curl && \
 	curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
 	cd /opt/ && \
