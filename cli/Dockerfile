@@ -22,7 +22,9 @@ RUN mkdir -p /usr/share/man/man1/ && \
 	sudo \
 	gpg \
 	gpg-agent \
-	curl && \
+	curl \
+	wget \
+	unzip && \
 	curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
 	cd /opt/ && \
 	git clone https://github.com/shopwareLabs/sw-cli-tools.git \
