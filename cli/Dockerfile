@@ -1,5 +1,7 @@
 FROM debian:buster-slim
 
+ENV SHOPWARE_ENV docker
+
 RUN mkdir -p /usr/share/man/man1/ && \
     apt update && apt-get install --no-install-recommends -y \
     openjdk-10-jre-headless \
