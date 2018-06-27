@@ -64,7 +64,7 @@ case "$1" in
     docker-compose run --rm -eANT_OPTS=-D"file.encoding=UTF-8" cli mysql -h mysql -u root -proot -e "DROP DATABASE $SHOPWARE_PROJECT"
     ;;
   shell)
-    docker-compose run --rm cli bash
+    docker-compose run -e COLUMNS="`tput cols`" -e LINES="`tput lines`" --rm cli bash
     ;;
   hooks)
     checkParameter
