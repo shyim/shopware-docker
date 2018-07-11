@@ -13,6 +13,10 @@ $config['phpsettings'] = [
     'display_errors' => 1,
 ];
 
+$config['httpcache'] = [
+    'debug' => true
+];
+
 if (isset($_SERVER['argv'][2])) {
 	switch ($_SERVER['argv'][2]) {
 		case 'template':
@@ -32,13 +36,18 @@ if (isset($_SERVER['argv'][2])) {
 		        ]
 			];
 			break;
+		case 'sbp':
+			$config['store'] = [
+				'apiEndpoint' => 'http://172.16.0.61:8000',
+			];
+			break;
 	}
 }
 
 function var_export54($var, $indent="") {
     switch (gettype($var)) {
         case "string":
-            return '"' . addcslashes($var, "\\\$\"\r\n\t\v\f") . '"';
+            return '\'' . addcslashes($var, "\\\$\"\r\n\t\v\f") . '\'';
         case "array":
             $indexed = array_keys($var) === range(0, count($var) - 1);
             $r = [];
@@ -51,7 +60,7 @@ function var_export54($var, $indent="") {
         case "boolean":
             return $var ? "true" : "false";
         default:
-            return var_export($var, TRUE);
+            return '\'' . $var . '\'';
     }
 }
 
