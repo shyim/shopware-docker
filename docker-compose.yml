@@ -5,8 +5,8 @@ services:
     env_file: .env
     ports:
       - 3306:3306
-    volumes:
-      - ./mysql-data:/var/lib/mysql
+    tmpfs:
+      - /var/lib/mysql
     restart: always
   smtp:
     image: mailhog/mailhog
