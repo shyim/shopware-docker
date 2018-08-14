@@ -8,7 +8,13 @@ fi
 
 DIR=$(dirname $FILE)
 SHOPWARE_PROJECT="$2"
+SNAP_SUFFIX="$3"
+SNAP_DIR="$HOME/Code/snapshots"
 SHOPWARE_FOLDER="$HOME/Code/$SHOPWARE_PROJECT"
+
+if [ ! -z "$SNAP_SUFFIX" ]; then
+    SNAP_SUFFIX=$(echo "-${SNAP_SUFFIX}")
+fi
 
 # Need to be in docker folder for docker-compose
 cd ${DIR}
@@ -69,7 +75,7 @@ case "$1" in
   snippets)
     checkParameter
     docker-compose run -e COLUMNS="`tput cols`" -e LINES="`tput lines`" --rm cli php /var/www/html/${SHOPWARE_PROJECT}/bin/console sw:snippets:to:db --include-plugins
-    docker-compose run -e COLUMNS="`tput cols`" -e LINES="`tput lines`" --rm cli php /var/www/html/${SHOPWARE_PROJECT}/bin/console sw:cache:clear
+    clearCache
     ;;
   hooks)
     checkParameter
@@ -85,8 +91,22 @@ case "$1" in
   down)
     docker-compose down
     ;;
-
+  snap)
+	checkParameter
+	if [ ! -d "$SNAP_DIR" ]; then
+		mkdir "$SNAP_DIR"
+	fi
+	docker-compose run --rm -eANT_OPTS=-D"file.encoding=UTF-8" cli bash -c "mysqldump -h mysql -uroot -proot ${SHOPWARE_PROJECT} > /var/www/html/snapshots/${SHOPWARE_PROJECT}${SNAP_SUFFIX}.sql"
+	;;
+  rsnap)
+	checkParameter
+	if [ ! -f "$SNAP_DIR/${SHOPWARE_PROJECT}${SNAP_SUFFIX}.sql" ]; then
+		echo "Snap for shop ${SHOPWARE_PROJECT} does not exists"
+		exit 1
+	fi
+	docker-compose run --rm -eANT_OPTS=-D"file.encoding=UTF-8" cli bash -c "mysql -h mysql -uroot -proot ${SHOPWARE_PROJECT} < /var/www/html/snapshots/${SHOPWARE_PROJECT}${SNAP_SUFFIX}.sql"
+	;;
   *)
-    echo "Usage: $0 {build|drop|test|shell|hooks|config|snippets|up|down}"
+    echo "Usage: $0 {build|drop|test|shell|hooks|config|snippets|snap|rsnap|up|down}"
     ;;
 esac
