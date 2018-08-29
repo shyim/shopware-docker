@@ -20,4 +20,6 @@ cd ..
 cd 56
 docker build -t shyim/shopware-nginx:php56 .
 
-
+cd ..
+cd mysql/8
+docker build -t shyim/shopware-mysql:8
