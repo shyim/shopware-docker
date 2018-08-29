@@ -91,22 +91,38 @@ case "$1" in
   down)
     docker-compose down
     ;;
+  new-ticket)
+    SHOPWARE_FOLDER=$(echo "${SHOPWARE_FOLDER/-/}")
+    SHOPWARE_PROJECT=$(echo "${SHOPWARE_PROJECT/-/}")
+    git clone ssh://git@stash.shopware.com/sw/shopware.git ${SHOPWARE_FOLDER}
+    if [ ! -d "$SHOPWARE_FOLDER" ]; then
+        echo "Git checkout failed"
+        exit 1
+    fi
+    cd ${SHOPWARE_FOLDER}
+    git checkout 5.5
+    git checkout -b ${SHOPWARE_PROJECT}/5.5/$3
+    $FILE build ${SHOPWARE_PROJECT}
+    wget -O test_images.zip http://releases.s3.shopware.com/test_images_since_5.1.zip
+    unzip test_images.zip
+    rm test_images.zip
+    ;;
   snap)
-	checkParameter
-	if [ ! -d "$SNAP_DIR" ]; then
-		mkdir "$SNAP_DIR"
-	fi
-	docker-compose run --rm -eANT_OPTS=-D"file.encoding=UTF-8" cli bash -c "mysqldump -h mysql -uroot -proot ${SHOPWARE_PROJECT} > /var/www/html/snapshots/${SHOPWARE_PROJECT}${SNAP_SUFFIX}.sql"
-	;;
+    checkParameter
+    if [ ! -d "$SNAP_DIR" ]; then
+      mkdir "$SNAP_DIR"
+    fi
+    docker-compose run --rm -eANT_OPTS=-D"file.encoding=UTF-8" cli bash -c "mysqldump -h mysql -uroot -proot ${SHOPWARE_PROJECT} > /var/www/html/snapshots/${SHOPWARE_PROJECT}${SNAP_SUFFIX}.sql"
+    ;;
   rsnap)
-	checkParameter
-	if [ ! -f "$SNAP_DIR/${SHOPWARE_PROJECT}${SNAP_SUFFIX}.sql" ]; then
-		echo "Snap for shop ${SHOPWARE_PROJECT} does not exists"
-		exit 1
-	fi
-	docker-compose run --rm -eANT_OPTS=-D"file.encoding=UTF-8" cli bash -c "mysql -h mysql -uroot -proot ${SHOPWARE_PROJECT} < /var/www/html/snapshots/${SHOPWARE_PROJECT}${SNAP_SUFFIX}.sql"
-	;;
+    checkParameter
+    if [ ! -f "$SNAP_DIR/${SHOPWARE_PROJECT}${SNAP_SUFFIX}.sql" ]; then
+      echo "Snap for shop ${SHOPWARE_PROJECT} does not exists"
+      exit 1
+    fi
+    docker-compose run --rm -eANT_OPTS=-D"file.encoding=UTF-8" cli bash -c "mysql -h mysql -uroot -proot ${SHOPWARE_PROJECT} < /var/www/html/snapshots/${SHOPWARE_PROJECT}${SNAP_SUFFIX}.sql"
+    ;;
   *)
-    echo "Usage: $0 {build|drop|test|shell|hooks|config|snippets|snap|rsnap|up|down}"
+    echo "Usage: $0 {build|drop|test|shell|hooks|config|snippets|snap|rsnap|new-ticket|up|down}"
     ;;
 esac

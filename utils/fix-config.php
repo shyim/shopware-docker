@@ -41,6 +41,14 @@ if (isset($_SERVER['argv'][2])) {
 				'apiEndpoint' => 'http://172.16.0.61:8000',
 			];
 			break;
+		case 'bi':
+			$config['bi'] = [
+		        'endpoint' => [
+		            'benchmark' => 'https://bi-staging.shopware.com/benchmark',
+		            'statistics' => 'https://bi-staging.shopware.com/statistics',
+		        ],
+		    ];
+			break;
 	}
 }
 
