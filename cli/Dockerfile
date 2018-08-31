@@ -24,6 +24,7 @@ RUN mkdir -p /usr/share/man/man1/ && \
 	gpg-agent \
 	curl \
 	wget \
+	nano \
 	unzip && \
 	curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
 	cd /opt/ && \
