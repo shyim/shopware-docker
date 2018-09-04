@@ -42,6 +42,7 @@ RUN mkdir -p /usr/share/man/man1/ && \
 ENV HOME /home/dev
 USER dev
 
-RUN composer global require hirak/prestissimo
+RUN composer global require hirak/prestissimo && composer global require bamarni/symfony-console-autocomplete
+RUN echo 'eval "$(symfony-autocomplete)"' >> ~/.bash_profile
 
 WORKDIR /var/www/html
