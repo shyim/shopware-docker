@@ -1,2 +1,3 @@
 mysql-data
 .idea
+nginx/**/rootfs/etc/nginx/ssl

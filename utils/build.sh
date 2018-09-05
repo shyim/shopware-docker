@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+for filename in ./nginx/*; do
+    cp -R ssl/ $filename/rootfs/etc/nginx/ssl
+done
+
 cd cli
 docker build -t shyim/shopware-cli:php72 .
 
@@ -26,4 +30,4 @@ docker build -t shyim/shopware-nginx:php56 .
 
 cd ../..
 cd mysql/8
-docker build -t shyim/shopware-mysql:8
+docker build -t shyim/shopware-mysql:8 .
