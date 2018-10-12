@@ -8,6 +8,7 @@ fi
 
 DIR=$(dirname $FILE)
 SHOPWARE_PROJECT="$2"
+FIXTURE_NAME="$3"
 SNAP_SUFFIX="$3"
 SNAP_DIR="$HOME/Code/snapshots"
 SHOPWARE_FOLDER="$HOME/Code/$SHOPWARE_PROJECT"
@@ -49,6 +50,20 @@ function checkParameter()
         echo "Folder $SHOPWARE_FOLDER does not exists!"
         exit 1
     fi
+}
+
+function applyFixture()
+{
+  if [ -z "$FIXTURE_NAME" ]; then
+    echo "Please enter a fixture name"
+    exit 1
+  fi
+
+  if [ ! -e "${DIR}/fixtures/${FIXTURE_NAME}.sql" ]; then
+    echo "Fixture by name ${FIXTURE_NAME} does not exist"
+    exit 1
+  fi
+  docker-compose run --rm -eANT_OPTS=-D"file.encoding=UTF-8" cli mysql -h mysql -u root -proot $SHOPWARE_PROJECT < "${DIR}/fixtures/${FIXTURE_NAME}.sql"
 }
 
 case "$1" in
@@ -112,6 +127,7 @@ case "$1" in
     if [ ! -d "$SNAP_DIR" ]; then
       mkdir "$SNAP_DIR"
     fi
+    docker-compose run --rm -eANT_OPTS=-D"file.encoding=UTF-8" cli mysql -h mysql -u root -proot -e "CREATE DATABASE IF NOT EXISTS $SHOPWARE_PROJECT"
     docker-compose run --rm -eANT_OPTS=-D"file.encoding=UTF-8" cli bash -c "mysqldump -h mysql -uroot -proot ${SHOPWARE_PROJECT} > /var/www/html/snapshots/${SHOPWARE_PROJECT}${SNAP_SUFFIX}.sql"
     ;;
   rsnap)
@@ -121,6 +137,10 @@ case "$1" in
       exit 1
     fi
     docker-compose run --rm -eANT_OPTS=-D"file.encoding=UTF-8" cli bash -c "mysql -h mysql -uroot -proot ${SHOPWARE_PROJECT} < /var/www/html/snapshots/${SHOPWARE_PROJECT}${SNAP_SUFFIX}.sql"
+    ;;
+  apply)
+    checkParameter
+    applyFixture 
     ;;
   *)
     echo "Usage: $0 {build|drop|test|shell|hooks|config|snippets|snap|rsnap|new-ticket|up|down}"
