@@ -33,6 +33,10 @@ if (isset($_SERVER['argv'][2])) {
 		            'hosts' => [
 		                'elastic:9200'
 		            ]
+		        ],
+		        'backend' => [
+		            'enabled' => true,
+		            'write_backlog' => true
 		        ]
 			];
 			break;
