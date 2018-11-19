@@ -127,7 +127,6 @@ case "$1" in
     if [ ! -d "$SNAP_DIR" ]; then
       mkdir "$SNAP_DIR"
     fi
-    docker-compose run --rm -eANT_OPTS=-D"file.encoding=UTF-8" cli mysql -h mysql -u root -proot -e "CREATE DATABASE IF NOT EXISTS $SHOPWARE_PROJECT"
     docker-compose run --rm -eANT_OPTS=-D"file.encoding=UTF-8" cli bash -c "mysqldump -h mysql -uroot -proot ${SHOPWARE_PROJECT} > /var/www/html/snapshots/${SHOPWARE_PROJECT}${SNAP_SUFFIX}.sql"
     ;;
   rsnap)
@@ -136,6 +135,7 @@ case "$1" in
       echo "Snap for shop ${SHOPWARE_PROJECT} does not exists"
       exit 1
     fi
+    docker-compose run --rm -eANT_OPTS=-D"file.encoding=UTF-8" cli mysql -h mysql -u root -proot -e "CREATE DATABASE IF NOT EXISTS $SHOPWARE_PROJECT"
     docker-compose run --rm -eANT_OPTS=-D"file.encoding=UTF-8" cli bash -c "mysql -h mysql -uroot -proot ${SHOPWARE_PROJECT} < /var/www/html/snapshots/${SHOPWARE_PROJECT}${SNAP_SUFFIX}.sql"
     ;;
   apply)
