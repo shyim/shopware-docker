@@ -68,16 +68,13 @@ function applyFixture()
 
 function isComposerProject()
 {
-    if [ -f "$SHOPWARE_FOLDER/app/install.sh" ]; then
+    if [ -d "$SHOPWARE_FOLDER/app" ]; then
         echo "true"
     fi
 }
 
 function buildComposerProjectEnvFile()
 {
-  echo 'SHOPWARE_ENV="development"' > "$SHOPWARE_FOLDER/.env"
-  # TODO do better than this
-  echo 'SHOPWARE_VERSION="5.5.4"' >> "$SHOPWARE_FOLDER/.env"
   echo "SHOPWARE_VERSION_TEXT=\"$SHOPWARE_PROJECT (local docker)\"" >> "$SHOPWARE_FOLDER/.env"
   echo "SHOPWARE_REVISION=\"`git rev-parse HEAD`\"" >> "$SHOPWARE_FOLDER/.env"
   echo "DATABASE_URL=\"mysql://root:root@mysql:3306/$SHOPWARE_PROJECT\"" >> "$SHOPWARE_FOLDER/.env"
