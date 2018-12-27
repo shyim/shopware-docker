@@ -91,9 +91,9 @@ case "$1" in
     checkParameter
     clearCache
     if [ `isComposerProject` ]; then
-      buildComposerProjectEnvFile
       docker-compose run --rm cli mysql -h mysql -u root -proot -e "CREATE DATABASE IF NOT EXISTS $SHOPWARE_PROJECT"
       docker-compose run --rm -w "/var/www/html/${SHOPWARE_PROJECT}" cli bash -c "composer install"
+      buildComposerProjectEnvFile
       docker-compose run --rm cli bash -c "/var/www/html/${SHOPWARE_PROJECT}/app/install.sh"      
     else
       docker-compose run --rm -eANT_OPTS=-D"file.encoding=UTF-8" cli ant -Dapp.host=$SHOPWARE_PROJECT.dev.localhost -Ddb.host=mysql -Ddb.user=root -Ddb.password=root -Ddb.name=$SHOPWARE_PROJECT -f /var/www/html/$SHOPWARE_PROJECT/build/build.xml build-unit
