@@ -66,13 +66,43 @@ function applyFixture()
   docker-compose run --rm cli mysql -h mysql -u root -proot $SHOPWARE_PROJECT < "${DIR}/fixtures/${FIXTURE_NAME}.sql"
 }
 
+function isComposerProject()
+{
+    if [ -f "$SHOPWARE_FOLDER/app/install.sh" ]; then
+        echo "true"
+    fi
+}
+
+function buildComposerProjectEnvFile()
+{
+  echo 'SHOPWARE_ENV="development"' > "$SHOPWARE_FOLDER/.env"
+  # TODO do better than this
+  echo 'SHOPWARE_VERSION="5.5.4"' >> "$SHOPWARE_FOLDER/.env"
+  echo "SHOPWARE_VERSION_TEXT=\"$SHOPWARE_PROJECT (local docker)\"" >> "$SHOPWARE_FOLDER/.env"
+  echo "SHOPWARE_REVISION=\"`git rev-parse HEAD`\"" >> "$SHOPWARE_FOLDER/.env"
+  echo "DATABASE_URL=\"mysql://root:root@mysql:3306/$SHOPWARE_PROJECT\"" >> "$SHOPWARE_FOLDER/.env"
+  echo 'ADMIN_EMAIL="demo@demo.com"' >> "$SHOPWARE_FOLDER/.env"
+  echo 'ADMIN_NAME="Don Joe"' >> "$SHOPWARE_FOLDER/.env"
+  echo 'ADMIN_USERNAME="demo"' >> "$SHOPWARE_FOLDER/.env"
+  echo 'ADMIN_PASSWORD="demo"' >> "$SHOPWARE_FOLDER/.env"
+  echo "SHOP_URL=\"http://$SHOPWARE_PROJECT.dev.localhost\"" >> "$SHOPWARE_FOLDER/.env"
+  echo 'IMPORT_DEMODATA=y' >> "$SHOPWARE_FOLDER/.env"
+}
+
 case "$1" in
   build)
     checkParameter
     clearCache
-    docker-compose run --rm -eANT_OPTS=-D"file.encoding=UTF-8" cli ant -Dapp.host=$SHOPWARE_PROJECT.dev.localhost -Ddb.host=mysql -Ddb.user=root -Ddb.password=root -Ddb.name=$SHOPWARE_PROJECT -f /var/www/html/$SHOPWARE_PROJECT/build/build.xml build-unit
-    fixHooks
-    fixDeveloperConfig
+    if [ `isComposerProject` ]; then
+      buildComposerProjectEnvFile
+      docker-compose run --rm cli mysql -h mysql -u root -proot -e "CREATE DATABASE IF NOT EXISTS $SHOPWARE_PROJECT"
+      docker-compose run --rm -w "/var/www/html/${SHOPWARE_PROJECT}" cli bash -c "composer install"
+      docker-compose run --rm cli bash -c "/var/www/html/${SHOPWARE_PROJECT}/app/install.sh"      
+    else
+      docker-compose run --rm -eANT_OPTS=-D"file.encoding=UTF-8" cli ant -Dapp.host=$SHOPWARE_PROJECT.dev.localhost -Ddb.host=mysql -Ddb.user=root -Ddb.password=root -Ddb.name=$SHOPWARE_PROJECT -f /var/www/html/$SHOPWARE_PROJECT/build/build.xml build-unit
+      fixHooks
+      fixDeveloperConfig
+    fi
     ;;
   test)
     checkParameter
