@@ -14,7 +14,7 @@ Mac or Windows users should use the `docker-compose-win.yml` which adds volumens
 * Clone the repository somewhere
 * Optional: Do a symlink from swdc to `/usr/local/bin/swdc`
 * `swdc up`: Starts the docker-compose
-* Checkout in `~/Code/shopware` the offical shopware repository
+* Checkout in `~/Code/shopware` the offical shopware repository or your shopware composer project ([read this](#what-do-i-need-to-prepare-to-use-shopware-composer-projects))
 * Execute `swdc build shopware`
 
 ## Which commands exist?
@@ -45,3 +45,30 @@ All fixtures can be applied with `swdc apply [Folder name in ~/Code] [Name]`
 
 * api - Sets a apiKey for the demo user with "demo"
 * bi-reset - Resets all bi statistics
+
+## What do I need to prepare to use shopware composer projects?
+
+The databases are stored temporarily by default. Change the following in your docker-compose.yml to keep your database on restart:
+
+```yml
+  mysql:
+    image: mysql:5.7
+    env_file: .env
+    ports:
+      - 3306:3306
+    tmpfs:
+      - /var/lib/mysql
+    volumes:
+      - ./mysql/dev.cnf:/etc/mysql/conf.d/dev-docker.cnf
+    restart: always
+```
+
+```yml
+  mysql:
+    image: mysql:5.7
+    env_file: .env
+    ports:
+      - 3306:3306
+    volumes:
+      - ./mysql/dev.cnf:/etc/mysql/conf.d/dev-docker.cnf
+```
