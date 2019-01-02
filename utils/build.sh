@@ -4,7 +4,7 @@ for filename in ./nginx/*; do
     cp -R ssl/ $filename/rootfs/etc/nginx/ssl
 done
 
-cd cli/php72
+cd cli/72
 docker build -t shyim/shopware-cli:php72 .
 
 cd ..
