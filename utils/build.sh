@@ -45,3 +45,15 @@ docker build -t shyim/shopware-nginx:php56-xdebug .
 cd ../..
 cd mysql/8
 docker build -t shyim/shopware-mysql:8 .
+
+cd ..
+cd 55
+docker build -t shyim/shopware-mysql:55 .
+
+cd ..
+cd 56
+docker build -t shyim/shopware-mysql:56 .
+
+cd ..
+cd 57
+docker build -t shyim/shopware-mysql:57 .

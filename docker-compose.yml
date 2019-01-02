@@ -1,14 +1,12 @@
 version: '2'
 services:
   mysql:
-    image: mysql:5.7
+    image: shyim/shopware-mysql:57
     env_file: .env
     ports:
       - 3306:3306
     tmpfs:
       - /var/lib/mysql
-    volumes:
-      - ./mysql/dev.cnf:/etc/mysql/conf.d/dev-docker.cnf
     restart: always
   smtp:
     image: mailhog/mailhog
