@@ -51,7 +51,8 @@ RUN apk add --no-cache \
     mkdir /etc/supervisor.d/ && \
     chown -R www-data:www-data /var/lib/nginx /var/tmp/nginx/ && \
     chmod 777 -R /var/tmp/nginx/ && \
-    pecl install xdebug && \
+    pecl install xdebug redis && \
+    docker-php-ext-enable redis && \
     apk del build-deps && \
     rm -rf /tmp/* && \
     chown -R www-data:www-data /var/www && \

@@ -25,8 +25,17 @@ cd 71
 docker build -t shyim/shopware-nginx:php71 .
 
 cd ..
+cd 71-xdebug
+docker build -t shyim/shopware-nginx:php71-xdebug .
+
+
+cd ..
 cd 56
 docker build -t shyim/shopware-nginx:php56 .
+
+cd ..
+cd 56-xdebug
+docker build -t shyim/shopware-nginx:php56-xdebug .
 
 cd ../..
 cd mysql/8
