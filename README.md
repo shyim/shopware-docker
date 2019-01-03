@@ -46,29 +46,31 @@ All fixtures can be applied with `swdc apply [Folder name in ~/Code] [Name]`
 * api - Sets a apiKey for the demo user with "demo"
 * bi-reset - Resets all bi statistics
 
+## Which images and tags are available?
+
+* [shopware/shopware-nginx](https://hub.docker.com/r/shyim/shopware-nginx/tags)
+* [shopware/shopware-mysql](https://hub.docker.com/r/shyim/shopware-mysql/tags)
+* [shopware/shopware-cli](https://hub.docker.com/r/shyim/shopware-cli/tags)
+
 ## What do I need to prepare to use shopware composer projects?
 
 The databases are stored temporarily by default. Change the following in your docker-compose.yml to keep your database on restart:
 
 ```yml
   mysql:
-    image: mysql:5.7
+    image: shyim/shopware-mysql:57
     env_file: .env
     ports:
       - 3306:3306
     tmpfs:
       - /var/lib/mysql
-    volumes:
-      - ./mysql/dev.cnf:/etc/mysql/conf.d/dev-docker.cnf
     restart: always
 ```
 
 ```yml
   mysql:
-    image: mysql:5.7
+    image: shyim/shopware-mysql:5.7
     env_file: .env
     ports:
       - 3306:3306
-    volumes:
-      - ./mysql/dev.cnf:/etc/mysql/conf.d/dev-docker.cnf
 ```
