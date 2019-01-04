@@ -1,41 +1,38 @@
-FROM php:7.2-cli
+FROM debian:stretch-slim
 
 ENV SHOPWARE_ENV docker
 
-RUN mkdir -p /usr/share/man/man1/ && apt-get update && apt-get install --no-install-recommends -y \
-        ant \
-        libfreetype6-dev \
-        libjpeg62-turbo-dev \
-        libmcrypt-dev \
-        libpng-dev \
-        zip \
-        zlib1g-dev \
-        unzip \
-        git \
-        mysql-client \
-        wget \
-        git \
-        nano \
-        wget \
-        curl \
-        curl \
-        libcurl4-gnutls-dev \
-        tar \
-        sudo \
-        gpg \
-        gpg-agent \
-        nano \
-        libxml2 \
-        libxml2-dev \
-        libssl-dev \
-    && docker-php-ext-install -j$(nproc) iconv mbstring zip ftp soap curl pdo pdo_mysql \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-    && docker-php-ext-install -j$(nproc) gd \
-    && rm -rf /var/lib/apt/lists/* \
-    && echo "date.timezone = 'Europe/Berlin'" >> /usr/local/etc/php/php.ini \
-    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
-    && cd /opt/ \
-    && git clone https://github.com/shopwareLabs/sw-cli-tools.git \
+RUN mkdir -p /usr/share/man/man1/ && \
+    apt update && \
+    apt install -y curl && \
+    curl https://packages.sury.org/php/README.txt | bash && \
+    apt update && apt-get install --no-install-recommends -y \
+    openjdk-8-jre-headless \
+    ant \
+    mariadb-client \
+    php7.2-cli \
+    php7.2-xml \
+    php7.2-zip \
+    php7.2-json \
+    php7.2-zip \
+    php7.2-gmp \
+    php7.2-mysql \
+    php7.2-sqlite3 \
+    php7.2-mbstring \
+    php7.2-bcmath \
+    php7.2-gd \
+    php7.2-curl \
+    git \
+    sudo \
+    gpg \
+    gpg-agent \
+    curl \
+    wget \
+    nano \
+    unzip && \
+    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
+    cd /opt/ && \
+    git clone https://github.com/shopwareLabs/sw-cli-tools.git \
     && cd sw-cli-tools \
     && composer install --no-dev \
     && ln -s /opt/sw-cli-tools/bin/sw /usr/local/bin/sw \
