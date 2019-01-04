@@ -53,6 +53,14 @@ if (isset($_SERVER['argv'][2])) {
 		        ],
 		    ];
 			break;
+		case 'bi-local':
+			$config['bi'] = [
+		        'endpoint' => [
+		            'benchmark' => 'http://127.0.0.1:3000/benchmark',
+		            'statistics' => 'http://127.0.0.1:3000/statistics',
+		        ],
+		    ];
+			break;
 	}
 }
 
