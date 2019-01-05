@@ -1,59 +1,30 @@
 #!/usr/bin/env bash
 
-for filename in ./nginx/*; do
-    cp -R ssl/ $filename/rootfs/etc/nginx/ssl
+phpVersions=(php56 php70 php71 php72 php73)
+mysqlVersions=(55 56 57 8)
+
+# Copy rootfs
+for t in ${phpVersions[@]}; do
+    if [[ $t == "php56" ]]; then
+        continue
+    fi
+
+    cp -R nginx/php56/rootfs nginx/${t}/rootfs
 done
 
-cd cli/72
-docker build -t shyim/shopware-cli:php72 .
+for t in ${phpVersions[@]}; do
+    echo "Building cli container for $t"
+    docker build -t shyim/shopware-cli:${t} ./cli/${t}
 
-cd ..
+    echo "Building nginx container for $t"
+    docker build -t shyim/shopware-nginx:${t} ./nginx/${t}
 
-cd 56
-docker build -t shyim/shopware-cli:php56 .
+    if [[ -d "./nginx/${t}-xdebug" ]]; then
+        docker build -t "shyim/shopware-nginx:${t}-xdebug" "./nginx/${t}-xdebug"
+    fi
+done
 
-cd ../..
-
-cd nginx/73
-docker build -t shyim/shopware-nginx:php73 .
-
-cd ..
-cd 72
-docker build -t shyim/shopware-nginx:php72 .
-
-cd ..
-cd 72-xdebug
-docker build -t shyim/shopware-nginx:php72-xdebug .
-
-cd ..
-cd 71
-docker build -t shyim/shopware-nginx:php71 .
-
-cd ..
-cd 71-xdebug
-docker build -t shyim/shopware-nginx:php71-xdebug .
-
-
-cd ..
-cd 56
-docker build -t shyim/shopware-nginx:php56 .
-
-cd ..
-cd 56-xdebug
-docker build -t shyim/shopware-nginx:php56-xdebug .
-
-cd ../..
-cd mysql/8
-docker build -t shyim/shopware-mysql:8 .
-
-cd ..
-cd 55
-docker build -t shyim/shopware-mysql:55 .
-
-cd ..
-cd 56
-docker build -t shyim/shopware-mysql:56 .
-
-cd ..
-cd 57
-docker build -t shyim/shopware-mysql:57 .
+for t in ${mysqlVersions[@]}; do
+    echo "Building cli container for $t"
+    docker build -t shyim/shopware-mysql:${t} ./mysql/${t}
+done

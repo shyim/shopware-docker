@@ -1,3 +1,5 @@
 mysql-data
 .idea
-nginx/**/rootfs/etc/nginx/ssl
+cli/*/Dockerfile
+nginx/*/rootfs
+!nginx/php56/rootfs

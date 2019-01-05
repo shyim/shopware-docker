@@ -1,12 +1,16 @@
 sudo: required
 
-language: php
+language: node
 
 services:
   - docker
 
+before_script:
+  - npm install -g mustache
+
 script:
   - cd ${TRAVIS_BUILD_DIR}
+  - ./utils/generate.sh
   - ./utils/build.sh
 
 after_success:
