@@ -3,3 +3,4 @@ mysql-data
 cli/*/Dockerfile
 nginx/*/rootfs
 !nginx/php56/rootfs
+docker-compose.override.yaml

@@ -28,6 +28,7 @@ Mac or Windows users should use the `docker-compose-win.yml` which adds volumens
 * `swdc rsnap [Folder name in ~/Code] [Name]` - Restores a database snapshot
 * `swdc apply [Folder name in ~/Code] [Name]` - Apply a fixture
 * `swdc shell` - Opens the a bash shell in cli container
+* `swdc version [PHP Version] [MySQL Version]` - Generate a docker-compose.override.yaml to choose a another version
 
 
 ## Which configs pre-sets are exists?
