@@ -41,7 +41,7 @@ case "$1" in
   test)
     checkParameter
     clearCache
-    docker-compose run --rm -eANT_OPTS=-D"file.encoding=UTF-8" cli ant -Dapp.host=$SHOPWARE_PROJECT.dev.localhost -Ddb.host=mysql -Ddb.user=root -Ddb.password=root -Ddb.name=$SHOPWARE_PROJECT -f /var/www/html/$SHOPWARE_PROJECT/build/build.xml build-unit unit-shopware-continuous
+    docker-compose run --rm -eANT_OPTS=-D"file.encoding=UTF-8" cli ant -Dapp.host=$SHOPWARE_PROJECT.dev.localhost -Ddb.host=mysql -Ddb.user=root -Ddb.password=root -Ddb.name=$SHOPWARE_PROJECT -f /var/www/html/$SHOPWARE_PROJECT/build/build.xml unit-shopware-continuous
     fixHooks
     ;;
   drop)

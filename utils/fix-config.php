@@ -14,7 +14,8 @@ $config['phpsettings'] = [
 ];
 
 $config['httpcache'] = [
-    'debug' => true
+	'debug' => true,
+	'purge_allowed_ips' => ['172.29.0.1']
 ];
 
 if (isset($_SERVER['argv'][2])) {
@@ -60,6 +61,12 @@ if (isset($_SERVER['argv'][2])) {
 		            'statistics' => 'http://127.0.0.1:3000/statistics',
 		        ],
 		    ];
+			break;
+		case 'csrf':
+			$config['csrfProtection'] = [
+				'frontend' => false,
+				'backend' => false,
+			];
 			break;
 	}
 }

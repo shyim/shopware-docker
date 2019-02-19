@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-set -o errexit
-set -o pipefail
-
 # Coloring/Styling helpers
 esc=$(printf '\033')
 reset="${esc}[0m"
