@@ -1,11 +1,18 @@
 #!/usr/bin/env bash
 
-phpVersions=(php56 php70 php71 php72 php73)
-mysqlVersions=(55 56 57 8)
+FILE="$0"
+
+if [ -L "$0" ]; then
+  FILE=$(readlink "$0")
+fi
+
+DIR=$(dirname ${FILE})
+
+source "${DIR}/functions.sh"
 
 for t in ${phpVersions[@]}; do
     echo "Building cli container for $t"
-    docker build -t shyim/shopware-cli:${t} ./cli/${t}
+    docker build -t shyim/shopware-cli:${t} -f ./cli/${t}/Dockerfile ./cli/${t}
 
     echo "Building nginx container for $t"
     docker build -t shyim/shopware-nginx:${t} -f ./nginx/${t}/Dockerfile ./nginx/

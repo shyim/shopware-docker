@@ -1,4 +1,4 @@
-FROM shyim/shopware-nginx:php72
+FROM shyim/shopware-nginx:{{ phpVersion }}
 
 RUN docker-php-ext-enable xdebug
 RUN echo 'xdebug.remote_enable=1' > /usr/local/etc/php/conf.d/ext-xdebug.ini && \

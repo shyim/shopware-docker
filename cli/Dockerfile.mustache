@@ -29,6 +29,7 @@ RUN mkdir -p /usr/share/man/man1/ && \
     curl \
     wget \
     nano \
+    ssmtp \
     unzip && \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
     cd /opt/ && \
@@ -45,6 +46,8 @@ RUN mkdir -p /usr/share/man/man1/ && \
 
 ENV HOME /home/dev
 USER dev
+
+COPY rootfs/ /
 
 RUN composer global require hirak/prestissimo
 

@@ -1,6 +1,5 @@
 mysql-data
 .idea
-cli/*/Dockerfile
-nginx/*/rootfs
-!nginx/php56/rootfs
+cli/php*
+nginx/php*
 docker-compose.override.yaml

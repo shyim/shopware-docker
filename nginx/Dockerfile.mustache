@@ -1,12 +1,13 @@
-FROM php:7.0-fpm-alpine
+FROM php:{{ phpVersion }}-fpm-alpine
 
 ENV SHOPWARE_ENV docker
 
+COPY --from=ochinchina/supervisord:latest /usr/local/bin/supervisord /usr/bin/supervisord
+
 RUN apk add --no-cache \
       nginx \
-      supervisor \
-	  shadow \
-	  bzip2-dev \
+	    shadow \
+	    bzip2-dev \
       ca-certificates \
       freetype \
       freetype-dev \
@@ -14,7 +15,6 @@ RUN apk add --no-cache \
       icu-dev \
       libjpeg-turbo \
       libjpeg-turbo-dev \
-      libmcrypt-dev \
       libpng \
       libpng-dev \
       mysql-client \
@@ -43,7 +43,6 @@ RUN apk add --no-cache \
       zip && \
     update-ca-certificates && \
     ln -s /usr/local/bin/php /usr/bin/php && \
-    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
     ln -sf /dev/stdout /var/log/nginx/access.log && \
     ln -sf /dev/stderr /var/log/nginx/error.log && \
     rm -rf /var/lib/nginx/tmp && \
