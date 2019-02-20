@@ -12,7 +12,7 @@ source "${DIR}/functions.sh"
 
 for t in ${phpVersions[@]}; do
     echo "Building cli container for $t"
-    docker build -t shyim/shopware-cli:${t} -f ./cli/${t}/Dockerfile ./cli/${t}
+    docker build -t shyim/shopware-cli:${t} -f ./cli/${t}/Dockerfile ./cli/
 
     echo "Building nginx container for $t"
     docker build -t shyim/shopware-nginx:${t} -f ./nginx/${t}/Dockerfile ./nginx/

@@ -10,6 +10,9 @@ DIR=$(dirname ${FILE})
 
 source "${DIR}/functions.sh"
 
+rm -r cli/php*
+rm -r nginx/php*
+
 for t in ${phpVersions[@]}; do
   dockerPHP=$(echo "${t:3:1}.${t:4:1}")
 
@@ -32,4 +35,18 @@ for t in ${xdebugPhpVersions[@]}; do
   fi
 
   echo "{\"phpVersion\": \"$t\"}" | mustache - nginx/Dockerfile-xdebug.mustache > nginx/${t}-xdebug/Dockerfile
+done
+
+for t in ${mysqlVersions[@]}; do
+  if [ ! -d "mysql/${t}" ]; then
+    mkdir mysql/${t}
+  fi
+
+  if [ ${t} == "8" ]; then
+    mysql="8.0"
+  else
+    mysql=$(echo "${t:0:1}.${t:1:1}")
+  fi
+
+  echo "{\"mysqlVersion\": \"$mysql\"}" | mustache - mysql/Dockerfile.mustache > mysql/${t}/Dockerfile
 done
