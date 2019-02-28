@@ -56,6 +56,11 @@ case "$1" in
     docker-compose run -e COLUMNS="`tput cols`" -e LINES="`tput lines`" --rm cli php /var/www/html/${SHOPWARE_PROJECT}/bin/console sw:snippets:to:db --include-plugins
     clearCache
     ;;
+  update-test)
+    checkParameter
+    docker-compose run -e COLUMNS="`tput cols`" -e LINES="`tput lines`" --rm cli php /var/www/html/${SHOPWARE_PROJECT}/bin/console sw:migration:migrate --mode=update
+    clearCache
+    ;;
   hooks)
     checkParameter
       fixHooks
@@ -110,6 +115,6 @@ case "$1" in
     generateVersionSwitch $2 $3
     ;;
   *)
-    echo "Usage: $0 {build|drop|test|shell|hooks|config|snippets|snap|rsnap|new-ticket|version|up|down}"
+    echo "Usage: $0 {build|drop|test|shell|hooks|config|snippets|update-test|snap|rsnap|new-ticket|version|up|down}"
     ;;
 esac

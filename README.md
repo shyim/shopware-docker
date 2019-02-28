@@ -29,6 +29,7 @@ Mac or Windows users should use the `docker-compose-win.yml` which adds volumens
 * `swdc apply [Folder name in ~/Code] [Name]` - Apply a fixture
 * `swdc shell` - Opens the a bash shell in cli container
 * `swdc version [PHP Version] [MySQL Version]` - Generate a docker-compose.override.yaml to choose a another version
+* `swdc update-test` - Runs migration in update mode
 
 
 ## Which configs pre-sets are exists?
