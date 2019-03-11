@@ -9,8 +9,6 @@ And at last every thing is designed to use of shopware git version.
 
 ## How to setup?
 
-Mac or Windows users should use the `docker-compose-win.yml` which adds volumens and uses sftp.
-
 * Clone the repository somewhere
 * Optional: Do a symlink from swdc to `/usr/local/bin/swdc`
 * `swdc up`: Starts the docker-compose
@@ -76,3 +74,7 @@ The databases are stored temporarily by default. Change the following in your do
     ports:
       - 3306:3306
 ```
+
+## Can i use it on Windows / Mac?
+
+I dont't develop on Windows or Mac. Try it out by own

@@ -98,7 +98,7 @@ function generateVersionSwitch()
     MYSQL_VERSION=$(echo ${MYSQL_VERSION} | sed 's/\.//g')
     PHP_VERSION=$(echo ${PHP_VERSION} | sed 's/\.//g')
 
-    echo "version: '2'" > "${DIR}/docker-compose.override.yaml"
+    echo "version: '3'" > "${DIR}/docker-compose.override.yaml"
     echo "services:" >> "${DIR}/docker-compose.override.yaml"
     echo "  nginx:" >> "${DIR}/docker-compose.override.yaml"
     echo "    image: shyim/shopware-nginx:php${PHP_VERSION}" >> "${DIR}/docker-compose.override.yaml"

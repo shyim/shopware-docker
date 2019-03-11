@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 services:
   mysql:
     image: mariadb:10.3
@@ -25,6 +25,8 @@ services:
     env_file: .env
     volumes:
       - ~/Code:/var/www/html
+      - .:/opt/swdc
+    tty: true
   elastic:
     image: elasticsearch:5-alpine
     ports:

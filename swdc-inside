@@ -1,0 +1,115 @@
+#!/usr/bin/env bash
+
+FILE="$0"
+
+if [ -L "$0" ]; then
+  FILE=$(readlink "$0")
+fi
+
+DIR=$(dirname ${FILE})
+
+source "${DIR}/utils/functions.sh"
+
+SHOPWARE_PROJECT="$2"
+FIXTURE_NAME="$3"
+SNAP_SUFFIX="$3"
+SNAP_DIR="/var/www/html/snapshots"
+SHOPWARE_FOLDER="/var/www/html/$SHOPWARE_PROJECT"
+
+if [ ! -z "$SNAP_SUFFIX" ]; then
+    SNAP_SUFFIX=$(echo "-${SNAP_SUFFIX}")
+fi
+
+# Need to be in docker folder for docker-compose
+cd ${DIR}
+
+case "$1" in
+  build)
+    checkParameter
+    clearCache
+    if [ `isComposerProject` ]; then
+      mysql -h mysql -u root -proot -e "CREATE DATABASE IF NOT EXISTS $SHOPWARE_PROJECT"
+      cd "/var/www/html/${SHOPWARE_PROJECT}"
+      bash -c "composer install"
+      buildComposerProjectEnvFile
+      bash -c "/var/www/html/${SHOPWARE_PROJECT}/app/install.sh"      
+    else
+      ant -Dapp.host=$SHOPWARE_PROJECT.dev.localhost -Ddb.host=mysql -Ddb.user=root -Ddb.password=root -Ddb.name=$SHOPWARE_PROJECT -f /var/www/html/$SHOPWARE_PROJECT/build/build.xml build-unit
+      fixHooks
+      fixDeveloperConfig
+    fi
+    ;;
+  test)
+    checkParameter
+    clearCache
+    ant -Dapp.host=$SHOPWARE_PROJECT.dev.localhost -Ddb.host=mysql -Ddb.user=root -Ddb.password=root -Ddb.name=$SHOPWARE_PROJECT -f /var/www/html/$SHOPWARE_PROJECT/build/build.xml unit-shopware-continuous
+    fixHooks
+    ;;
+  drop)
+    checkParameter
+    mysql -h mysql -u root -proot -e "DROP DATABASE $SHOPWARE_PROJECT"
+    ;;
+  shell)
+    docker-compose run -e COLUMNS="`tput cols`" -e LINES="`tput lines`" -e SHELL=bash --rm cli bash
+    ;;
+  snippets)
+    checkParameter
+    php /var/www/html/${SHOPWARE_PROJECT}/bin/console sw:snippets:to:db --include-plugins
+    clearCache
+    ;;
+  update-test)
+    checkParameter
+    php /var/www/html/${SHOPWARE_PROJECT}/bin/console sw:migration:migrate --mode=update
+    clearCache
+    ;;
+  hooks)
+    checkParameter
+    fixHooks
+    ;;
+  config)
+    checkParameter
+    fixDeveloperConfig "$3"
+    ;;
+  new-ticket)
+    SHOPWARE_FOLDER=$(echo "${SHOPWARE_FOLDER/-/}")
+    SHOPWARE_PROJECT=$(echo "${SHOPWARE_PROJECT/-/}")
+    git clone ssh://git@stash.shopware.com/sw/shopware.git ${SHOPWARE_FOLDER}
+    if [ ! -d "$SHOPWARE_FOLDER" ]; then
+        echo "Git checkout failed"
+        exit 1
+    fi
+    cd ${SHOPWARE_FOLDER}
+    git checkout 5.5
+    git checkout -b ${SHOPWARE_PROJECT}/5.5/$3
+    $FILE build ${SHOPWARE_PROJECT}
+    wget -O test_images.zip http://releases.s3.shopware.com/test_images_since_5.1.zip
+    unzip test_images.zip
+    rm test_images.zip
+    ;;
+  snap)
+    checkParameter
+    if [ ! -d "$SNAP_DIR" ]; then
+      mkdir "$SNAP_DIR"
+    fi
+    bash -c "mysqldump -h mysql -uroot -proot ${SHOPWARE_PROJECT} > /var/www/html/snapshots/${SHOPWARE_PROJECT}${SNAP_SUFFIX}.sql"
+    ;;
+  rsnap)
+    checkParameter
+    if [ ! -f "$SNAP_DIR/${SHOPWARE_PROJECT}${SNAP_SUFFIX}.sql" ]; then
+      echo "Snap for shop ${SHOPWARE_PROJECT} does not exists"
+      exit 1
+    fi
+    mysql -h mysql -u root -proot -e "CREATE DATABASE IF NOT EXISTS $SHOPWARE_PROJECT"
+    bash -c "mysql -h mysql -uroot -proot ${SHOPWARE_PROJECT} < /var/www/html/snapshots/${SHOPWARE_PROJECT}${SNAP_SUFFIX}.sql"
+    ;;
+  apply)
+    checkParameter
+    applyFixture 
+    ;;
+  version)
+    generateVersionSwitch $2 $3
+    ;;
+  *)
+    echo "Usage: $0 {build|drop|test|shell|hooks|config|snippets|update-test|snap|rsnap|new-ticket|version|up|down}"
+    ;;
+esac
