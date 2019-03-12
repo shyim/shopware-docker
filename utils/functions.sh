@@ -80,20 +80,9 @@ function buildComposerProjectEnvFile()
   echo 'IMPORT_DEMODATA=y' >> "$SHOPWARE_FOLDER/.env"
 }
 
-function generateVersionSwitch()
+function generateDockerComposeOverride()
 {
-    PHP_VERSION=$1
-    MYSQL_VERSION=$2
-
-    if [[ -z ${PHP_VERSION} ]]; then
-        echo "Please give a PHP version"
-        exit 1
-    fi
-
-    if [[ -z ${MYSQL_VERSION} ]]; then
-        echo "Using MySQL 5.7 as default"
-        MYSQL_VERSION="57"
-    fi
+    source ".env"
 
     MYSQL_VERSION=$(echo ${MYSQL_VERSION} | sed 's/\.//g')
     PHP_VERSION=$(echo ${PHP_VERSION} | sed 's/\.//g')
@@ -105,9 +94,43 @@ function generateVersionSwitch()
     echo "  mysql:" >> "${DIR}/docker-compose.override.yaml"
     echo "    image: shyim/shopware-mysql:${MYSQL_VERSION}" >> "${DIR}/docker-compose.override.yaml"
 
+    if [[ $PERSISTENT_DATABASE == "false" ]]; then
+        echo "    tmpfs:" >> "${DIR}/docker-compose.override.yaml"
+        echo "      - /var/lib/mysql" >> "${DIR}/docker-compose.override.yaml"
+    fi
 
-    echo "${green}";
-    echo "Generated a docker-compose.override.yaml for PHP: ${PHP_VERSION} and MySQL: ${MYSQL_VERSION}";
-    echo "${reset}";
+    if [[ $ENABLE_ELASTICSEARCH == "true" ]]; then
+        echo "  elastic:" >> "${DIR}/docker-compose.override.yaml"
+        echo "    image: elasticsearch:${ELASTICSEARCH_VERSION}" >> "${DIR}/docker-compose.override.yaml"
+        echo "    ports:" >> "${DIR}/docker-compose.override.yaml"
+        echo "      - 9200:9200" >> "${DIR}/docker-compose.override.yaml"
+    fi
 
+    if [[ $ENABLE_REDIS == "true" ]]; then
+        echo "  redis:" >> "${DIR}/docker-compose.override.yaml"
+        echo "    image: redis:5-alpine" >> "${DIR}/docker-compose.override.yaml"
+    fi
+
+    if [[ $ENABLE_MINIO == "true" ]]; then
+        echo "  minio:" >> "${DIR}/docker-compose.override.yaml"
+        echo "    image: minio/minio" >> "${DIR}/docker-compose.override.yaml"
+        echo "    env_file: docker.env" >> "${DIR}/docker-compose.override.yaml"
+        echo "    command: server" >> "${DIR}/docker-compose.override.yaml"
+    fi
+
+    if [[ $DATABASE_TOOL == "adminer" ]]; then
+        echo "  adminer:" >> "${DIR}/docker-compose.override.yaml"
+        echo "    image: adminer" >> "${DIR}/docker-compose.override.yaml"
+        echo "    env_file: docker.env" >> "${DIR}/docker-compose.override.yaml"
+        echo "    ports:" >> "${DIR}/docker-compose.override.yaml"
+        echo "      - 8080:8080" >> "${DIR}/docker-compose.override.yaml"
+    fi
+
+    if [[ $DATABASE_TOOL == "phpmyadmin" ]]; then
+        echo "  phpmyadmin:" >> "${DIR}/docker-compose.override.yaml"
+        echo "    image: phpmyadmin/phpmyadmin" >> "${DIR}/docker-compose.override.yaml"
+        echo "    env_file: docker.env" >> "${DIR}/docker-compose.override.yaml"
+        echo "    ports:" >> "${DIR}/docker-compose.override.yaml"
+        echo "      - 8080:80" >> "${DIR}/docker-compose.override.yaml"
+    fi
 }

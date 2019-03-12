@@ -11,8 +11,9 @@ And at last every thing is designed to use of shopware git version.
 
 * Clone the repository somewhere
 * Optional: Do a symlink from swdc to `/usr/local/bin/swdc`
+* Configure your needs in ".env" file
 * `swdc up`: Starts the docker-compose
-* Checkout in `~/Code/shopware` the offical shopware repository or your shopware composer project ([read this](#what-do-i-need-to-prepare-to-use-shopware-composer-projects))
+* Checkout in `~/Code/shopware` the offical shopware repository or your shopware composer project
 * Execute `swdc build shopware`
 
 ## Which commands exist?
@@ -45,6 +46,7 @@ All fixtures can be applied with `swdc apply [Folder name in ~/Code] [Name]`
 
 * api - Sets a apiKey for the demo user with "demo"
 * bi-reset - Resets all bi statistics
+* en - Sets base-urls and the categories to German category
 
 ## Which images and tags are available?
 
@@ -52,29 +54,18 @@ All fixtures can be applied with `swdc apply [Folder name in ~/Code] [Name]`
 * [shopware/shopware-mysql](https://hub.docker.com/r/shyim/shopware-mysql/tags)
 * [shopware/shopware-cli](https://hub.docker.com/r/shyim/shopware-cli/tags)
 
-## What do I need to prepare to use shopware composer projects?
-
-The databases are stored temporarily by default. Change the following in your docker-compose.yml to keep your database on restart:
-
-```yml
-  mysql:
-    image: shyim/shopware-mysql:57
-    env_file: .env
-    ports:
-      - 3306:3306
-    tmpfs:
-      - /var/lib/mysql
-    restart: always
-```
-
-```yml
-  mysql:
-    image: shyim/shopware-mysql:5.7
-    env_file: .env
-    ports:
-      - 3306:3306
-```
-
 ## Can i use it on Windows / Mac?
 
 I dont't develop on Windows or Mac. Try it out by own
+
+## What are the passwords?
+
+### MySQL
+
+User: root
+Password: Root
+
+### Shopware
+
+User: demo
+Password: demo

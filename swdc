@@ -8,13 +8,15 @@ fi
 
 DIR=$(dirname ${FILE})
 
+source "${DIR}/utils/functions.sh"
 
 # Need to be in docker folder for docker-compose
 cd ${DIR}
 
 case "$1" in
   up)
-    docker-compose up -d
+    generateDockerComposeOverride
+    docker-compose up -d --remove-orphans
     ;;
   down)
     docker-compose down
