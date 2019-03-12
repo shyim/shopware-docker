@@ -115,7 +115,9 @@ function generateDockerComposeOverride()
         echo "  minio:" >> "${DIR}/docker-compose.override.yaml"
         echo "    image: minio/minio" >> "${DIR}/docker-compose.override.yaml"
         echo "    env_file: docker.env" >> "${DIR}/docker-compose.override.yaml"
-        echo "    command: server" >> "${DIR}/docker-compose.override.yaml"
+        echo "    command: server /data" >> "${DIR}/docker-compose.override.yaml"
+        echo "    ports:" >> "${DIR}/docker-compose.override.yaml"
+        echo "      - 9000:9000" >> "${DIR}/docker-compose.override.yaml"
     fi
 
     if [[ $DATABASE_TOOL == "adminer" ]]; then

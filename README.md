@@ -62,10 +62,19 @@ I dont't develop on Windows or Mac. Try it out by own
 
 ### MySQL
 
+Host: mysql
 User: root
 Password: Root
+PhpMyAdmin / Adminer: http://localhost:8080
 
 ### Shopware
 
 User: demo
 Password: demo
+
+### Minio (S3)
+
+Host: minio
+Key: AKIAIOSFODNN7EXAMPLE
+Secret-Key: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+Bucket can be created on page http://localhost:9000/minio/
