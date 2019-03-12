@@ -91,6 +91,6 @@ case "$1" in
     applyFixture 
     ;;
   *)
-    echo "Usage: $0 {build|drop|test|shell|hooks|config|snippets|update-test|snap|rsnap|up|down}"
+    echo "Usage: swdc {build|drop|test|shell|hooks|config|snippets|update-test|snap|rsnap|up|down}"
     ;;
 esac
