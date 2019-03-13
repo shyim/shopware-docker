@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+set -o nounset
+set -o errexit
+set -o pipefail
+
+
 FILE="$0"
 
 if [ -L "$0" ]; then
