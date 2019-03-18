@@ -13,6 +13,6 @@ RUN echo 'xdebug.remote_enable=1' > /usr/local/etc/php/conf.d/ext-xdebug.ini && 
     echo 'xdebug.profiler_output_name = "cachegrind.out.%R.%t"' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
     echo 'xdebug.auto_trace=0' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
     echo 'xdebug.trace_enable_trigger=1' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
-    echo 'xdebug.trace_output_dir="/tmp/xdebug"' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.trace_output_dir="/var/www/html/traces"' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
     echo 'xdebug.trace_output_name="trace.%R.%t"' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
     echo 'xdebug.show_mem_delta=1' >> /usr/local/etc/php/conf.d/ext-xdebug.ini
