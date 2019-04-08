@@ -17,7 +17,8 @@ mysqlVersions=(55 56 57 8)
 function fixHooks()
 {
     rm ${SHOPWARE_FOLDER}/.git/hooks/pre-commit
-    ln -s ${SHOPWARE_FOLDER}/build/gitHooks/pre-commit ${SHOPWARE_FOLDER}/.git/hooks/pre-commit
+    cd ${SHOPWARE_FOLDER}
+    ln -s ../../build/gitHooks/pre-commit .git/hooks/pre-commit
     echo "Hooks fixed"
 }
 
@@ -57,7 +58,7 @@ function applyFixture()
     echo "Fixture by name ${FIXTURE_NAME} does not exist"
     exit 1
   fi
-  docker-compose run --rm cli mysql -h mysql -u root -proot $SHOPWARE_PROJECT < "${DIR}/fixtures/${FIXTURE_NAME}.sql"
+  mysql -h mysql -u root -proot $SHOPWARE_PROJECT < "${DIR}/fixtures/${FIXTURE_NAME}.sql"
 }
 
 function isComposerProject()
@@ -93,6 +94,16 @@ function generateDockerComposeOverride()
     echo "    image: shyim/shopware-nginx:php${PHP_VERSION}" >> "${DIR}/docker-compose.override.yaml"
     echo "  mysql:" >> "${DIR}/docker-compose.override.yaml"
     echo "    image: shyim/shopware-mysql:${MYSQL_VERSION}" >> "${DIR}/docker-compose.override.yaml"
+
+    # Build alias for cli
+    echo "  cli:" >> "${DIR}/docker-compose.override.yaml"
+    echo "    links:" >> "${DIR}/docker-compose.override.yaml"
+    for d in ~/Code/* ; do
+        if [ -d "$d" ]; then
+            NAME=$(basename $d)
+            echo "      - nginx:${NAME}.dev.localhost" >> "${DIR}/docker-compose.override.yaml"
+        fi
+    done
 
     if [[ $PERSISTENT_DATABASE == "false" ]]; then
         echo "    tmpfs:" >> "${DIR}/docker-compose.override.yaml"
@@ -135,4 +146,22 @@ function generateDockerComposeOverride()
         echo "    ports:" >> "${DIR}/docker-compose.override.yaml"
         echo "      - 8080:80" >> "${DIR}/docker-compose.override.yaml"
     fi
+
+    if [[ $ENABLE_SELENIUM == "true" ]]; then
+        echo "  selenium:" >> "${DIR}/docker-compose.override.yaml"
+        echo "    image: selenium/standalone-chrome:3.8.1" >> "${DIR}/docker-compose.override.yaml"
+        echo "    shm_size: 2g" >> "${DIR}/docker-compose.override.yaml"
+        echo "    links:" >> "${DIR}/docker-compose.override.yaml"
+        echo "    environment:" >> "${DIR}/docker-compose.override.yaml"
+        echo "      DBUS_SESSION_BUS_ADDRESS: /dev/null" >> "${DIR}/docker-compose.override.yaml"
+        echo "    links:" >> "${DIR}/docker-compose.override.yaml"
+
+        for d in ~/Code/* ; do
+            if [ -d "$d" ]; then
+                NAME=$(basename $d)
+                echo "      - nginx:${NAME}.dev.localhost" >> "${DIR}/docker-compose.override.yaml"
+            fi
+        done
+    fi
+
 }
