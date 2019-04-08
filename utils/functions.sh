@@ -10,7 +10,7 @@ bold="${esc}[1m"
 warn="${esc}[41m${esc}[97m"
 
 phpVersions=(php56 php70 php71 php72 php73)
-xdebugPhpVersions=(php56 php70 php71 php72)
+xdebugPhpVersions=(php70 php71 php72)
 mysqlVersions=(55 56 57 8)
 
 

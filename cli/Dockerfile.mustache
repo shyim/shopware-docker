@@ -3,10 +3,10 @@ FROM debian:stretch-slim
 ENV SHOPWARE_ENV docker
 
 RUN mkdir -p /usr/share/man/man1/ && \
-    apt update && \
-    apt install -y curl && \
+    apt-get update && \
+    apt-get install --no-install-recommends -y curl wget ca-certificates && \
     curl https://packages.sury.org/php/README.txt | bash && \
-    apt update && apt-get install --no-install-recommends -y \
+    apt-get update && apt-get install --no-install-recommends -y \
     openjdk-8-jre-headless \
     ant \
     patch \
