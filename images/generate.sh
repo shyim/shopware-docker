@@ -6,6 +6,8 @@ source "${DIR}/../utils/functions.sh"
 
 rm -r cli/php*
 rm -r nginx/php*
+rm -r mysql/5*
+rm -r mysql/8*
 
 for t in ${phpVersions[@]}; do
     dockerPHP=$(echo "${t:3:1}.${t:4:1}")
@@ -44,4 +46,5 @@ for t in ${mysqlVersions[@]}; do
     fi
 
     node "${DIR}/twig.js" mysql/Dockerfile.twig "{\"mysqlVersion\": \"$mysql\"}" > mysql/${t}/Dockerfile
+    node "${DIR}/twig.js" mysql/dev.twig "{\"mysqlVersion\": \"$mysql\"}" > mysql/${t}/dev.cnf
 done

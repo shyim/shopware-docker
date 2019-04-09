@@ -9,8 +9,8 @@ max_connections=10000
 group_concat_max_len=320000
 local_infile = 1
 
-query_cache_limit = 256k
-query_cache_size  = 256M
-query_cache_type  = 1
+{% if mysqlVersion == "8.0" %}
+default_authentication_plugin=mysql_native_password
+{% endif %}
 
 sql_mode = ''

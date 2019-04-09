@@ -4,7 +4,8 @@ ENV SHOPWARE_ENV docker
 
 COPY --from=ochinchina/supervisord:latest /usr/local/bin/supervisord /usr/bin/supervisord
 
-RUN apk add --no-cache \
+RUN set -x && \
+      apk add --no-cache \
       nginx \
       shadow \
 	  bzip2-dev \
@@ -46,7 +47,7 @@ RUN apk add --no-cache \
       bz2 \
       intl \
       soap \
-      zip && \
+      zip > /dev/null && \
     update-ca-certificates && \
     ln -s /usr/local/bin/php /usr/bin/php && \
     ln -sf /dev/stdout /var/log/nginx/access.log && \
