@@ -95,6 +95,11 @@ function generateDockerComposeOverride()
     echo "  mysql:" >> "${DIR}/docker-compose.override.yaml"
     echo "    image: shyim/shopware-mysql:${MYSQL_VERSION}" >> "${DIR}/docker-compose.override.yaml"
 
+    if [[ $PERSISTENT_DATABASE == "false" ]]; then
+        echo "    tmpfs:" >> "${DIR}/docker-compose.override.yaml"
+        echo "      - /var/lib/mysql" >> "${DIR}/docker-compose.override.yaml"
+    fi
+
     # Build alias for cli
     echo "  cli:" >> "${DIR}/docker-compose.override.yaml"
     echo "    links:" >> "${DIR}/docker-compose.override.yaml"
@@ -104,11 +109,6 @@ function generateDockerComposeOverride()
             echo "      - nginx:${NAME}.dev.localhost" >> "${DIR}/docker-compose.override.yaml"
         fi
     done
-
-    if [[ $PERSISTENT_DATABASE == "false" ]]; then
-        echo "    tmpfs:" >> "${DIR}/docker-compose.override.yaml"
-        echo "      - /var/lib/mysql" >> "${DIR}/docker-compose.override.yaml"
-    fi
 
     if [[ $ENABLE_ELASTICSEARCH == "true" ]]; then
         echo "  elastic:" >> "${DIR}/docker-compose.override.yaml"
@@ -151,7 +151,6 @@ function generateDockerComposeOverride()
         echo "  selenium:" >> "${DIR}/docker-compose.override.yaml"
         echo "    image: selenium/standalone-chrome:3.8.1" >> "${DIR}/docker-compose.override.yaml"
         echo "    shm_size: 2g" >> "${DIR}/docker-compose.override.yaml"
-        echo "    links:" >> "${DIR}/docker-compose.override.yaml"
         echo "    environment:" >> "${DIR}/docker-compose.override.yaml"
         echo "      DBUS_SESSION_BUS_ADDRESS: /dev/null" >> "${DIR}/docker-compose.override.yaml"
         echo "    links:" >> "${DIR}/docker-compose.override.yaml"
