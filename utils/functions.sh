@@ -9,8 +9,8 @@ red="${esc}[31m"
 bold="${esc}[1m"
 warn="${esc}[41m${esc}[97m"
 
-phpVersions=(php56 php70 php71 php72 php73)
-xdebugPhpVersions=(php70 php71 php72)
+phpVersions=(php56 php71 php72 php73)
+xdebugPhpVersions=(php56 php71 php70 php72)
 mysqlVersions=(55 56 57 8)
 
 
@@ -36,12 +36,12 @@ function fixDeveloperConfig()
 
 function checkParameter()
 {
-    if [ -z "$SHOPWARE_PROJECT" ]; then
+    if [[ -z "$SHOPWARE_PROJECT" ]]; then
         echo "Please enter a shopware folder name"
         exit 1
     fi
 
-    if [ ! -d "$SHOPWARE_FOLDER" ]; then
+    if [[ ! -d "$SHOPWARE_FOLDER" ]]; then
         echo "Folder $SHOPWARE_FOLDER does not exists!"
         exit 1
     fi
@@ -49,23 +49,30 @@ function checkParameter()
 
 function applyFixture()
 {
-  if [ -z "$FIXTURE_NAME" ]; then
+  if [[ -z "$FIXTURE_NAME" ]]; then
     echo "Please enter a fixture name"
     exit 1
   fi
 
-  if [ ! -e "${DIR}/fixtures/${FIXTURE_NAME}.sql" ]; then
+  if [[ ! -e "${DIR}/fixtures/${FIXTURE_NAME}.sql" ]]; then
     echo "Fixture by name ${FIXTURE_NAME} does not exist"
     exit 1
   fi
   mysql -h mysql -u root -proot $SHOPWARE_PROJECT < "${DIR}/fixtures/${FIXTURE_NAME}.sql"
 }
 
-function isComposerProject()
+function getProjectType()
 {
-    if [ -d "$SHOPWARE_FOLDER/app" ]; then
-        echo "true"
+    if [[ -d "$SHOPWARE_FOLDER/app" ]]; then
+        echo "composer"
+        return;
     fi
+    if [[ -f "$SHOPWARE_FOLDER/src/RequestTransformer.php" ]]; then
+        echo "platform"
+        return;
+    fi
+
+    echo "shopware-git"
 }
 
 function buildComposerProjectEnvFile()
@@ -79,6 +86,18 @@ function buildComposerProjectEnvFile()
   echo 'ADMIN_PASSWORD="demo"' >> "$SHOPWARE_FOLDER/.env"
   echo "SHOP_URL=\"http://$SHOPWARE_PROJECT.dev.localhost\"" >> "$SHOPWARE_FOLDER/.env"
   echo 'IMPORT_DEMODATA=y' >> "$SHOPWARE_FOLDER/.env"
+}
+
+function buildPshOverrideFile()
+{
+    echo "const:" > "$SHOPWARE_FOLDER/.psh.yaml.override"
+    echo "  APP_ENV: dev" >> "$SHOPWARE_FOLDER/.psh.yaml.override"
+    echo "  APP_URL: http://$SHOPWARE_PROJECT.platform.localhost" >> "$SHOPWARE_FOLDER/.psh.yaml.override"
+    echo "  DB_HOST: mysql" >> "$SHOPWARE_FOLDER/.psh.yaml.override"
+    echo "  DB_PORT: 3306" >> "$SHOPWARE_FOLDER/.psh.yaml.override"
+    echo "  DB_NAME: $SHOPWARE_PROJECT" >> "$SHOPWARE_FOLDER/.psh.yaml.override"
+    echo "  DB_USER: root" >> "$SHOPWARE_FOLDER/.psh.yaml.override"
+    echo "  DB_PASSWORD: root" >> "$SHOPWARE_FOLDER/.psh.yaml.override"
 }
 
 function generateDockerComposeOverride()
@@ -104,9 +123,13 @@ function generateDockerComposeOverride()
     echo "  cli:" >> "${DIR}/docker-compose.override.yaml"
     echo "    links:" >> "${DIR}/docker-compose.override.yaml"
     for d in ~/Code/* ; do
-        if [ -d "$d" ]; then
+        if [[ -d "$d" ]]; then
             NAME=$(basename $d)
-            echo "      - nginx:${NAME}.dev.localhost" >> "${DIR}/docker-compose.override.yaml"
+            if [[ -f "$d/src/RequestTransformer.php" ]]; then
+                echo "      - nginx:${NAME}.platform.localhost" >> "${DIR}/docker-compose.override.yaml"
+            else
+                echo "      - nginx:${NAME}.dev.localhost" >> "${DIR}/docker-compose.override.yaml"
+            fi
         fi
     done
 
@@ -156,8 +179,9 @@ function generateDockerComposeOverride()
         echo "    links:" >> "${DIR}/docker-compose.override.yaml"
 
         for d in ~/Code/* ; do
-            if [ -d "$d" ]; then
-                NAME=$(basename $d)
+            if [[ -f "$d/src/RequestTransformer.php" ]]; then
+                echo "      - nginx:${NAME}.platform.localhost" >> "${DIR}/docker-compose.override.yaml"
+            else
                 echo "      - nginx:${NAME}.dev.localhost" >> "${DIR}/docker-compose.override.yaml"
             fi
         done

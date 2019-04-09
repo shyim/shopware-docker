@@ -1,0 +1,89 @@
+FROM php:{{ phpVersion }}-fpm-alpine
+
+ENV SHOPWARE_ENV docker
+
+COPY --from=ochinchina/supervisord:latest /usr/local/bin/supervisord /usr/bin/supervisord
+
+RUN apk add --no-cache \
+      nginx \
+      shadow \
+	  bzip2-dev \
+      ca-certificates \
+      freetype \
+      freetype-dev \
+      git \
+      icu-dev \
+      libjpeg-turbo \
+      libjpeg-turbo-dev \
+      libpng \
+      libpng-dev \
+      libzip-dev \
+      libwebp-dev \
+      libxml2-dev \
+      mysql-client \
+      pcre-dev \
+      unzip \
+      wget \
+      ssmtp && \
+    apk add --no-cache --virtual build-deps \
+      coreutils \
+      build-base \
+      autoconf \
+      automake && \
+    docker-php-ext-configure gd \
+      --with-gd \
+      --with-freetype-dir=/usr/include/ \
+      --with-png-dir=/usr/include/ \
+      --with-jpeg-dir=/usr/include/ \
+      --with-webp && \
+    docker-php-ext-install -j$(nproc) \
+      bcmath \
+      gd \
+      intl \
+      mysqli \
+      pdo_mysql \
+      sockets \
+      bz2 \
+      intl \
+      soap \
+      zip && \
+    update-ca-certificates && \
+    ln -s /usr/local/bin/php /usr/bin/php && \
+    ln -sf /dev/stdout /var/log/nginx/access.log && \
+    ln -sf /dev/stderr /var/log/nginx/error.log && \
+    rm -rf /var/lib/nginx/tmp && \
+    ln -sf /tmp /var/lib/nginx/tmp && \
+    mkdir /etc/supervisor.d/ && \
+    chown -R www-data:www-data /var/lib/nginx /var/tmp/nginx/ && \
+    chmod 777 -R /var/tmp/nginx/ && \
+    pecl install {% if xdebug %}xdebug {% endif %}redis && \
+    docker-php-ext-enable redis && \
+    apk del build-deps && \
+    rm -rf /tmp/* && \
+    chown -R www-data:www-data /var/www && \
+    usermod -u 1000 www-data && \
+    apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/community gnu-libiconv{% if xdebug %} && \
+    docker-php-ext-enable xdebug && \
+    echo 'xdebug.remote_enable=1' > /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.remote_autostart=0' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.remote_connect_back=1' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.remote_port=9000' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.remote_log=/tmp/xdebug.log' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.idekey=PHPSTORM' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.profiler_enable=0' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.profiler_enable_trigger=1' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.profiler_output_dir="/tmp/xdebug"' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.profiler_output_name = "cachegrind.out.%R.%t"' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.auto_trace=0' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.trace_enable_trigger=1' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.trace_output_dir="/var/www/html/traces"' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.trace_output_name="trace.%R.%t"' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.show_mem_delta=1' >> /usr/local/etc/php/conf.d/ext-xdebug.ini
+{% endif %}
+
+ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
+
+COPY rootfs/ /
+EXPOSE 80
+
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]

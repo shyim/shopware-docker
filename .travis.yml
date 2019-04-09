@@ -6,13 +6,15 @@ services:
   - docker
 
 before_script:
-  - npm install -g mustache
+  - cd ${TRAVIS_BUILD_DIR}/images
+  - npm install twig
 
 script:
-  - cd ${TRAVIS_BUILD_DIR}
-  - ./utils/generate.sh
-  - ./utils/build.sh
+  - cd ${TRAVIS_BUILD_DIR}/utils/
+  - ./generate.sh
+  - ./build.sh
 
 after_success:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
-  - bash ./utils/push.sh
+  - cd ${TRAVIS_BUILD_DIR}/utils/
+  - bash ./push.sh

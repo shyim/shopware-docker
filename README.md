@@ -1,12 +1,5 @@
 # shopware-docker
 
-## Why i build it, there are already docker images for shopware?
-
-I have a little bit another use case, i need different php versions for testing. Also i hate apache so i use as webserver everywhere nginx with php-fpm.
-Also all images does not contain ioncube, because i dont need it while developing in the core.
-Every folder in `~/Code` is a subdomain which makes testing very helpful. ("~/Code/shopware" => http://shopware.localhost)
-And at last every thing is designed to use of shopware git version.
-
 ## How to setup?
 
 * Clone the repository somewhere
@@ -15,6 +8,7 @@ And at last every thing is designed to use of shopware git version.
 * `swdc up`: Starts the docker-compose
 * Checkout in `~/Code/shopware` the offical shopware repository or your shopware composer project
 * Execute `swdc build shopware`
+* Access your shop under `http://shopware.dev.localhost`
 
 ## Which commands exist?
 
@@ -54,6 +48,11 @@ All fixtures can be applied with `swdc apply [Folder name in ~/Code] [Name]`
 * [shopware/shopware-mysql](https://hub.docker.com/r/shyim/shopware-mysql/tags)
 * [shopware/shopware-cli](https://hub.docker.com/r/shyim/shopware-cli/tags)
 
+## How can i access the shop?
+
+* For Shopware 5 you can use http://**FOLDERNAME**.dev.localhost
+* For Shopware Platform you can use http://**FOLDERNAME**.platform.localhost
+
 ## Can i use it on Windows / Mac?
 
 I dont't develop on Windows or Mac. Try it out by own
@@ -70,11 +69,15 @@ PhpMyAdmin / Adminer: http://localhost:8080
 ### Shopware
 
 User: demo
+
 Password: demo
 
 ### Minio (S3)
 
 Host: minio
+
 Key: AKIAIOSFODNN7EXAMPLE
+
 Secret-Key: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+
 Bucket can be created on page http://localhost:9000/minio/

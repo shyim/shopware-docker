@@ -15,8 +15,9 @@ FIXTURE_NAME="$3"
 SNAP_SUFFIX="$3"
 SNAP_DIR="/var/www/html/snapshots"
 SHOPWARE_FOLDER="/var/www/html/$SHOPWARE_PROJECT"
+TYPE=`getProjectType`
 
-if [ ! -z "$SNAP_SUFFIX" ]; then
+if [[ ! -z "$SNAP_SUFFIX" ]]; then
     SNAP_SUFFIX=$(echo "-${SNAP_SUFFIX}")
 fi
 
@@ -27,12 +28,18 @@ case "$1" in
   build)
     checkParameter
     clearCache
-    if [ `isComposerProject` ]; then
-      mysql -h mysql -u root -proot -e "CREATE DATABASE IF NOT EXISTS $SHOPWARE_PROJECT"
-      cd "/var/www/html/${SHOPWARE_PROJECT}"
+    mysql -h mysql -u root -proot -e "CREATE DATABASE IF NOT EXISTS $SHOPWARE_PROJECT"
+    cd "/var/www/html/${SHOPWARE_PROJECT}"
+
+    if [[ ${TYPE} == "composer" ]]; then
       bash -c "composer install"
       buildComposerProjectEnvFile
-      bash -c "/var/www/html/${SHOPWARE_PROJECT}/app/install.sh"      
+      bash -c "/var/www/html/${SHOPWARE_PROJECT}/app/install.sh"
+    fi
+    if [[ ${TYPE} == "platform" ]]; then
+      composer install -o
+      buildPshOverrideFile
+      php psh.phar install
     else
       ant -Dapp.host=$SHOPWARE_PROJECT.dev.localhost -Ddb.host=mysql -Ddb.user=root -Ddb.password=root -Ddb.name=$SHOPWARE_PROJECT -f /var/www/html/$SHOPWARE_PROJECT/build/build.xml build-unit
       fixHooks
@@ -41,9 +48,14 @@ case "$1" in
     ;;
   test)
     checkParameter
-    clearCache
-    ant -Dapp.host=$SHOPWARE_PROJECT.dev.localhost -Ddb.host=mysql -Ddb.user=root -Ddb.password=root -Ddb.name=$SHOPWARE_PROJECT -f /var/www/html/$SHOPWARE_PROJECT/build/build.xml unit-shopware-continuous
-    fixHooks
+    if [[ ${TYPE} == "platform" ]]; then
+        php psh.phar unit
+    else
+        checkParameter
+        clearCache
+        ant -Dapp.host=$SHOPWARE_PROJECT.dev.localhost -Ddb.host=mysql -Ddb.user=root -Ddb.password=root -Ddb.name=$SHOPWARE_PROJECT -f /var/www/html/$SHOPWARE_PROJECT/build/build.xml unit-shopware-continuous
+        fixHooks
+    fi
     ;;
   drop)
     checkParameter
@@ -72,14 +84,14 @@ case "$1" in
     ;;
   snap)
     checkParameter
-    if [ ! -d "$SNAP_DIR" ]; then
+    if [[ ! -d "$SNAP_DIR" ]]; then
       mkdir "$SNAP_DIR"
     fi
     bash -c "mysqldump -h mysql -uroot -proot ${SHOPWARE_PROJECT} > /var/www/html/snapshots/${SHOPWARE_PROJECT}${SNAP_SUFFIX}.sql"
     ;;
   rsnap)
     checkParameter
-    if [ ! -f "$SNAP_DIR/${SHOPWARE_PROJECT}${SNAP_SUFFIX}.sql" ]; then
+    if [[ ! -f "$SNAP_DIR/${SHOPWARE_PROJECT}${SNAP_SUFFIX}.sql" ]]; then
       echo "Snap for shop ${SHOPWARE_PROJECT} does not exists"
       exit 1
     fi

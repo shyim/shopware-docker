@@ -5,15 +5,9 @@ set -o errexit
 set -o pipefail
 
 
-FILE="$0"
+DIR=$(dirname $0)
 
-if [ -L "$0" ]; then
-  FILE=$(readlink "$0")
-fi
-
-DIR=$(dirname ${FILE})
-
-source "${DIR}/functions.sh"
+source "${DIR}/../utils/functions.sh"
 
 for t in ${phpVersions[@]}; do
     echo "Building cli container for $t"
@@ -23,7 +17,7 @@ for t in ${phpVersions[@]}; do
     docker build -t shyim/shopware-nginx:${t} -f ./nginx/${t}/Dockerfile ./nginx/
 
     if [[ -d "./nginx/${t}-xdebug" ]]; then
-        docker build -t "shyim/shopware-nginx:${t}-xdebug" "./nginx/${t}-xdebug"
+        docker build -t shyim/shopware-nginx:${t}-xdebug -f ./nginx/${t}-xdebug/Dockerfile ./nginx/
     fi
 done
 

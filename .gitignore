@@ -1,5 +1,5 @@
 mysql-data
 .idea
-cli/php*
-nginx/php*
+images/**/Dockerfile
 docker-compose.override.yaml
+node_modules

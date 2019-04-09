@@ -1,14 +1,8 @@
 #!/usr/bin/env bash
 
-FILE="$0"
+DIR=$(dirname $0)
 
-if [ -L "$0" ]; then
-  FILE=$(readlink "$0")
-fi
-
-DIR=$(dirname ${FILE})
-
-source "${DIR}/functions.sh"
+source "${DIR}/../utils/functions.sh"
 
 
 for t in ${phpVersions[@]}; do
