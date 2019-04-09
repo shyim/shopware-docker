@@ -10,11 +10,11 @@ before_script:
   - npm install twig
 
 script:
-  - cd ${TRAVIS_BUILD_DIR}/utils/
+  - cd ${TRAVIS_BUILD_DIR}/images/
   - ./generate.sh
   - ./build.sh
 
 after_success:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
-  - cd ${TRAVIS_BUILD_DIR}/utils/
+  - cd ${TRAVIS_BUILD_DIR}/images/
   - bash ./push.sh
