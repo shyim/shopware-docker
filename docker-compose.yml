@@ -24,3 +24,5 @@ services:
       - ~/Code:/var/www/html
       - .:/opt/swdc
     tty: true
+    ports:
+      - 8181:8181

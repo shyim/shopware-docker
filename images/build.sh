@@ -7,7 +7,7 @@ set -o pipefail
 
 DIR=$(dirname $0)
 
-source "${DIR}/../utils/functions.sh"
+source "${DIR}/../functions.sh"
 
 for t in ${phpVersions[@]}; do
     echo "Building cli container for $t"

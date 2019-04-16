@@ -2,107 +2,72 @@
 
 FILE="$0"
 
-if [ -L "$0" ]; then
+if [[ -L "$0" ]]; then
   FILE=$(readlink "$0")
 fi
 
 DIR=$(dirname ${FILE})
 
-source "${DIR}/utils/functions.sh"
+source "${DIR}/functions.sh"
 
 SHOPWARE_PROJECT="$2"
-FIXTURE_NAME="$3"
-SNAP_SUFFIX="$3"
-SNAP_DIR="/var/www/html/snapshots"
 SHOPWARE_FOLDER="/var/www/html/$SHOPWARE_PROJECT"
-TYPE=`getProjectType`
 
-if [[ ! -z "$SNAP_SUFFIX" ]]; then
-    SNAP_SUFFIX=$(echo "-${SNAP_SUFFIX}")
+export SHOPWARE_FOLDER=$SHOPWARE_FOLDER
+export SHOPWARE_PROJECT=$SHOPWARE_PROJECT
+export DIR=$DIR
+
+modules=(base)
+
+if [[ ! -z "$SHOPWARE_PROJECT" ]]; then
+    modules=(base docker classic)
+
+    if [[ -d "$SHOPWARE_FOLDER/app" ]]; then
+        modules=(base docker classic-composer classic)
+    fi
+
+    if [[ -f "$SHOPWARE_FOLDER/src/RequestTransformer.php" ]]; then
+        modules=(base docker platform)
+    fi
 fi
 
 # Need to be in docker folder for docker-compose
 cd ${DIR}
 
-case "$1" in
-  build)
-    checkParameter
-    clearCache
-    mysql -h mysql -u root -proot -e "CREATE DATABASE IF NOT EXISTS $SHOPWARE_PROJECT"
-    cd "/var/www/html/${SHOPWARE_PROJECT}"
+for module in ${modules[@]}; do
+    for command in ./modules/${module}/*.sh; do
+        NAME=$(basename $command)
+        NAME=${NAME%.*}
 
-    if [[ ${TYPE} == "composer" ]]; then
-      bash -c "composer install"
-      buildComposerProjectEnvFile
-      bash -c "/var/www/html/${SHOPWARE_PROJECT}/app/install.sh"
+        if [[ $NAME == $1 ]]; then
+            source $command
+            exit 0
+        fi
+    done
+done
+
+cat ./modules/base/header.txt
+echo ""
+echo ""
+
+for module in ./modules/*; do
+    moduleBasename=$(basename $module)
+
+    if [[ "$(ls -A ${module})" ]]; then
+        echo "${green}Available commands in module: ${moduleBasename}${reset}"
+
+        for command in ${module}/*.sh; do
+            name=$(basename $command)
+            name=${name%.*}
+            usage=""
+
+            if [[ -f "${module}/${name}.help" ]]; then
+                usage=$(trim_whitespace "$(cat "${module}/${name}.help")")
+            fi
+
+            printf '%-20s' "${lightGreen}    ${name}"
+            echo " ${usage}${reset}"
+        done
+        echo ""
     fi
-    if [[ ${TYPE} == "platform" ]]; then
-      composer install -o
-      buildPshOverrideFile
-      php psh.phar install
-    else
-      ant -Dapp.host=$SHOPWARE_PROJECT.dev.localhost -Ddb.host=mysql -Ddb.user=root -Ddb.password=root -Ddb.name=$SHOPWARE_PROJECT -f /var/www/html/$SHOPWARE_PROJECT/build/build.xml build-unit
-      fixHooks
-      fixDeveloperConfig
-    fi
-    ;;
-  test)
-    checkParameter
-    if [[ ${TYPE} == "platform" ]]; then
-        php psh.phar unit
-    else
-        checkParameter
-        clearCache
-        ant -Dapp.host=$SHOPWARE_PROJECT.dev.localhost -Ddb.host=mysql -Ddb.user=root -Ddb.password=root -Ddb.name=$SHOPWARE_PROJECT -f /var/www/html/$SHOPWARE_PROJECT/build/build.xml unit-shopware-continuous
-        fixHooks
-    fi
-    ;;
-  drop)
-    checkParameter
-    mysql -h mysql -u root -proot -e "DROP DATABASE $SHOPWARE_PROJECT"
-    ;;
-  shell)
-    docker-compose run -e COLUMNS="`tput cols`" -e LINES="`tput lines`" -e SHELL=bash --rm cli bash
-    ;;
-  snippets)
-    checkParameter
-    php /var/www/html/${SHOPWARE_PROJECT}/bin/console sw:snippets:to:db --include-plugins
-    clearCache
-    ;;
-  update-test)
-    checkParameter
-    php /var/www/html/${SHOPWARE_PROJECT}/bin/console sw:migration:migrate --mode=update
-    clearCache
-    ;;
-  hooks)
-    checkParameter
-    fixHooks
-    ;;
-  config)
-    checkParameter
-    fixDeveloperConfig "$3"
-    ;;
-  snap)
-    checkParameter
-    if [[ ! -d "$SNAP_DIR" ]]; then
-      mkdir "$SNAP_DIR"
-    fi
-    bash -c "mysqldump -h mysql -uroot -proot ${SHOPWARE_PROJECT} > /var/www/html/snapshots/${SHOPWARE_PROJECT}${SNAP_SUFFIX}.sql"
-    ;;
-  rsnap)
-    checkParameter
-    if [[ ! -f "$SNAP_DIR/${SHOPWARE_PROJECT}${SNAP_SUFFIX}.sql" ]]; then
-      echo "Snap for shop ${SHOPWARE_PROJECT} does not exists"
-      exit 1
-    fi
-    mysql -h mysql -u root -proot -e "CREATE DATABASE IF NOT EXISTS $SHOPWARE_PROJECT"
-    bash -c "mysql -h mysql -uroot -proot ${SHOPWARE_PROJECT} < /var/www/html/snapshots/${SHOPWARE_PROJECT}${SNAP_SUFFIX}.sql"
-    ;;
-  apply)
-    checkParameter
-    applyFixture 
-    ;;
-  *)
-    echo "Usage: swdc {build|drop|test|shell|hooks|config|snippets|update-test|snap|rsnap|up|down}"
-    ;;
-esac
+done

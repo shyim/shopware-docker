@@ -8,23 +8,26 @@ fi
 
 DIR=$(dirname ${FILE})
 
-source "${DIR}/utils/functions.sh"
+export DIR=${DIR}
+
+source "${DIR}/functions.sh"
 
 # Need to be in docker folder for docker-compose
 cd ${DIR}
 
-case "$1" in
-  up)
-    generateDockerComposeOverride
-    docker-compose up -d --remove-orphans
-    ;;
-  down)
-    docker-compose down
-    ;;
-  shell)
-    docker-compose exec -e COLUMNS="`tput cols`" -e LINES="`tput lines`" -e SHELL=bash cli bash
-    ;;
-  *)
+FOUNDCLI=false
+export MODULES="base"
+
+for command in ./modules/base/*.sh; do
+    NAME=$(basename $command)
+    NAME=${NAME%.*}
+
+    if [[ $NAME == $1 ]]; then
+        source $command
+        FOUNDCLI=true
+    fi
+done
+
+if [[ $FOUNDCLI == false ]]; then
     docker-compose exec cli bash /opt/swdc/swdc-inside "$@"
-    ;;
-esac
+fi

@@ -2,7 +2,7 @@
 
 DIR=$(dirname $0)
 
-source "${DIR}/../utils/functions.sh"
+source "${DIR}/../functions.sh"
 
 rm -r cli/php*
 rm -r nginx/php*
