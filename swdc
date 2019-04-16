@@ -2,7 +2,7 @@
 
 FILE="$0"
 
-if [ -L "$0" ]; then
+if [[ -L "$0" ]]; then
   FILE=$(readlink "$0")
 fi
 
@@ -15,19 +15,14 @@ source "${DIR}/functions.sh"
 # Need to be in docker folder for docker-compose
 cd ${DIR}
 
-FOUNDCLI=false
-export MODULES="base"
-
 for command in ./modules/base/*.sh; do
     NAME=$(basename $command)
     NAME=${NAME%.*}
 
     if [[ $NAME == $1 ]]; then
-        source $command
-        FOUNDCLI=true
+        source ${command}
+        exit 0
     fi
 done
 
-if [[ $FOUNDCLI == false ]]; then
-    docker-compose exec cli bash /opt/swdc/swdc-inside "$@"
-fi
+docker-compose exec cli bash /opt/swdc/swdc-inside "$@"
