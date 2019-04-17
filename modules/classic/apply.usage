@@ -1,0 +1,7 @@
+All fixtures can be applied with `swdc apply [Folder name in ~/Code] [Name]`
+
+* api - Sets a apiKey for the demo user with "demo"
+* bi-reset - Resets all bi statistics
+* en - Sets base-urls and the categories to German category
+* force-compile - Enables force compile
+* netto-bug - Create a product to produce netto issues

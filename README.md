@@ -55,24 +55,6 @@ This setup works for Shopware 5, Shopware 5 Composer Project and Platform
 * `swdc build`                     Reinstalls the database
 * `swdc unit`                      Runs all unit tests
 
-
-## Which configs pre-sets are exists?
-
-All configs can be applied with `swdc config [Folder name in ~/Code] [Name]`
-
-* bi - Sets bi endpoint to staging
-* sbp - Sets store endpoint to staging
-* template - Enables forceCompile
-* elastic - Enables elasticsearch
-
-## Which fixtures are available?
-
-All fixtures can be applied with `swdc apply [Folder name in ~/Code] [Name]`
-
-* api - Sets a apiKey for the demo user with "demo"
-* bi-reset - Resets all bi statistics
-* en - Sets base-urls and the categories to German category
-
 ## Which images and tags are available?
 
 * [shopware/shopware-nginx](https://hub.docker.com/r/shyim/shopware-nginx/tags)

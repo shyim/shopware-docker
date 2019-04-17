@@ -1,0 +1,6 @@
+All configs can be applied with `swdc config [Folder name in ~/Code] [Name]`
+
+* bi - Sets bi endpoint to staging
+* sbp - Sets store endpoint to staging
+* template - Enables forceCompile
+* elastic - Enables elasticsearch

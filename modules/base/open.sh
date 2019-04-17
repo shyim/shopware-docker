@@ -4,7 +4,7 @@ SHOPWARE_PROJECT=$2
 SHOPWARE_FOLDER=~/Code/${SHOPWARE_PROJECT}
 URL=http://${SHOPWARE_PROJECT}.dev.localhost
 
-if [[ -f "$SHOPWARE_FOLDER/src/RequestTransformer.php" ]]; then
+if [[ -f "$SHOPWARE_FOLDER/src/Kernel.php" ]]; then
     URL=http://${SHOPWARE_PROJECT}.platform.localhost
 fi
 
