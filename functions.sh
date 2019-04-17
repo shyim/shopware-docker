@@ -29,7 +29,7 @@ function fixHooks()
 
 function clearCache()
 {
-    rm -r ${SHOPWARE_FOLDER}/var/cache/*
+    rm -rf ${SHOPWARE_FOLDER}/var/cache/*
 }
 
 function checkParameter()
