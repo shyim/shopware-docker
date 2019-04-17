@@ -6,14 +6,23 @@ source "${DIR}/../functions.sh"
 
 
 for t in ${phpVersions[@]}; do
-    docker push shyim/shopware-cli:${t}
-    docker push shyim/shopware-nginx:${t}
+    if [[ $1 == "cli" || $1 == "all" ]]; then
+        docker push shyim/shopware-cli:${t}
+    fi
+
+    if [[ $1 == "nginx" || $1 == "all" ]]; then
+        docker push shyim/shopware-nginx:${t}
+    fi
 done
 
-docker push shyim/shopware-nginx:php72-xdebug
-docker push shyim/shopware-nginx:php71-xdebug
-docker push shyim/shopware-nginx:php56-xdebug
+if [[ $1 == "xdebug" || $1 == "all" ]]; then
+    docker push shyim/shopware-nginx:php72-xdebug
+    docker push shyim/shopware-nginx:php71-xdebug
+    docker push shyim/shopware-nginx:php56-xdebug
+fi
 
-for t in ${mysqlVersions[@]}; do
-    docker push shyim/shopware-mysql:${t}
-done
+if [[ $1 == "mysql" || $1 == "all" ]]; then
+    for t in ${mysqlVersions[@]}; do
+        docker push shyim/shopware-mysql:${t}
+    done
+fi

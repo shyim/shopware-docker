@@ -2,6 +2,13 @@ sudo: required
 
 language: php
 
+env:
+  matrix:
+    - MODULE="cli"
+    - MODULE="nginx"
+    - MODULE="xdebug"
+    - MODULE="mysql"
+
 services:
   - docker
 
@@ -12,9 +19,9 @@ before_script:
 script:
   - cd ${TRAVIS_BUILD_DIR}/images/
   - ./generate.sh
-  - ./build.sh
+  - ./build.sh ${MODULE}
 
 after_success:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
   - cd ${TRAVIS_BUILD_DIR}/images/
-  - bash ./push.sh
+  - bash ./push.sh ${MODULE}
