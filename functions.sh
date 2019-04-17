@@ -15,7 +15,7 @@ modulesClassic=(base classic)
 modulesClassicComposerProject=(base classic-composer classic)
 modulesPlatform=(base platform)
 
-phpVersions=(php56 php70 php71 php72 php73)
+phpVersions=(php71 php72 php73)
 xdebugPhpVersions=(php71 php70 php72)
 mysqlVersions=(55 56 57 8)
 
