@@ -1,28 +1,59 @@
 # shopware-docker
 
+This setup works for Shopware 5, Shopware 5 Composer Project and Platform
+
 ## How to setup?
 
 * Clone the repository somewhere
 * Optional: Do a symlink from swdc to `/usr/local/bin/swdc`
 * Configure your needs in ".env" file
-* `swdc up`: Starts the docker-compose
-* Checkout in `~/Code/shopware` the offical shopware repository or your shopware composer project
-* Execute `swdc build shopware`
-* Access your shop under `http://shopware.dev.localhost`
+* `swdc up`: Starts the docker-compose with the containers
+
+## Creating projects
+
+* Create a new folder in ~/Code/ with your project name and checkout a shopware installation
+* Run `swdc build [Folder Name]`
+* After the installation succeed, can you open the shop with the command `swdc open [Folder Name]`
 
 ## Which commands exist?
 
-* `swdc up` - Starts the containers
-* `swdc down` - Stops the containers
-* `swdc build [Folder name in ~/Code]` - Runs build unit, cleares cache, sets developer config (throwExceptions)
-* `swdc test [Folder name in ~/Code]` - Runs unit tests for it
-* `swdc snippets [Folder name in ~/Code]` - Imports all new snippets for that shop
-* `swdc snap [Folder name in ~/Code] [Name]` - Creates a database snapshot
-* `swdc rsnap [Folder name in ~/Code] [Name]` - Restores a database snapshot
-* `swdc apply [Folder name in ~/Code] [Name]` - Apply a fixture
-* `swdc shell` - Opens the a bash shell in cli container
-* `swdc version [PHP Version] [MySQL Version]` - Generate a docker-compose.override.yaml to choose a another version
-* `swdc update-test` - Runs migration in update mode
+### Module: base
+
+* `swdc debug-logs`                Please use this command to collect informations for a Github Issue
+* `swdc down`                      Stops the containers
+* `swdc generate-command-list`     Generates the command list for README.md
+* `swdc help`                      
+* `swdc open`                      Opens the given shop in browser
+* `swdc shell-root`                Joins into the cli container as root user
+* `swdc shell`                     Joins into the cli container as normal user
+* `swdc update-images`             Updates used docker images
+* `swdc up`                        Starts the containers
+
+### Module: classic
+
+* `swdc apply`                     Applys a database fixture
+* `swdc build`                     Reinstalls the database
+* `swdc config`                    Applies fixture to the config.php
+* `swdc hooks`                     Fixes the hooks for git
+* `swdc snippets`                  Reimports all snippets
+* `swdc test`                      Runs all tests
+* `swdc update-test`               Simulate a update
+
+### Module: classic-composer
+
+* `swdc build`                     Reinstalls the database
+
+### Module: docker
+
+* `swdc drop`                      Drops the database
+* `swdc rsnap`                     Loads back a created snapshot
+* `swdc snap`                      Creates a new snapshot
+
+### Module: platform
+
+* `swdc admin-watch`               Start the admin watcher at port 8181
+* `swdc build`                     Reinstalls the database
+* `swdc unit`                      Runs all unit tests
 
 
 ## Which configs pre-sets are exists?
@@ -52,6 +83,7 @@ All fixtures can be applied with `swdc apply [Folder name in ~/Code] [Name]`
 
 * For Shopware 5 you can use http://**FOLDERNAME**.dev.localhost
 * For Shopware Platform you can use http://**FOLDERNAME**.platform.localhost
+* Or use `swdc open [Folder Name]`
 
 ## Can i use it on Windows / Mac?
 
