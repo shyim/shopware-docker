@@ -22,7 +22,7 @@ if [[ ! -z "$SHOPWARE_PROJECT" ]]; then
         modules=(base docker classic-composer classic)
     fi
 
-    if [[ -f "$SHOPWARE_FOLDER/src/RequestTransformer.php" ]]; then
+    if [[ -f "$SHOPWARE_FOLDER/src/Kernel.php" ]]; then
         modules=(base docker platform)
     fi
 fi
