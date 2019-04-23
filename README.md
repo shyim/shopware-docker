@@ -77,7 +77,7 @@ I dont't develop on Windows or Mac. Try it out by own
 
 Host: mysql
 User: root
-Password: Root
+Password: root
 PhpMyAdmin / Adminer: http://localhost:8080
 
 ### Shopware
