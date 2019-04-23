@@ -16,4 +16,7 @@ then
 elif which gnome-open > /dev/null
 then
   gnome-open ${URL}
+elif which open > /dev/null
+then
+  open ${URL}
 fi
