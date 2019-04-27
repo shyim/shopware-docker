@@ -14,6 +14,11 @@ echo "    image: shyim/shopware-nginx:php${PHP_VERSION}" >> "${DIR}/docker-compo
 echo "  mysql:" >> "${DIR}/docker-compose.override.yaml"
 echo "    image: shyim/shopware-mysql:${MYSQL_VERSION}" >> "${DIR}/docker-compose.override.yaml"
 
+if [[ ${EXPOSE_MYSQL_LOCAL} == "true" ]]; then
+    echo "    ports:" >> "${DIR}/docker-compose.override.yaml"
+    echo "      - 3306:3306" >> "${DIR}/docker-compose.override.yaml"
+fi
+
 if [[ ${PERSISTENT_DATABASE} == "false" ]]; then
     echo "    tmpfs:" >> "${DIR}/docker-compose.override.yaml"
     echo "      - /var/lib/mysql" >> "${DIR}/docker-compose.override.yaml"
@@ -38,8 +43,9 @@ fi
 if [[ ${ENABLE_ELASTICSEARCH} == "true" ]]; then
     echo "  elastic:" >> "${DIR}/docker-compose.override.yaml"
     echo "    image: elasticsearch:${ELASTICSEARCH_VERSION}" >> "${DIR}/docker-compose.override.yaml"
-    echo "    ports:" >> "${DIR}/docker-compose.override.yaml"
-    echo "      - 9200:9200" >> "${DIR}/docker-compose.override.yaml"
+
+    echo "  cerebro:" >> "${DIR}/docker-compose.override.yaml"
+    echo "    image: lmenezes/cerebro" >> "${DIR}/docker-compose.override.yaml"
 fi
 
 if [[ ${ENABLE_REDIS} == "true" ]]; then
@@ -60,16 +66,12 @@ if [[ ${DATABASE_TOOL} == "adminer" ]]; then
     echo "  adminer:" >> "${DIR}/docker-compose.override.yaml"
     echo "    image: adminer" >> "${DIR}/docker-compose.override.yaml"
     echo "    env_file: docker.env" >> "${DIR}/docker-compose.override.yaml"
-    echo "    ports:" >> "${DIR}/docker-compose.override.yaml"
-    echo "      - 8080:8080" >> "${DIR}/docker-compose.override.yaml"
 fi
 
 if [[ ${DATABASE_TOOL} == "phpmyadmin" ]]; then
     echo "  phpmyadmin:" >> "${DIR}/docker-compose.override.yaml"
     echo "    image: phpmyadmin/phpmyadmin" >> "${DIR}/docker-compose.override.yaml"
     echo "    env_file: docker.env" >> "${DIR}/docker-compose.override.yaml"
-    echo "    ports:" >> "${DIR}/docker-compose.override.yaml"
-    echo "      - 8080:80" >> "${DIR}/docker-compose.override.yaml"
 fi
 
 if [[ ${ENABLE_SELENIUM} == "true" ]]; then

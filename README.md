@@ -73,12 +73,21 @@ I dont't develop on Windows or Mac. Try it out by own
 
 ## What are the passwords?
 
+### SMTP
+
+Mailhog: http://mail.localhost
+
 ### MySQL
 
 Host: mysql
 User: root
 Password: root
-PhpMyAdmin / Adminer: http://localhost:8080
+PhpMyAdmin / Adminer: http://db.localhost
+
+## ElasticSearch
+
+Access es directly: http://es.localhost
+Access cerebro: http://cerebro.localhost
 
 ### Shopware
 

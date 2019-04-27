@@ -3,15 +3,13 @@ services:
   mysql:
     image: mariadb:10.3
     env_file: docker.env
-    ports:
-      - 3306:3306
   smtp:
     image: mailhog/mailhog
-    ports:
-      - 8025:8025
   nginx:
     image: shyim/shopware-nginx:php72
-    env_file: docker.env 
+    env_file:
+      - docker.env
+      - .env
     ports:
       - 80:80
       - 443:443

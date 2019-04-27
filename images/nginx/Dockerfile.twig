@@ -8,20 +8,17 @@ RUN set -x && \
       apk add --no-cache \
       nginx \
       shadow \
-	  bzip2-dev \
+	    bzip2-dev \
+      libzip-dev \
+      gettext \
       ca-certificates \
-      freetype \
       freetype-dev \
-      git \
       icu-dev \
-      libjpeg-turbo \
       libjpeg-turbo-dev \
-      libpng \
       libpng-dev \
       libzip-dev \
       libwebp-dev \
       libxml2-dev \
-      mysql-client \
       pcre-dev \
       unzip \
       wget \
@@ -31,12 +28,14 @@ RUN set -x && \
       build-base \
       autoconf \
       automake && \
+    docker-php-ext-configure zip \
+      --with-libzip && \
     docker-php-ext-configure gd \
       --with-gd \
       --with-freetype-dir=/usr/include/ \
       --with-png-dir=/usr/include/ \
       --with-jpeg-dir=/usr/include/ \
-      --with-webp && \
+      --with-webp-dir && \
     docker-php-ext-install -j$(nproc) \
       bcmath \
       gd \
@@ -86,4 +85,5 @@ ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
 COPY rootfs/ /
 EXPOSE 80
 
+ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
