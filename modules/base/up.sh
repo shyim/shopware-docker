@@ -22,6 +22,9 @@ fi
 if [[ ${PERSISTENT_DATABASE} == "false" ]]; then
     echo "    tmpfs:" >> "${DIR}/docker-compose.override.yaml"
     echo "      - /var/lib/mysql" >> "${DIR}/docker-compose.override.yaml"
+else
+    echo "    volumes:" >> "${DIR}/docker-compose.override.yaml"
+    echo "      - ./mysql-data:/var/lib/mysql" >> "${DIR}/docker-compose.override.yaml"
 fi
 
 # Build alias for cli
