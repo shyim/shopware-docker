@@ -38,6 +38,7 @@ This setup works for Shopware 5, Shopware 5 Composer Project and Platform
 * `swdc snippets`                  Reimports all snippets
 * `swdc test`                      Runs all tests
 * `swdc update-test`               Simulate a update
+* `swdc download-testimages`       Download and extract shopware testimages
 
 ### Module: classic-composer
 
