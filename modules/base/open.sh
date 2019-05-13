@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 SHOPWARE_PROJECT=$2
-SHOPWARE_FOLDER=~/Code/${SHOPWARE_PROJECT}
+SHOPWARE_FOLDER=${CODE_DIRECTORY}/${SHOPWARE_PROJECT}
 URL=http://${SHOPWARE_PROJECT}.dev.localhost
 
 if [[ -f "$SHOPWARE_FOLDER/src/Kernel.php" ]]; then

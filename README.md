@@ -15,6 +15,11 @@ This setup works for Shopware 5, Shopware 5 Composer Project and Platform
 * Run `swdc build [Folder Name]`
 * After the installation succeed, can you open the shop with the command `swdc open [Folder Name]`
 
+### Custom code directory
+
+* You may change the code directory which the shopware installations lie in by
+  modifying the `CODE_DIRECTORY` variable in `.env`
+
 ## Which commands exist?
 
 ### Module: base

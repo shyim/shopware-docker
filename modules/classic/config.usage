@@ -1,4 +1,4 @@
-All configs can be applied with `swdc config [Folder name in ~/Code] [Name]`
+All configs can be applied with `swdc config [Folder name in ~/Code (CODE_DIRECTORY variable)] [Name]`
 
 * bi - Sets bi endpoint to staging
 * sbp - Sets store endpoint to staging
