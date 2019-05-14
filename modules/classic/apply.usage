@@ -1,4 +1,4 @@
-All fixtures can be applied with `swdc apply [Folder name in ~/Code] [Name]`
+All fixtures can be applied with `swdc apply [Folder name in ~/Code (CODE_DIRECTORY variable)] [Name]`
 
 * api - Sets a apiKey for the demo user with "demo"
 * bi-reset - Resets all bi statistics
