@@ -36,7 +36,7 @@ if [[ ${CODE_FOLDER_CONTENT} ]]; then
     for d in ${CODE_DIRECTORY}/* ; do
         if [[ -d "$d" ]]; then
             NAME=$(basename $d)
-            if [[ -f "$d/src/RequestTransformer.php" ]]; then
+            if [[ -f "$d/src/Kernel.php" ]]; then
                 echo "      - nginx:${NAME}.platform.localhost" >> "${DIR}/docker-compose.override.yaml"
             else
                 echo "      - nginx:${NAME}.dev.localhost" >> "${DIR}/docker-compose.override.yaml"
@@ -92,7 +92,7 @@ if [[ ${ENABLE_SELENIUM} == "true" ]]; then
         echo "    links:" >> "${DIR}/docker-compose.override.yaml"
 
         for d in ${CODE_DIRECTORY}/* ; do
-            if [[ -f "$d/src/RequestTransformer.php" ]]; then
+            if [[ -f "$d/src/Kernel.php" ]]; then
                 echo "      - nginx:${NAME}.platform.localhost" >> "${DIR}/docker-compose.override.yaml"
             else
                 echo "      - nginx:${NAME}.dev.localhost" >> "${DIR}/docker-compose.override.yaml"
