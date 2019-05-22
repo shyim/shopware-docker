@@ -22,6 +22,19 @@ This setup works for Shopware 5, Shopware 5 Composer Project and Platform
 
 ## Which commands exist?
 
+### Module: base
+
+* `swdc debug-logs`                Please use this command to collect informations for a Github Issue
+* `swdc debug`                     Symfony Var-dump Server, use swdump() in your Code
+* `swdc down`                      Stops the containers
+* `swdc generate-command-list`     Generates the command list for README.md
+* `swdc help`                      
+* `swdc open`                      Opens the given shop in browser
+* `swdc shell-root`                Joins into the cli container as root user
+* `swdc shell`                     Joins into the cli container as normal user
+* `swdc update-images`             Updates used docker images
+* `swdc up`                        Starts the containers
+
 ### Module: classic
 
 * `swdc apply`                     Applys a database fixture
