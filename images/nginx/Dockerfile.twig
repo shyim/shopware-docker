@@ -80,6 +80,15 @@ RUN set -x && \
     echo 'xdebug.show_mem_delta=1' >> /usr/local/etc/php/conf.d/ext-xdebug.ini
 {% endif %}
 
+{% if phpVersionNumeric >= 71 %}
+RUN cd /opt/ && \
+    wget https://github.com/shyim/var-dumper-server-prefixed/archive/master.zip && \
+    unzip master.zip && \
+    rm master.zip && \
+    mv var-dumper-server-prefixed-master var-dumper-server && \
+    echo "auto_prepend_file = /opt/var-dumper-server/bin/init.php" > /usr/local/etc/php/conf.d/vardumpserver.ini
+{% endif %}
+
 ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
 
 COPY rootfs/ /

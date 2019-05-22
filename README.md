@@ -22,28 +22,16 @@ This setup works for Shopware 5, Shopware 5 Composer Project and Platform
 
 ## Which commands exist?
 
-### Module: base
-
-* `swdc debug-logs`                Please use this command to collect informations for a Github Issue
-* `swdc down`                      Stops the containers
-* `swdc generate-command-list`     Generates the command list for README.md
-* `swdc help`                      
-* `swdc open`                      Opens the given shop in browser
-* `swdc shell-root`                Joins into the cli container as root user
-* `swdc shell`                     Joins into the cli container as normal user
-* `swdc update-images`             Updates used docker images
-* `swdc up`                        Starts the containers
-
 ### Module: classic
 
 * `swdc apply`                     Applys a database fixture
 * `swdc build`                     Reinstalls the database
 * `swdc config`                    Applies fixture to the config.php
+* `swdc download-testimages`       Download and extract shopware testimages
 * `swdc hooks`                     Fixes the hooks for git
 * `swdc snippets`                  Reimports all snippets
 * `swdc test`                      Runs all tests
 * `swdc update-test`               Simulate a update
-* `swdc download-testimages`       Download and extract shopware testimages
 
 ### Module: classic-composer
 
@@ -60,6 +48,7 @@ This setup works for Shopware 5, Shopware 5 Composer Project and Platform
 * `swdc admin-watch`               Start the admin watcher at port 8181
 * `swdc build`                     Reinstalls the database
 * `swdc unit`                      Runs all unit tests
+
 
 ## Which images and tags are available?
 

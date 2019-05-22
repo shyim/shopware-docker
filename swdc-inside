@@ -61,7 +61,7 @@ for module in ./modules/*; do
                 usage=$(trim_whitespace "$(cat "${module}/${name}.help")")
             fi
 
-            printf '%-25s' "${lightGreen}    ${name}"
+            printf '%-32s' "${lightGreen}    ${name}"
             echo " ${usage}${reset}"
         done
         echo ""
