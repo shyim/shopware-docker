@@ -103,6 +103,12 @@ User: demo
 
 Password: demo
 
+### Shopware 6
+
+User: admin
+
+Password: shopware
+
 ### Minio (S3)
 
 Host: minio
