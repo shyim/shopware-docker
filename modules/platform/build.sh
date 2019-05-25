@@ -7,15 +7,14 @@ mysql -h mysql -u root -proot -e "DROP DATABASE IF EXISTS $SHOPWARE_PROJECT"
 mysql -h mysql -u root -proot -e "CREATE DATABASE $SHOPWARE_PROJECT"
 cd "/var/www/html/${SHOPWARE_PROJECT}"
 
-echo "const:" > "$SHOPWARE_FOLDER/.psh.yaml.override"
-echo "  APP_ENV: dev" >> "$SHOPWARE_FOLDER/.psh.yaml.override"
-echo "  APP_URL: http://$SHOPWARE_PROJECT.platform.localhost" >> "$SHOPWARE_FOLDER/.psh.yaml.override"
-echo "  DB_HOST: mysql" >> "$SHOPWARE_FOLDER/.psh.yaml.override"
-echo "  DB_PORT: 3306" >> "$SHOPWARE_FOLDER/.psh.yaml.override"
-echo "  DB_NAME: $SHOPWARE_PROJECT" >> "$SHOPWARE_FOLDER/.psh.yaml.override"
-echo "  DB_USER: root" >> "$SHOPWARE_FOLDER/.psh.yaml.override"
-echo "  DB_PASSWORD: root" >> "$SHOPWARE_FOLDER/.psh.yaml.override"
-echo "  DEVPORT: 8181" >> "$SHOPWARE_FOLDER/.psh.yaml.override"
+echo "APP_ENV=docker
+APP_SECRET=8583a6ff63c5894a3195331701749943
+APP_URL=http://${SHOPWARE_PROJECT}.platform.localhost
+MAILER_URL=null://localhost
+
+DATABASE_URL=mysql://root:root@mysql:3306/${SHOPWARE_PROJECT}
+
+COMPOSER_HOME=/tmp/composer-tmp-${SHOPWARE_PROJECT}" > .env
 
 export PROJECT_ROOT=$SHOPWARE_FOLDER
 

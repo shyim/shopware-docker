@@ -29,7 +29,9 @@ function fixHooks()
 
 function clearCache()
 {
-    find ${SHOPWARE_FOLDER}/var/cache -mindepth 1 -maxdepth 1 -type d -exec rm -r {} \;
+    if [ -d "${SHOPWARE_FOLDER}/var/cache" ]; then
+        find ${SHOPWARE_FOLDER}/var/cache -mindepth 1 -maxdepth 1 -type d -exec rm -r {} \;
+    fi
 }
 
 function checkParameter()

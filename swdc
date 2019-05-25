@@ -10,6 +10,7 @@ DIR=$(dirname ${FILE})
 
 export DIR=${DIR}
 
+source "${DIR}/.env"
 source "${DIR}/functions.sh"
 
 # Need to be in docker folder for docker-compose
