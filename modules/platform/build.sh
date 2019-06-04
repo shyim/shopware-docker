@@ -32,7 +32,7 @@ bin/console sales-channel:create:storefront --url="http://${SHOPWARE_PROJECT}.pl
 
 
 if [[ ! "$@" == *"--without-demo-data" ]]; then
-    APP_ENV=dev bin/console framework:demodata
+    APP_ENV=prod bin/console framework:demodata
     bin/console dbal:refresh:index
 fi
 
