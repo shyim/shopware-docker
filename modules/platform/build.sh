@@ -37,7 +37,8 @@ if [[ ! "$@" == *"--without-demo-data" ]]; then
 fi
 
 if [[ ! "$@" == *"--without-building" ]]; then
-    npm --prefix vendor/shopware/platform/src/Administration/Resources/administration/ install
+    npm clean-install --prefix vendor/shopware/platform/src/Administration/Resources
+    npm run --prefix vendor/shopware/platform/src/Administration/Resources lerna -- bootstrap
     npm run --prefix vendor/shopware/platform/src/Administration/Resources/administration/ build
 
     npm --prefix vendor/shopware/platform/src/Storefront/Resources/ install

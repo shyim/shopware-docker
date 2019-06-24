@@ -13,6 +13,22 @@ echo "  nginx:" >> "${DIR}/docker-compose.override.yaml"
 echo "    image: shyim/shopware-nginx:php${PHP_VERSION}" >> "${DIR}/docker-compose.override.yaml"
 echo "    volumes:" >> "${DIR}/docker-compose.override.yaml"
 echo "      - ${CODE_DIRECTORY}:/var/www/html" >> "${DIR}/docker-compose.override.yaml"
+if [[ ${CODE_FOLDER_CONTENT} ]]; then
+    echo "    extra_hosts:" >> "${DIR}/docker-compose.override.yaml"
+    for d in ${CODE_DIRECTORY}/* ; do
+        if [[ -d "$d" ]]; then
+            NAME=$(basename $d)
+            if [[ -f "$d/public/index.php" ]]; then
+                echo "      ${NAME}.platform.localhost: 127.0.0.1" >> "${DIR}/docker-compose.override.yaml"
+            else
+                echo "      ${NAME}.dev.localhost: 127.0.0.1" >> "${DIR}/docker-compose.override.yaml"
+            fi
+        fi
+    done
+    echo "    volumes:" >> "${DIR}/docker-compose.override.yaml"
+    echo "      - ${CODE_DIRECTORY}:/var/www/html" >> "${DIR}/docker-compose.override.yaml"
+fi
+
 echo "  mysql:" >> "${DIR}/docker-compose.override.yaml"
 echo "    image: shyim/shopware-mysql:${MYSQL_VERSION}" >> "${DIR}/docker-compose.override.yaml"
 
@@ -36,7 +52,7 @@ if [[ ${CODE_FOLDER_CONTENT} ]]; then
     for d in ${CODE_DIRECTORY}/* ; do
         if [[ -d "$d" ]]; then
             NAME=$(basename $d)
-            if [[ -f "$d/src/Kernel.php" ]]; then
+            if [[ -f "$d/public/index.php" ]]; then
                 echo "      - nginx:${NAME}.platform.localhost" >> "${DIR}/docker-compose.override.yaml"
             else
                 echo "      - nginx:${NAME}.dev.localhost" >> "${DIR}/docker-compose.override.yaml"
@@ -49,7 +65,7 @@ fi
 
 if [[ ${ENABLE_ELASTICSEARCH} == "true" ]]; then
     echo "  elastic:" >> "${DIR}/docker-compose.override.yaml"
-    echo "    image: elasticsearch:${ELASTICSEARCH_VERSION}" >> "${DIR}/docker-compose.override.yaml"
+    echo "    image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTICSEARCH_VERSION}" >> "${DIR}/docker-compose.override.yaml"
 
     echo "  cerebro:" >> "${DIR}/docker-compose.override.yaml"
     echo "    image: lmenezes/cerebro" >> "${DIR}/docker-compose.override.yaml"
@@ -92,7 +108,7 @@ if [[ ${ENABLE_SELENIUM} == "true" ]]; then
         echo "    links:" >> "${DIR}/docker-compose.override.yaml"
 
         for d in ${CODE_DIRECTORY}/* ; do
-            if [[ -f "$d/src/Kernel.php" ]]; then
+            if [[ -f "$d/public/index.php" ]]; then
                 echo "      - nginx:${NAME}.platform.localhost" >> "${DIR}/docker-compose.override.yaml"
             else
                 echo "      - nginx:${NAME}.dev.localhost" >> "${DIR}/docker-compose.override.yaml"
