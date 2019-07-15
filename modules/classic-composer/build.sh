@@ -16,4 +16,7 @@ echo "SHOP_URL=\"http://$SHOPWARE_PROJECT.dev.localhost\"" >> "$SHOPWARE_FOLDER/
 echo 'IMPORT_DEMODATA=y' >> "$SHOPWARE_FOLDER/.env"
 
 bash -c "composer install"
-bash -c "/var/www/html/${SHOPWARE_PROJECT}/app/install.sh"
+
+NEW_INSTALLER_PATH="/var/www/html/${SHOPWARE_PROJECT}/app/bin/install.sh"
+OLD_INSTALLER_PATH="/var/www/html/${SHOPWARE_PROJECT}/app/install.sh"
+bash -c "if [ -x \"$NEW_INSTALLER_PATH\" ]; then bash \"$NEW_INSTALLER_PATH\"; else bash \"$OLD_INSTALLER_PATH\"; fi"
