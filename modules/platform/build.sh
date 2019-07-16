@@ -47,5 +47,8 @@ if [[ ! "$@" == *"--without-building" ]]; then
     npm --prefix vendor/shopware/platform/src/Storefront/Resources/ install
     npm --prefix vendor/shopware/platform/src/Storefront/Resources/ run production
 
+    php bin/console theme:compile
     php bin/console assets:install
+    php bin/console theme:refresh
+    php bin/console theme:change Storefront --all
 fi
