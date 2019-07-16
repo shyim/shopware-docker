@@ -13,8 +13,8 @@ echo "<?php
 return [
     'db' => [
         'username' => 'root',
-        'password' => 'root',
-        'dbname' => '$SHOPWARE_PROJECT',
+        'password' => '${MYSQL_ROOT_PASSWORD}',
+        'dbname' => '${SHOPWARE_PROJECT}',
         'host' => 'mysql',
         'port' => '3306'
     ]

@@ -7,7 +7,7 @@ cd "/var/www/html/${SHOPWARE_PROJECT}"
 
 echo "SHOPWARE_VERSION_TEXT=\"$SHOPWARE_PROJECT (local docker)\"" >> "$SHOPWARE_FOLDER/.env"
 echo "SHOPWARE_REVISION=\"`git rev-parse HEAD`\"" >> "$SHOPWARE_FOLDER/.env"
-echo "DATABASE_URL=\"mysql://root:root@mysql:3306/$SHOPWARE_PROJECT\"" >> "$SHOPWARE_FOLDER/.env"
+echo "DATABASE_URL=\"mysql://root:${MYSQL_ROOT_PASSWORD}@mysql:3306/$SHOPWARE_PROJECT\"" >> "$SHOPWARE_FOLDER/.env"
 echo 'ADMIN_EMAIL="demo@demo.com"' >> "$SHOPWARE_FOLDER/.env"
 echo 'ADMIN_NAME="Don Joe"' >> "$SHOPWARE_FOLDER/.env"
 echo 'ADMIN_USERNAME="demo"' >> "$SHOPWARE_FOLDER/.env"
