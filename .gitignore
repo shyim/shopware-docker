@@ -1,6 +1,6 @@
 mysql-data
 .idea
 images/**/Dockerfile
-images/mysql/**/.dev.cnf
+images/mysql/**
 docker-compose.override.yaml
 node_modules

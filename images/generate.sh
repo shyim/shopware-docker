@@ -13,6 +13,14 @@ for t in ${phpVersions[@]}; do
     dockerPHP=$(echo "${t:3:1}.${t:4:1}")
     phpVersionNumeric=$(echo "${t:3:1}${t:4:1}")
 
+    if [[ ${dockerPHP} == "7.2" ]]; then
+        dockerPHP="7.2.19"
+    fi
+
+    if [[ ${dockerPHP} == "7.3" ]]; then
+        dockerPHP="7.3.6"
+    fi
+
     if [[ ! -d "cli/${t}" ]]; then
         mkdir cli/${t}
     fi
@@ -28,11 +36,37 @@ done
 for t in ${xdebugPhpVersions[@]}; do
     dockerPHP=$(echo "${t:3:1}.${t:4:1}")
 
+    if [[ ${dockerPHP} == "7.2" ]]; then
+        dockerPHP="7.2.19"
+    fi
+
+    if [[ ${dockerPHP} == "7.3" ]]; then
+        dockerPHP="7.3.6"
+    fi
+
     if [ ! -d "nginx/${t}-xdebug" ]; then
         mkdir nginx/${t}-xdebug
     fi
 
     node "${DIR}/twig.js" nginx/Dockerfile.twig "{\"phpVersion\": \"$dockerPHP\", \"phpVersioNumeric\": $phpVersionNumeric, \"xdebug\": true}" > nginx/${t}-xdebug/Dockerfile
+done
+
+for t in ${xdebugPhpVersions[@]}; do
+    dockerPHP=$(echo "${t:3:1}.${t:4:1}")
+
+    if [[ ${dockerPHP} == "7.2" ]]; then
+        dockerPHP="7.2.19"
+    fi
+
+    if [[ ${dockerPHP} == "7.3" ]]; then
+        dockerPHP="7.3.6"
+    fi
+
+    if [ ! -d "nginx/${t}-blackfire" ]; then
+        mkdir nginx/${t}-blackfire
+    fi
+
+    node "${DIR}/twig.js" nginx/Dockerfile.twig "{\"phpVersion\": \"$dockerPHP\", \"phpVersioNumeric\": $phpVersionNumeric, \"blackfire\": true}" > nginx/${t}-blackfire/Dockerfile
 done
 
 for t in ${mysqlVersions[@]}; do

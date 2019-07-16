@@ -117,4 +117,12 @@ if [[ ${ENABLE_SELENIUM} == "true" ]]; then
     fi
 fi
 
+if [[ ${ENABLE_BLACKFIRE} == "true" ]]; then
+    echo "  blackfire:" >> "${DIR}/docker-compose.override.yaml"
+    echo "    image: blackfire/blackfire" >> "${DIR}/docker-compose.override.yaml"
+    echo "    environment:" >> "${DIR}/docker-compose.override.yaml"
+    echo "      BLACKFIRE_SERVER_ID: ${BLACKFIRE_SERVER_ID}" >> "${DIR}/docker-compose.override.yaml"
+    echo "      BLACKFIRE_SERVER_TOKEN: ${BLACKFIRE_SERVER_TOKEN}" >> "${DIR}/docker-compose.override.yaml"
+fi
+
 docker-compose up -d --remove-orphans

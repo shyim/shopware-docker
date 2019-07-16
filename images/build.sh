@@ -25,6 +25,12 @@ for t in ${phpVersions[@]}; do
             docker build -t shyim/shopware-nginx:${t}-xdebug -f ./nginx/${t}-xdebug/Dockerfile ./nginx/
         fi
     fi
+
+    if [[ $1 == "blackfire" || $1 == "all" ]]; then
+        if [[ -d "./nginx/${t}-blackfire" ]]; then
+            docker build -t shyim/shopware-nginx:${t}-blackfire -f ./nginx/${t}-blackfire/Dockerfile ./nginx/
+        fi
+    fi
 done
 
 if [[ $1 == "mysql" || $1 == "all" ]]; then

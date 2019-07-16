@@ -8,6 +8,7 @@ env:
     - MODULE="nginx"
     - MODULE="xdebug"
     - MODULE="mysql"
+    - MODULE="blackfire"
 
 services:
   - docker
