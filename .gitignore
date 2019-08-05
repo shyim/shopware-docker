@@ -1,6 +1,8 @@
-mysql-data
-.idea
-images/**/Dockerfile
-images/mysql/**
-docker-compose.override.yaml
-node_modules
+/mysql-data
+/.idea
+/images/**/Dockerfile
+/images/custom
+/images/mysql/**
+/docker-compose.override.yaml
+/node_modules
+/package-lock.json

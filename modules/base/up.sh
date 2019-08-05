@@ -26,7 +26,20 @@ if [[ ${CODE_FOLDER_CONTENT} ]]; then
         fi
     done
     echo "    volumes:" >> "${DIR}/docker-compose.override.yaml"
-    echo "      - ${CODE_DIRECTORY}:/var/www/html" >> "${DIR}/docker-compose.override.yaml"
+    if [[ ${CACHE_VOLUMES} == "true" ]]; then
+        echo "      - ${CODE_DIRECTORY}:/var/www/html:cached" >> "${DIR}/docker-compose.override.yaml"
+        for d in ${CODE_DIRECTORY}/* ; do
+            if [[ -d "$d" ]]; then
+                NAME=$(basename $d)
+                echo "      - ${CODE_DIRECTORY}/${NAME}/media:/var/www/html/${NAME}/media:cached" >> "${DIR}/docker-compose.override.yaml"
+                echo "      - ${CODE_DIRECTORY}/${NAME}/files:/var/www/html/${NAME}/files:cached" >> "${DIR}/docker-compose.override.yaml"
+                echo "      - ${NAME}_var_cache:/var/www/html/${NAME}/var/cache:delegated" >> "${DIR}/docker-compose.override.yaml"
+                echo "      - ${NAME}_web_cache:/var/www/html/${NAME}/web/cache:delegated" >> "${DIR}/docker-compose.override.yaml"
+            fi
+        done
+    else
+        echo "      - ${CODE_DIRECTORY}:/var/www/html" >> "${DIR}/docker-compose.override.yaml"
+    fi
 fi
 
 echo "  mysql:" >> "${DIR}/docker-compose.override.yaml"
@@ -123,6 +136,22 @@ if [[ ${ENABLE_BLACKFIRE} == "true" ]]; then
     echo "    environment:" >> "${DIR}/docker-compose.override.yaml"
     echo "      BLACKFIRE_SERVER_ID: ${BLACKFIRE_SERVER_ID}" >> "${DIR}/docker-compose.override.yaml"
     echo "      BLACKFIRE_SERVER_TOKEN: ${BLACKFIRE_SERVER_TOKEN}" >> "${DIR}/docker-compose.override.yaml"
+fi
+
+
+if [[ ${CACHE_VOLUMES} == "true" ]]; then
+    if [[ ${CODE_FOLDER_CONTENT} ]]; then
+        echo "volumes:" >> "${DIR}/docker-compose.override.yaml"
+        for d in ${CODE_DIRECTORY}/* ; do
+            if [[ -d "$d" ]]; then
+                NAME=$(basename $d)
+                echo "  ${NAME}_var_cache:" >> "${DIR}/docker-compose.override.yaml"
+                echo "    driver: local" >> "${DIR}/docker-compose.override.yaml"
+                echo "  ${NAME}_web_cache:" >> "${DIR}/docker-compose.override.yaml"
+                echo "    driver: local" >> "${DIR}/docker-compose.override.yaml"
+            fi
+        done
+    fi
 fi
 
 docker-compose up -d --remove-orphans
