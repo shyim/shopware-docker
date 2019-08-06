@@ -14,6 +14,7 @@ modulesDefault=(base)
 modulesClassic=(base classic)
 modulesClassicComposerProject=(base classic-composer classic)
 modulesPlatform=(base platform)
+modulesLocal=(base local)
 
 phpVersions=(php71 php72 php73)
 xdebugPhpVersions=(php71 php70 php72)

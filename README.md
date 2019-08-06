@@ -62,6 +62,10 @@ This setup works for Shopware 5, Shopware 5 Composer Project and Platform
 * `swdc build`                     Reinstalls the database
 * `swdc unit`                      Runs all unit tests
 
+### Module: local
+* `swdc local-rebuild`               Rebuilds all used containser
+* `swdc local-up`                    Starts the containers
+
 
 ## Which images and tags are available?
 
