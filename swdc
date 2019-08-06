@@ -3,27 +3,27 @@
 FILE="$0"
 
 if [[ -L "$0" ]]; then
-  FILE=$(readlink "$0")
+  FILE="$(readlink ${0})"
 fi
 
-DIR=$(dirname ${FILE})
-
-export DIR=${DIR}
-
+DIR="$(dirname ${FILE})"
+export DIR="${DIR}"
 source "${DIR}/.env"
 source "${DIR}/functions.sh"
 
 # Need to be in docker folder for docker-compose
-cd ${DIR}
+cd "${DIR}"
 
-for command in ./modules/base/*.sh; do
-    NAME=$(basename $command)
-    NAME=${NAME%.*}
+if [[ -f "./modules/base/${1}.sh" ]];
+then
+    source "./modules/base/${1}.sh"
+    exit "0"
+fi
 
-    if [[ $NAME == $1 ]]; then
-        source ${command}
-        exit 0
-    fi
-done
+if [[ -f "./modules/local/${1}.sh" ]];
+then
+    source "./modules/local/${1}.sh"
+    exit "0"
+fi
 
 docker-compose exec cli bash /opt/swdc/swdc-inside "$@"
