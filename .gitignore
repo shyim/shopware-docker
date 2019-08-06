@@ -3,6 +3,6 @@
 /images/**/Dockerfile
 /images/custom
 /images/mysql/**
+/images/node_modules
 /docker-compose.override.yaml
-/node_modules
 /package-lock.json
