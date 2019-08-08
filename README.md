@@ -24,13 +24,15 @@ This setup works for Shopware 5, Shopware 5 Composer Project and Platform
 
 ### Module: base
 
+* `swdc command-list`              
 * `swdc debug-logs`                Please use this command to collect informations for a Github Issue
 * `swdc debug`                     Symfony Var-dump Server, use swdump() in your Code
 * `swdc down`                      Stops the containers
 * `swdc generate-command-list`     Generates the command list for README.md
 * `swdc help`                      
+* `swdc log`                       Shows the log of the specified container
+* `swdc mysql`                     Starts the mysql client on the cli container
 * `swdc open`                      Opens the given shop in browser
-* `swdc log`                       Shows the log of the specified container 
 * `swdc shell-root`                Joins into the cli container as root user
 * `swdc shell`                     Joins into the cli container as normal user
 * `swdc update-images`             Updates used docker images
@@ -45,27 +47,32 @@ This setup works for Shopware 5, Shopware 5 Composer Project and Platform
 * `swdc hooks`                     Fixes the hooks for git
 * `swdc snippets`                  Reimports all snippets
 * `swdc test`                      Runs all tests
+* `swdc unit`                      Runs only unit tests
 * `swdc update-test`               Simulate a update
 
 ### Module: classic-composer
 
-* `swdc build`                     Reinstalls the database
+* `swdc build`                     Reinstalls the database           
 
 ### Module: docker
 
 * `swdc drop`                      Drops the database
+* `swdc es-clear`                  Deletes everything from elasticsearch server
 * `swdc rsnap`                     Loads back a created snapshot
 * `swdc snap`                      Creates a new snapshot
 
+### Module: local
+
+* `swdc configure`                 Opens the configuration .env file with your favourite editor
+* `swdc local-rebuild`             Rebuilds used docker images
+* `swdc local-up`                  Starts the stack with local images if they are defined
+
 ### Module: platform
 
+* `swdc admin-build`               Builds the administration and executes assets install
 * `swdc admin-watch`               Start the admin watcher at port 8181
 * `swdc build`                     Reinstalls the database
 * `swdc unit`                      Runs all unit tests
-
-### Module: local
-* `swdc local-rebuild`               Rebuilds all used containser
-* `swdc local-up`                    Starts the containers
 
 ## Which images and tags are available?
 

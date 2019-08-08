@@ -8,6 +8,13 @@ fi
 
 DIR="$(dirname ${FILE})"
 export DIR="${DIR}"
+
+if [[ ! -f "${DIR}/.env" ]]; then
+  cp "${DIR}/.env.dist" "${DIR}/.env"
+  echo "Copied .env.dist to .env. Please configure .env file or run again to use default settings"
+  exit 1
+fi
+
 source "${DIR}/.env"
 source "${DIR}/functions.sh"
 
@@ -16,20 +23,20 @@ cd "${DIR}"
 
 if [[ "${1}" == "" ]];
 then
-  source modules/base/generate-command-list.sh
+  source modules/base/command-list.sh
   exit "1"
 fi
 
 if [[ -f "./modules/base/${1}.sh" ]];
 then
     source "./modules/base/${1}.sh"
-    exit "0"
+    exit 0
 fi
 
 if [[ -f "./modules/local/${1}.sh" ]];
 then
     source "./modules/local/${1}.sh"
-    exit "0"
+    exit 0
 fi
 
 docker-compose exec cli bash /opt/swdc/swdc-inside "$@"

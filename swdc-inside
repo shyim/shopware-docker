@@ -46,4 +46,4 @@ cat ./modules/base/header.txt
 echo ""
 echo ""
 
-/opt/swdc/swdc-inside generate-command-list
+/opt/swdc/swdc-inside command-list
