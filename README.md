@@ -30,6 +30,7 @@ This setup works for Shopware 5, Shopware 5 Composer Project and Platform
 * `swdc generate-command-list`     Generates the command list for README.md
 * `swdc help`                      
 * `swdc open`                      Opens the given shop in browser
+* `swdc log`                       Shows the log of the specified container 
 * `swdc shell-root`                Joins into the cli container as root user
 * `swdc shell`                     Joins into the cli container as normal user
 * `swdc update-images`             Updates used docker images
@@ -65,7 +66,6 @@ This setup works for Shopware 5, Shopware 5 Composer Project and Platform
 ### Module: local
 * `swdc local-rebuild`               Rebuilds all used containser
 * `swdc local-up`                    Starts the containers
-
 
 ## Which images and tags are available?
 
