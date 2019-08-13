@@ -9,7 +9,7 @@ services:
     image: shyim/shopware-nginx:php72
     env_file:
       - docker.env
-      - .env
+      - ~/.swdc_env
     ports:
       - 80:80
       - 443:443

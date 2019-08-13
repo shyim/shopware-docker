@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source "${DIR}/.env"
+source "${HOME}/.swdc_env"
 source "${DIR}/modules/defaults/base-up.sh"
 
 CODE_FOLDER_CONTENT="$(ls -A ${CODE_DIRECTORY})"

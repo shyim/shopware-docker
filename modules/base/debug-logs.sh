@@ -19,7 +19,7 @@ echo "" >> debug.txt
 echo "=== .env" >> debug.txt
 echo "" >> debug.txt
 
-cat .env >> debug.txt
+cat "${HOME}/.swdc_env" >> debug.txt
 
 echo "" >> debug.txt
 echo "" >> debug.txt

@@ -9,13 +9,18 @@ fi
 DIR="$(dirname ${FILE})"
 export DIR="${DIR}"
 
-if [[ ! -f "${DIR}/.env" ]]; then
-  cp "${DIR}/.env.dist" "${DIR}/.env"
-  echo "Copied .env.dist to .env. Please configure .env file or run again to use default settings"
-  exit 1
+if [[ ! -f "${HOME}/.swdc_env" ]]; then
+  if [[ -f "${DIR}/.env" ]]; then
+    mv "${DIR}/.env" "${HOME}/.swdc_env"
+  else
+    cp "${DIR}/.env.dist" "${HOME}/.swdc_env"
+    echo "Copied .env.dist to $HOME/.swdc_env. Please configure .env file or run again to use default settings"
+    exit 1
+  fi
 fi
 
-source "${DIR}/.env"
+
+source "${HOME}/.swdc_env"
 source "${DIR}/functions.sh"
 
 # Need to be in docker folder for docker-compose

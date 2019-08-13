@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source ".env"
+source "${HOME}/.swdc_env"
 source "${DIR}/modules/defaults/base-up.sh"
 
 CODE_FOLDER_CONTENT="$(ls -A ${CODE_DIRECTORY})"
@@ -8,8 +8,10 @@ CODE_FOLDER_CONTENT="$(ls -A ${CODE_DIRECTORY})"
 MYSQL_VERSION=$(echo ${MYSQL_VERSION} | sed 's/\.//g')
 PHP_VERSION=$(echo ${PHP_VERSION} | sed 's/\.//g')
 
-echo "version: '3'" > "${DIR}/docker-compose.override.yaml"
-echo "services:" >> "${DIR}/docker-compose.override.yaml"
+export DOCKER_OVERRIDE_FILE="/tmp/swdc-docker-compose-override.yml";
+
+echo "version: '3'" > ${DOCKER_OVERRIDE_FILE}
+echo "services:" >> ${DOCKER_OVERRIDE_FILE}
 
 create_nginx
 create_mysql
@@ -43,4 +45,4 @@ if [[ ${CACHE_VOLUMES} == "true" ]]; then
     create_caching
 fi
 
-docker-compose up -d --remove-orphans
+docker-compose -f ${DIR}/docker-compose.yml -f ${DOCKER_OVERRIDE_FILE} up -d --remove-orphans

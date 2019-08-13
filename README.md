@@ -6,7 +6,7 @@ This setup works for Shopware 5, Shopware 5 Composer Project and Platform
 
 * Clone the repository somewhere
 * Optional: Do a symlink from swdc to `/usr/local/bin/swdc`
-* Configure your needs in ".env" file
+* Copy .env.dist to $HOME/.swdc_env or just run swdc
 * `swdc up`: Starts the docker-compose with the containers
 
 ## Creating projects
@@ -15,10 +15,11 @@ This setup works for Shopware 5, Shopware 5 Composer Project and Platform
 * Run `swdc build [Folder Name]`
 * After the installation succeed, can you open the shop with the command `swdc open [Folder Name]`
 
+
 ### Custom code directory
 
 * You may change the code directory which the shopware installations lie in by
-  modifying the `CODE_DIRECTORY` variable in `.env`
+  modifying the `CODE_DIRECTORY` variable in `$HOME/.swdc_env`
 
 ## Which commands exist?
 
