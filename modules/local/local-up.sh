@@ -12,6 +12,7 @@ export DOCKER_OVERRIDE_FILE="/tmp/swdc-docker-compose-override.yml";
 
 echo "version: '3'" > ${DOCKER_OVERRIDE_FILE}
 echo "services:" >> ${DOCKER_OVERRIDE_FILE}
+
 if [[ -f "${DIR}/images/custom/nginx/Dockerfile" ]]; then
     echo "  nginx:" >> ${DOCKER_OVERRIDE_FILE}
     echo "    build:" >> ${DOCKER_OVERRIDE_FILE}
@@ -30,27 +31,26 @@ if [[ -f "${DIR}/images/custom/nginx/Dockerfile" ]]; then
         fi
     done
     echo "    volumes:" >> ${DOCKER_OVERRIDE_FILE}
-    echo "      - ${CODE_DIRECTORY}:/var/www/html:cached" >> ${DOCKER_OVERRIDE_FILE}
-    for d in ${CODE_DIRECTORY}/* ; do
-        if [[ -d "$d" ]]; then
-            NAME=$(basename $d)
-            echo "      - ${CODE_DIRECTORY}/${NAME}/media:/var/www/html/${NAME}/media:cached" >> ${DOCKER_OVERRIDE_FILE}
-            echo "      - ${CODE_DIRECTORY}/${NAME}/files:/var/www/html/${NAME}/files:cached" >> ${DOCKER_OVERRIDE_FILE}
-            if [[ ${CACHE_VOLUMES} == "true" ]]; then
-                echo "      - ${NAME}_var_cache:/var/www/html/${NAME}/var/cache:delegated" >> ${DOCKER_OVERRIDE_FILE}
-                echo "      - ${NAME}_web_cache:/var/www/html/${NAME}/web/cache:delegated" >> ${DOCKER_OVERRIDE_FILE}
-            else
-                echo "      - ${CODE_DIRECTORY}/${NAME}/var/cache:/var/www/html/${NAME}/var/cache:delegated" >> ${DOCKER_OVERRIDE_FILE}
-                echo "      - ${CODE_DIRECTORY}/${NAME}/web/cache:/var/www/html/${NAME}/web/cache:delegated" >> ${DOCKER_OVERRIDE_FILE}
+    if [[ "${CACHE_VOLUMES}" == "true" ]]; then
+        for d in ${CODE_DIRECTORY}/* ; do
+            if [[ -d "${d}" ]]; then
+                if [[ -f "${d}/public/index.php" ]]; then
+                    create_platform_volumes "${d}"
+                else
+                    create_default_volumes "${d}"
+                fi
             fi
-        fi
-    done
+        done
+    else
+        echo "      - ${CODE_DIRECTORY}:/var/www/html:cached" >> ${DOCKER_OVERRIDE_FILE}
+    fi
 fi
 else
     create_nginx
 fi
+
 if [[ -f "${DIR}/images/custom/mysql/Dockerfile" ]]; then
-echo "  mysql:" >> ${DOCKER_OVERRIDE_FILE}
+    echo "  mysql:" >> ${DOCKER_OVERRIDE_FILE}
     echo "    build:" >> ${DOCKER_OVERRIDE_FILE}
     echo "      context: ${DIR}/images/custom/mysql/" >> ${DOCKER_OVERRIDE_FILE}
     echo "      dockerfile: ${DIR}/images/custom/mysql/Dockerfile" >> ${DOCKER_OVERRIDE_FILE}
@@ -73,6 +73,7 @@ echo "  mysql:" >> ${DOCKER_OVERRIDE_FILE}
 else
     create_mysql
 fi
+
 create_ci
 
 # Build alias for cli
@@ -103,3 +104,4 @@ if [[ ${CACHE_VOLUMES} == "true" ]]; then
 fi
 
 docker-compose -f ${DIR}/docker-compose.yml -f ${DOCKER_OVERRIDE_FILE} up -d --remove-orphans
+docker-compose exec -e COLUMNS="`tput cols`" -e LINES="`tput lines`" -e SHELL=bash -u 0 cli /opt/swdc/swdc-inside volume-permissions

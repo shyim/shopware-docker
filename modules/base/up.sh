@@ -46,3 +46,4 @@ if [[ ${CACHE_VOLUMES} == "true" ]]; then
 fi
 
 docker-compose -f ${DIR}/docker-compose.yml -f ${DOCKER_OVERRIDE_FILE} up -d --remove-orphans
+docker-compose exec -e COLUMNS="`tput cols`" -e LINES="`tput lines`" -e SHELL=bash -u 0 cli /opt/swdc/swdc-inside volume-permissions

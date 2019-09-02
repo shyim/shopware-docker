@@ -4,6 +4,5 @@
 /images/custom
 /images/mysql/**
 /images/node_modules
-/docker-compose.override.yaml
 /package-lock.json
 /.env

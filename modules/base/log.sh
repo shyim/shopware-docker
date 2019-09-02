@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-source ".env"
+
+source "${HOME}/.swdc_env"
+
 base_name="$(basename ${DIR})"
 container_name="${base_name}_${2}_1"
 example_containers="$(docker ps --all --format "table {{.Names}}" | grep ${base_name})"
