@@ -28,9 +28,9 @@ steps:
     ./generate.sh
     ./build.sh ${MODULE}
   displayName: 'Build image and push'
-  
+
 - task: Docker@2
-  condition: eq('${{ parameters.MODULE }}', 'mysql')
+  condition: and(always(), eq('${{ parameters.MODULE }}', 'mysql'))
   inputs:
     containerRegistry: 'Docker Hub'
     repository: 'shyim/shopware-mysql'
