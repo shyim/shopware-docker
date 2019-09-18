@@ -1,0 +1,28 @@
+pool:
+  vmImage: 'ubuntu-latest'
+
+strategy:
+  matrix:
+    cli:
+      MODULE: "cli"
+    nginx:
+      MODULE: "nginx"
+    xdebug:
+      MODULE: "xdebug"
+    mysql:
+      MODULE: "mysql"
+    blackfire:
+      MODULE: "blackfire"
+
+steps:
+- task: NodeTool@0 
+  inputs:
+    versionSpec: '12.x'
+
+- script: |
+    cd images/
+    npm install twig
+    ./generate.sh
+    ./build.sh ${MODULE}
+    ./push.sh ${MODULE}
+  displayName: 'Build image and push'
