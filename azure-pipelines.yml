@@ -1,9 +1,6 @@
 pool:
   vmImage: 'ubuntu-latest'
 
-trigger:
-- master
-
 strategy:
   matrix:
     cli:
