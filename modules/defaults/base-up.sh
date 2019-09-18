@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+export Platform=$(uname -s)
+
 function create_nginx (){
     echo "  nginx:" >> ${DOCKER_OVERRIDE_FILE}
     if [[ -z $XDEBUG_VERSION ]]; then
@@ -19,22 +21,24 @@ function create_nginx (){
                 fi
             fi
         done
-        echo "    volumes:" >> ${DOCKER_OVERRIDE_FILE}
-        echo "      - ${CODE_DIRECTORY}:/var/www/html:cached" >> ${DOCKER_OVERRIDE_FILE}
-        for d in ${CODE_DIRECTORY}/* ; do
-            if [[ -d "$d" ]]; then
-                NAME=$(basename $d)
-                echo "      - ${CODE_DIRECTORY}/${NAME}/media:/var/www/html/${NAME}/media:cached" >> ${DOCKER_OVERRIDE_FILE}
-                echo "      - ${CODE_DIRECTORY}/${NAME}/files:/var/www/html/${NAME}/files:cached" >> ${DOCKER_OVERRIDE_FILE}
-                if [[ ${CACHE_VOLUMES} == "true" ]]; then
-                    echo "      - ${NAME}_var_cache:/var/www/html/${NAME}/var/cache:delegated" >> ${DOCKER_OVERRIDE_FILE}
-                    echo "      - ${NAME}_web_cache:/var/www/html/${NAME}/web/cache:delegated" >> ${DOCKER_OVERRIDE_FILE}
-                else
-                    echo "      - ${CODE_DIRECTORY}/${NAME}/var/cache:/var/www/html/${NAME}/var/cache:delegated" >> ${DOCKER_OVERRIDE_FILE}
-                    echo "      - ${CODE_DIRECTORY}/${NAME}/web/cache:/var/www/html/${NAME}/web/cache:delegated" >> ${DOCKER_OVERRIDE_FILE}
+        if [[ ${Platform} != "Linux" ]]; then
+            echo "    volumes:" >> ${DOCKER_OVERRIDE_FILE}
+            echo "      - ${CODE_DIRECTORY}:/var/www/html:cached" >> ${DOCKER_OVERRIDE_FILE}
+            for d in ${CODE_DIRECTORY}/* ; do
+                if [[ -d "$d" ]]; then
+                    NAME=$(basename $d)
+                    echo "      - ${CODE_DIRECTORY}/${NAME}/media:/var/www/html/${NAME}/media:cached" >> ${DOCKER_OVERRIDE_FILE}
+                    echo "      - ${CODE_DIRECTORY}/${NAME}/files:/var/www/html/${NAME}/files:cached" >> ${DOCKER_OVERRIDE_FILE}
+                    if [[ ${CACHE_VOLUMES} == "true" ]]; then
+                        echo "      - ${NAME}_var_cache:/var/www/html/${NAME}/var/cache:delegated" >> ${DOCKER_OVERRIDE_FILE}
+                        echo "      - ${NAME}_web_cache:/var/www/html/${NAME}/web/cache:delegated" >> ${DOCKER_OVERRIDE_FILE}
+                    else
+                        echo "      - ${CODE_DIRECTORY}/${NAME}/var/cache:/var/www/html/${NAME}/var/cache:delegated" >> ${DOCKER_OVERRIDE_FILE}
+                        echo "      - ${CODE_DIRECTORY}/${NAME}/web/cache:/var/www/html/${NAME}/web/cache:delegated" >> ${DOCKER_OVERRIDE_FILE}
+                    fi
                 fi
-            fi
-        done
+            done
+        fi
     fi
 }
 
@@ -68,22 +72,24 @@ function create_ci () {
                 fi
             fi
         done
-        echo "    volumes:" >> ${DOCKER_OVERRIDE_FILE}
-        echo "      - ${CODE_DIRECTORY}:/var/www/html:cached" >> ${DOCKER_OVERRIDE_FILE}
-        for d in ${CODE_DIRECTORY}/* ; do
-            if [[ -d "$d" ]]; then
-                NAME=$(basename $d)
-                echo "      - ${CODE_DIRECTORY}/${NAME}/media:/var/www/html/${NAME}/media:cached" >> ${DOCKER_OVERRIDE_FILE}
-                echo "      - ${CODE_DIRECTORY}/${NAME}/files:/var/www/html/${NAME}/files:cached" >> ${DOCKER_OVERRIDE_FILE}
-                if [[ ${CACHE_VOLUMES} == "true" ]]; then
-                    echo "      - ${NAME}_var_cache:/var/www/html/${NAME}/var/cache:delegated" >> ${DOCKER_OVERRIDE_FILE}
-                    echo "      - ${NAME}_web_cache:/var/www/html/${NAME}/web/cache:delegated" >> ${DOCKER_OVERRIDE_FILE}
-                else
-                    echo "      - ${CODE_DIRECTORY}/${NAME}/var/cache:/var/www/html/${NAME}/var/cache:delegated" >> ${DOCKER_OVERRIDE_FILE}
-                    echo "      - ${CODE_DIRECTORY}/${NAME}/web/cache:/var/www/html/${NAME}/web/cache:delegated" >> ${DOCKER_OVERRIDE_FILE}
+        if [[ ${Platform} != "Linux" ]]; then
+            echo "    volumes:" >> ${DOCKER_OVERRIDE_FILE}
+            echo "      - ${CODE_DIRECTORY}:/var/www/html:cached" >> ${DOCKER_OVERRIDE_FILE}
+            for d in ${CODE_DIRECTORY}/* ; do
+                if [[ -d "$d" ]]; then
+                    NAME=$(basename $d)
+                    echo "      - ${CODE_DIRECTORY}/${NAME}/media:/var/www/html/${NAME}/media:cached" >> ${DOCKER_OVERRIDE_FILE}
+                    echo "      - ${CODE_DIRECTORY}/${NAME}/files:/var/www/html/${NAME}/files:cached" >> ${DOCKER_OVERRIDE_FILE}
+                    if [[ ${CACHE_VOLUMES} == "true" ]]; then
+                        echo "      - ${NAME}_var_cache:/var/www/html/${NAME}/var/cache:delegated" >> ${DOCKER_OVERRIDE_FILE}
+                        echo "      - ${NAME}_web_cache:/var/www/html/${NAME}/web/cache:delegated" >> ${DOCKER_OVERRIDE_FILE}
+                    else
+                        echo "      - ${CODE_DIRECTORY}/${NAME}/var/cache:/var/www/html/${NAME}/var/cache:delegated" >> ${DOCKER_OVERRIDE_FILE}
+                        echo "      - ${CODE_DIRECTORY}/${NAME}/web/cache:/var/www/html/${NAME}/web/cache:delegated" >> ${DOCKER_OVERRIDE_FILE}
+                    fi
                 fi
-            fi
-        done
+            done
+        fi
     fi
 }
 
