@@ -27,7 +27,7 @@ steps:
   displayName: 'Build image and push'
 
 - task: Docker@2
-  condition: and(always(), eq('$MODULE', 'mysql'))
+  condition: and(always(), eq(variables('MODULE'), 'mysql'))
   inputs:
     containerRegistry: 'Docker Hub'
     repository: 'shyim/shopware-mysql'
