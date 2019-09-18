@@ -22,13 +22,21 @@ steps:
   inputs:
     versionSpec: '12.x'
 
-- script: 'echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin'
-  displayName: 'Login into Docker Hub'
-
 - script: |
     cd images/
     npm install twig
     ./generate.sh
     ./build.sh ${MODULE}
-    bash ./push.sh ${MODULE}
   displayName: 'Build image and push'
+  
+- task: Docker@2
+  condition: eq('${{ parameters.MODULE }}', 'mysql')
+  inputs:
+    containerRegistry: 'Docker Hub'
+    repository: 'shyim/shopware-mysql'
+    command: 'push'
+    tags: |
+      55
+      56
+      57
+      8
