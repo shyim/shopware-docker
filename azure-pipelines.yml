@@ -1,0 +1,31 @@
+pool:
+  vmImage: 'ubuntu-latest'
+
+strategy:
+  matrix:
+    cli:
+      MODULE: "cli"
+    nginx:
+      MODULE: "nginx"
+    xdebug:
+      MODULE: "xdebug"
+    mysql:
+      MODULE: "mysql"
+    blackfire:
+      MODULE: "blackfire"
+
+steps:
+- task: NodeTool@0 
+  inputs:
+    versionSpec: '12.x'
+
+- script: 'echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin'
+  displayName: 'Login into Docker Hub'
+
+- script: |
+    cd images/
+    npm install twig
+    ./generate.sh
+    ./build.sh ${MODULE}
+    bash ./push.sh ${MODULE}
+  displayName: 'Build image and push'
