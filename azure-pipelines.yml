@@ -1,6 +1,6 @@
 pool:
   vmImage: 'ubuntu-latest'
-
+  
 trigger:
 - master
 
@@ -14,8 +14,6 @@ strategy:
       MODULE: "xdebug"
     mysql:
       MODULE: "mysql"
-    blackfire:
-      MODULE: "blackfire"
 
 steps:
 - task: NodeTool@0 
@@ -30,7 +28,8 @@ steps:
   displayName: 'Build image and push'
 
 - task: Docker@2
-  condition: and(always(), eq('${{ MODULE }}', 'mysql'))
+  condition: eq(variables['MODULE'], 'mysql')
+  displayName: 'Push MySQL Images'
   inputs:
     containerRegistry: 'Docker Hub'
     repository: 'shyim/shopware-mysql'
@@ -40,3 +39,38 @@ steps:
       56
       57
       8
+
+- task: Docker@2
+  condition: eq(variables['MODULE'], 'xdebug')
+  displayName: 'Push XDebug Images'
+  inputs:
+    containerRegistry: 'Docker Hub'
+    repository: 'shyim/shopware-nginx'
+    command: 'push'
+    tags: |
+      php72-xdebug
+      php71-xdebug
+
+- task: Docker@2
+  condition: eq(variables['MODULE'], 'nginx')
+  displayName: 'Push Nginx Images'
+  inputs:
+    containerRegistry: 'Docker Hub'
+    repository: 'shyim/shopware-nginx'
+    command: 'push'
+    tags: |
+      php71
+      php72
+      php73
+
+- task: Docker@2
+  condition: eq(variables['MODULE'], 'cli')
+  displayName: 'Push Cli Images'
+  inputs:
+    containerRegistry: 'Docker Hub'
+    repository: 'shyim/shopware-cli'
+    command: 'push'
+    tags: |
+      php71
+      php72
+      php73
