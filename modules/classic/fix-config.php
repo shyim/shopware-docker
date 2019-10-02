@@ -68,6 +68,14 @@ if (isset($_SERVER['argv'][2])) {
 				'backend' => false,
 			];
 			break;
+		case 'mink':
+			$config['csrfProtection'] = [
+				'frontend' => false,
+				'backend' => false,
+			];
+			unset($config['front']);
+			unset($config['phpsettings']);
+			break;
 	}
 }
 

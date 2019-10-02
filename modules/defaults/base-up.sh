@@ -138,6 +138,7 @@ function create_selenium () {
         echo "    links:" >> ${DOCKER_OVERRIDE_FILE}
 
         for d in ${CODE_DIRECTORY}/* ; do
+            NAME=$(basename $d)
             if [[ -f "$d/public/index.php" ]]; then
                 echo "      - nginx:${NAME}.platform.localhost" >> ${DOCKER_OVERRIDE_FILE}
             else
