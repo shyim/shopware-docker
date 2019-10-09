@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+export COMPOSE_PROJECT_NAME="shopware-docker"
+
 FILE="$0"
 
 if [[ -L "$0" ]]; then
