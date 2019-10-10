@@ -8,7 +8,7 @@ strategy:
   matrix:
     cli:
       MODULE: "cli"
-    cli:
+    clixdebug:
       MODULE: "cli-xdebug"
     nginx:
       MODULE: "nginx"
