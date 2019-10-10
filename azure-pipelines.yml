@@ -50,6 +50,7 @@ steps:
     repository: 'shyim/shopware-nginx'
     command: 'push'
     tags: |
+      php73-xdebug
       php72-xdebug
       php71-xdebug
 
@@ -64,6 +65,7 @@ steps:
       php71
       php72
       php73
+      php74
 
 - task: Docker@2
   condition: eq(variables['MODULE'], 'cli')
@@ -76,6 +78,7 @@ steps:
       php71
       php72
       php73
+      php74
 
 - task: Docker@2
   condition: eq(variables['MODULE'], 'cli-xdebug')
