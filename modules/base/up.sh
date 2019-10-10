@@ -15,7 +15,7 @@ echo "services:" >> ${DOCKER_OVERRIDE_FILE}
 
 create_nginx
 create_mysql
-create_ci
+create_cli
 
 # Build alias for cli
 if [[ ${ENABLE_ELASTICSEARCH} == "true" ]]; then

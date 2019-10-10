@@ -16,8 +16,8 @@ modulesClassicComposerProject=(base classic-composer classic)
 modulesPlatform=(base platform)
 modulesLocal=(base local)
 
-phpVersions=(php71 php72 php73)
-xdebugPhpVersions=(php71 php70 php72)
+phpVersions=(php71 php72 php73 php74)
+xdebugPhpVersions=(php71 php70 php72 php73)
 mysqlVersions=(55 56 57 8)
 
 function fixHooks()

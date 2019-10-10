@@ -37,7 +37,7 @@ RUN mkdir -p /usr/share/man/man1/ && \
     php{{ phpVersion }}-gd \
     php{{ phpVersion }}-curl \
     php{{ phpVersion }}-soap \
-    php{{ phpVersion }}-intl \
+    php{{ phpVersion }}-intl {% if xdebug %}php-xdebug {% endif %} \
     git \
     sudo \
     gpg \

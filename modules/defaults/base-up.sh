@@ -58,8 +58,13 @@ function create_mysql() {
     fi
 }
 
-function create_ci () {
+function create_cli () {
     echo "  cli:" >> ${DOCKER_OVERRIDE_FILE}
+    if [[ -z $XDEBUG_VERSION ]]; then
+        echo "    image: shyim/shopware-cli:php${PHP_VERSION}" >> ${DOCKER_OVERRIDE_FILE}
+    else
+        echo "    image: shyim/shopware-cli:php${XDEBUG_VERSION}" >> ${DOCKER_OVERRIDE_FILE}
+    fi
     if [[ ${CODE_FOLDER_CONTENT} ]]; then
         echo "    links:" >> ${DOCKER_OVERRIDE_FILE}
         for d in ${CODE_DIRECTORY}/* ; do

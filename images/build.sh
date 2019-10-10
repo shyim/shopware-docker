@@ -26,6 +26,12 @@ for t in ${phpVersions[@]}; do
         fi
     fi
 
+    if [[ $1 == "cli-xdebug" || $1 == "all" ]]; then
+        if [[ -d "./cli/${t}-xdebug" ]]; then
+            docker build -t shyim/shopware-cli:${t}-xdebug -f ./cli/${t}-xdebug/Dockerfile ./cli/
+        fi
+    fi
+
     if [[ $1 == "blackfire" || $1 == "all" ]]; then
         if [[ -d "./nginx/${t}-blackfire" ]]; then
             docker build -t shyim/shopware-nginx:${t}-blackfire -f ./nginx/${t}-blackfire/Dockerfile ./nginx/

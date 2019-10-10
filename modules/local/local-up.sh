@@ -73,7 +73,7 @@ echo "  mysql:" >> ${DOCKER_OVERRIDE_FILE}
 else
     create_mysql
 fi
-create_ci
+create_cli
 
 # Build alias for cli
 if [[ ${ENABLE_ELASTICSEARCH} == "true" ]]; then
