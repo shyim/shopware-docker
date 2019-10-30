@@ -1,12 +1,15 @@
 #!/usr/bin/env bash
 
 source "${HOME}/.swdc_env"
-source "${DIR}/modules/defaults/base-up.sh"
+source "${DIR}/modules/defaults.sh"
 
 CODE_FOLDER_CONTENT="$(ls -A ${CODE_DIRECTORY})"
 
 MYSQL_VERSION=$(echo ${MYSQL_VERSION} | sed 's/\.//g')
 PHP_VERSION=$(echo ${PHP_VERSION} | sed 's/\.//g')
+XDEBUG_VERSION="$(check_xdebug ${2})"
+check_php "${2}"
+
 export DOCKER_OVERRIDE_FILE="/tmp/swdc-docker-compose-override.yml";
 
 

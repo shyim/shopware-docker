@@ -20,6 +20,14 @@ for t in ${phpVersions[@]}; do
         docker build -t shyim/shopware-nginx:${t} -f ./nginx/${t}/Dockerfile ./nginx/
     fi
 
+    if [[ $1 == "blackfire" || $1 == "all" ]]; then
+        if [[ -d "./nginx/${t}-blackfire" ]]; then
+            docker build -t shyim/shopware-nginx:${t}-blackfire -f ./nginx/${t}-blackfire/Dockerfile ./nginx/
+        fi
+    fi
+done
+
+for t in ${xdebugPhpVersions[@]}; do
     if [[ $1 == "xdebug" || $1 == "all" ]]; then
         if [[ -d "./nginx/${t}-xdebug" ]]; then
             docker build -t shyim/shopware-nginx:${t}-xdebug -f ./nginx/${t}-xdebug/Dockerfile ./nginx/
@@ -29,12 +37,6 @@ for t in ${phpVersions[@]}; do
     if [[ $1 == "cli-xdebug" || $1 == "all" ]]; then
         if [[ -d "./cli/${t}-xdebug" ]]; then
             docker build -t shyim/shopware-cli:${t}-xdebug -f ./cli/${t}-xdebug/Dockerfile ./cli/
-        fi
-    fi
-
-    if [[ $1 == "blackfire" || $1 == "all" ]]; then
-        if [[ -d "./nginx/${t}-blackfire" ]]; then
-            docker build -t shyim/shopware-nginx:${t}-blackfire -f ./nginx/${t}-blackfire/Dockerfile ./nginx/
         fi
     fi
 done

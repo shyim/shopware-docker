@@ -38,6 +38,7 @@ This setup works for Shopware 5, Shopware 5 Composer Project and Platform
 * `swdc shell`                     Joins into the cli container as normal user
 * `swdc update-images`             Updates used docker images
 * `swdc up`                        Starts the containers
+* `swdc up xdebug`                 Starts the containers with php-xdebug
 
 ### Module: classic
 
@@ -67,6 +68,7 @@ This setup works for Shopware 5, Shopware 5 Composer Project and Platform
 * `swdc configure`                 Opens the configuration .env file with your favourite editor
 * `swdc local-rebuild`             Rebuilds used docker images
 * `swdc local-up`                  Starts the stack with local images if they are defined
+* `swdc local-up xdebug`                 Starts the containers with php-xdebug
 
 ### Module: platform
 
