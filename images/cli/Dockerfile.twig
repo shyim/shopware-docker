@@ -22,6 +22,7 @@ RUN mkdir -p /usr/share/man/man1/ && \
     apt-get install --no-install-recommends -y curl wget ca-certificates && \
     curl https://packages.sury.org/php/README.txt | bash && \
     apt-get update && apt-get install --no-install-recommends -y \
+    bash-completion \
     patch \
     mariadb-client \
     php{{ phpVersion }}-cli \
