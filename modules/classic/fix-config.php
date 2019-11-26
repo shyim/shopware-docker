@@ -76,6 +76,24 @@ if (isset($_SERVER['argv'][2])) {
 			unset($config['front']);
 			unset($config['phpsettings']);
 			break;
+		case 's3':
+			$config['cdn'] = [
+				'backend' => 's3',
+				'adapters' => [
+					's3' => [
+						'type' => 's3',
+						'mediaUrl' => 'http://localhost:9000/shopware',
+						'bucket' => 'shopware',
+						'use_path_style_endpoint' => true,
+						'endpoint' => 'http://minio:9000',
+						'credentials' => [
+							'key' => 'AKIAIOSFODNN7EXAMPLE',
+							'secret' => 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY'
+						]
+					]
+				]
+			];
+			break;
 	}
 }
 

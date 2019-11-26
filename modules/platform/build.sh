@@ -13,10 +13,10 @@ APP_URL=http://${SHOPWARE_PROJECT}.platform.localhost
 MAILER_URL=null://localhost
 INSTANCE_ID=test
 DATABASE_URL=mysql://root:${MYSQL_ROOT_PASSWORD}@mysql:3306/${SHOPWARE_PROJECT}
-SHOPWARE_SES_HOSTS=elastic
-SHOPWARE_SES_ENABLED=0
-SHOPWARE_SES_INDEXING_ENABLED=0
-SHOPWARE_SES_INDEX_PREFIX=test_
+SHOPWARE_ES_HOSTS=elastic
+SHOPWARE_ES_ENABLED=0
+SHOPWARE_ES_INDEXING_ENABLED=0
+SHOPWARE_ES_INDEX_PREFIX=test_
 COMPOSER_HOME=/tmp/composer-tmp-${SHOPWARE_PROJECT}
 SHOPWARE_HTTP_CACHE_ENABLED=0
 SHOPWARE_HTTP_DEFAULT_TTL=7200" > .env
@@ -44,14 +44,14 @@ fi
 if [[ ! "$@" == *"--without-building" ]]; then
     npm clean-install --prefix vendor/shopware/platform/src/Administration/Resources
     npm run --prefix vendor/shopware/platform/src/Administration/Resources lerna -- bootstrap
-    npm run --prefix vendor/shopware/platform/src/Administration/Resources/administration/ build
+    npm run --prefix vendor/shopware/platform/src/Administration/Resources/app/administration/ build
 
-    npm --prefix vendor/shopware/platform/src/Storefront/Resources/ install
-    npm --prefix vendor/shopware/platform/src/Storefront/Resources/ run production
-
-    bin/console theme:refresh
-    node vendor/shopware/platform/src/Storefront/Resources/copy-to-vendor.js
-    bin/console theme:change Storefront --all
-
+    npm --prefix vendor/shopware/platform/src/Storefront/Resources/app/storefront/ clean-install
+    node vendor/shopware/platform/src/Storefront/Resources/app/storefront/copy-to-vendor.js
+    npm --prefix vendor/shopware/platform/src/Storefront/Resources/app/storefront/ run production
+    
     php bin/console assets:install
+    bin/console theme:refresh
+    bin/console theme:change Storefront --all
+    bin/console theme:compile
 fi
