@@ -50,6 +50,7 @@ steps:
     repository: 'shyim/shopware-nginx'
     command: 'push'
     tags: |
+      php74-xdebug
       php73-xdebug
       php72-xdebug
       php71-xdebug
@@ -91,3 +92,4 @@ steps:
       php71-xdebug
       php72-xdebug
       php73-xdebug
+      php74-xdebug

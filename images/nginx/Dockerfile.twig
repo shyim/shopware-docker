@@ -19,6 +19,8 @@ RUN set -x && \
       libzip-dev \
       libwebp-dev \
       libxml2-dev \
+      libxslt-dev \
+      libffi-dev \
       pcre-dev \
       unzip \
       wget \
@@ -31,11 +33,22 @@ RUN set -x && \
     docker-php-ext-configure zip \
       --with-libzip && \
     docker-php-ext-configure gd \
+    {% if phpVersionNumeric >= 74 %}
+      --enable-gd \
+      --with-freetype \
+      --with-png \
+      --with-jpeg \
+      --with-webp && \
+    {% else %}
       --with-gd \
       --with-freetype-dir=/usr/include/ \
       --with-png-dir=/usr/include/ \
       --with-jpeg-dir=/usr/include/ \
       --with-webp-dir && \
+    {% endif %}
+    {% if phpVersionNumeric >= 74 %}
+    docker-php-ext-configure ffi --with-ffi && \
+    {% endif %}
     docker-php-ext-install -j$(nproc) \
       bcmath \
       gd \
@@ -46,7 +59,7 @@ RUN set -x && \
       bz2 \
       intl \
       soap \
-      zip > /dev/null && \
+      zip {% if phpVersionNumeric >= 74 %} ffi {% endif %} > /dev/null && \
     update-ca-certificates && \
     ln -s /usr/local/bin/php /usr/bin/php && \
     ln -sf /dev/stdout /var/log/nginx/access.log && \

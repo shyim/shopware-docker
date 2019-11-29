@@ -25,9 +25,6 @@ for t in ${phpVersions[@]}; do
     node "${DIR}/twig.js" nginx/Dockerfile.twig "{\"phpVersion\": \"$dockerPHP\", \"phpVersionNumeric\": $phpVersionNumeric, \"xdebug\": false}" > nginx/${t}/Dockerfile
 done
 
-# RC has custom name
-node "${DIR}/twig.js" nginx/Dockerfile.twig "{\"phpVersion\": \"rc\", \"phpVersionNumeric\": 7.4, \"xdebug\": false}" > nginx/php74/Dockerfile
-
 for t in ${xdebugPhpVersions[@]}; do
     dockerPHP=$(echo "${t:3:1}.${t:4:1}")
     
