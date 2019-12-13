@@ -17,12 +17,20 @@ for t in ${phpVersions[@]}; do
 
     if [[ $1 == "nginx" || $1 == "all" ]]; then
         echo "Building nginx container for $t"
-        docker build -t shyim/shopware-nginx:${t} -f ./nginx/${t}/Dockerfile ./nginx/
+        cp nginx/10-classic.conf nginx/rootfs/etc/nginx/sites-enabled/www.conf
+        docker build -t shyim/shopware-classic-nginx:${t} -f ./nginx/${t}/Dockerfile ./nginx/
+
+        cp nginx/10-platform.conf nginx/rootfs/etc/nginx/sites-enabled/www.conf
+        docker build -t shyim/shopware-platform-nginx:${t} -f ./nginx/${t}/Dockerfile ./nginx/
     fi
 
     if [[ $1 == "xdebug" || $1 == "all" ]]; then
         if [[ -d "./nginx/${t}-xdebug" ]]; then
-            docker build -t shyim/shopware-nginx:${t}-xdebug -f ./nginx/${t}-xdebug/Dockerfile ./nginx/
+            cp nginx/10-classic.conf nginx/rootfs/etc/nginx/sites-enabled/www.conf
+            docker build -t shyim/shopware-classic-nginx:${t}-xdebug -f ./nginx/${t}-xdebug/Dockerfile ./nginx/
+
+            cp nginx/10-platform.conf nginx/rootfs/etc/nginx/sites-enabled/www.conf
+            docker build -t shyim/shopware-platform-nginx:${t}-xdebug -f ./nginx/${t}-xdebug/Dockerfile ./nginx/
         fi
     fi
 

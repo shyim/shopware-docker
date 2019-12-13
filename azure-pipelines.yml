@@ -57,10 +57,23 @@ steps:
 
 - task: Docker@2
   condition: eq(variables['MODULE'], 'nginx')
-  displayName: 'Push Nginx Images'
+  displayName: 'Push Nginx Shopware 6 Images'
   inputs:
     containerRegistry: 'Docker Hub'
-    repository: 'shyim/shopware-nginx'
+    repository: 'shopware-platform-nginx'
+    command: 'push'
+    tags: |
+      php71
+      php72
+      php73
+      php74
+
+- task: Docker@2
+  condition: eq(variables['MODULE'], 'nginx')
+  displayName: 'Push Nginx Shopware 5 Images'
+  inputs:
+    containerRegistry: 'Docker Hub'
+    repository: 'shopware-classic-nginx'
     command: 'push'
     tags: |
       php71

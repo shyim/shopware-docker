@@ -55,3 +55,48 @@ function trim_whitespace() {
     var="${var%"${var##*[![:space:]]}"}"   # remove trailing whitespace characters
     echo -n "$var"
 }
+
+function get_image()
+{
+    folder=$1
+    var="VHOST_${folder^^}_IMAGE"
+    var="${var//-/_}"
+    val=${!var}
+
+    if [[ ! -z $val ]]; then
+        echo $val
+    else
+        IMAGE="shyim/shopware-classic-nginx"
+        if [[ -f "$2/public/index.php" ]]; then
+            IMAGE="shyim/shopware-platform-nginx"
+        fi
+
+        echo "${IMAGE}:php${PHP_VERSION}"
+    fi
+}
+
+function get_hosts()
+{
+    folder=$1
+    var="VHOST_${folder^^}_HOSTS"
+    var="${var//-/_}"
+    val=${!var}
+
+    if [[ ! -z $val ]]; then
+        echo $val
+    else
+        echo "${folder}.dev.localhost"
+    fi
+}
+
+function get_url()
+{
+    hosts=$(get_hosts $1)
+    host=$(cut -d ',' -f 1 <<< "${hosts}")
+
+    if [[ $USE_SSL_DEFAULT == "true" ]]; then
+        echo "https://${host}"
+    else
+        echo "http://${host}"
+    fi
+}

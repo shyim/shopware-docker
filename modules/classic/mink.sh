@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 cd /var/www/html/$SHOPWARE_PROJECT
+URL=$(get_url $SHOPWARE_PROJECT)
 
 php ${DIR}/modules/classic/fix-config.php "$SHOPWARE_FOLDER/config.php" csrf
 
@@ -13,7 +14,7 @@ echo "default:
         Shopware\Behat\ShopwareExtension: ~
         Behat\MinkExtension:
             ## defined in buildscript
-            base_url: 'http://$SHOPWARE_PROJECT.dev.localhost'
+            base_url: '$URL'
             default_session: 'goutte'
             javascript_session: 'selenium2'
             goutte: ~

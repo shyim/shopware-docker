@@ -8,10 +8,20 @@ CODE_FOLDER_CONTENT="$(ls -A ${CODE_DIRECTORY})"
 MYSQL_VERSION=$(echo ${MYSQL_VERSION} | sed 's/\.//g')
 PHP_VERSION=$(echo ${PHP_VERSION} | sed 's/\.//g')
 
-export DOCKER_OVERRIDE_FILE="/tmp/swdc-docker-compose-override.yml";
+echo "version: '3.7'" > ${DOCKER_COMPOSE_FILE}
+echo "services:" >> ${DOCKER_COMPOSE_FILE}
 
-echo "version: '3'" > ${DOCKER_OVERRIDE_FILE}
-echo "services:" >> ${DOCKER_OVERRIDE_FILE}
+echo "  smtp:" >> ${DOCKER_COMPOSE_FILE}
+echo "    image: djfarrelly/maildev" >> ${DOCKER_COMPOSE_FILE}
+
+echo "  proxy:" >> ${DOCKER_COMPOSE_FILE}
+echo "    image: jwilder/nginx-proxy" >> ${DOCKER_COMPOSE_FILE}
+echo "    volumes:" >> ${DOCKER_COMPOSE_FILE}
+echo "      - /var/run/docker.sock:/tmp/docker.sock:ro" >> ${DOCKER_COMPOSE_FILE}
+echo "      - ${REALDIR}/ssl:/etc/nginx/certs" >> ${DOCKER_COMPOSE_FILE}
+echo "    ports:" >> ${DOCKER_COMPOSE_FILE}
+echo "      - 80:80" >> ${DOCKER_COMPOSE_FILE}
+echo "      - 443:443" >> ${DOCKER_COMPOSE_FILE}
 
 create_nginx
 create_mysql
@@ -45,4 +55,4 @@ if [[ ${CACHE_VOLUMES} == "true" ]]; then
     create_caching
 fi
 
-docker-compose -f ${DIR}/docker-compose.yml -f ${DOCKER_OVERRIDE_FILE} up -d --remove-orphans
+docker-compose -f ${DOCKER_COMPOSE_FILE} up -d --remove-orphans

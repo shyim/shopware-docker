@@ -6,10 +6,11 @@ clearCache
 mysql -h mysql -u root -proot -e "DROP DATABASE IF EXISTS $SHOPWARE_PROJECT"
 mysql -h mysql -u root -proot -e "CREATE DATABASE $SHOPWARE_PROJECT"
 cd "/var/www/html/${SHOPWARE_PROJECT}"
+URL=$(get_url $SHOPWARE_PROJECT)
 
-echo "APP_ENV=docker
+echo "APP_ENV=dev
 APP_SECRET=8583a6ff63c5894a3195331701749943
-APP_URL=http://${SHOPWARE_PROJECT}.platform.localhost
+APP_URL=$URL
 MAILER_URL=null://localhost
 INSTANCE_ID=test
 DATABASE_URL=mysql://root:${MYSQL_ROOT_PASSWORD}@mysql:3306/${SHOPWARE_PROJECT}

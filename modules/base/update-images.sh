@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-docker-compose pull
-docker-compose up -d --remove-orphans
+docker-compose -f ${DOCKER_COMPOSE_FILE} pull
+docker-compose -f ${DOCKER_COMPOSE_FILE} up -d --remove-orphans

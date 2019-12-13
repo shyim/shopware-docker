@@ -7,6 +7,8 @@ mysql -h mysql -u root -proot -e "CREATE DATABASE IF NOT EXISTS $SHOPWARE_PROJEC
 
 cd /var/www/html/$SHOPWARE_PROJECT
 
+URL=$(get_url $SHOPWARE_PROJECT)
+
 touch recovery/install/data/install.lock
 
 echo "<?php
@@ -30,7 +32,7 @@ fi
 
 clearCache
 
-./bin/console sw:database:setup --steps=setupShop --shop-url=http://$SHOPWARE_PROJECT.dev.localhost
+./bin/console sw:database:setup --steps=setupShop --shop-url=$URL
 ./bin/console sw:snippets:to:db --include-plugins
 ./bin/console sw:theme:initialize
 ./bin/console sw:firstrunwizard:disable

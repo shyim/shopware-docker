@@ -11,7 +11,8 @@ for t in ${phpVersions[@]}; do
     fi
 
     if [[ $1 == "nginx" || $1 == "all" ]]; then
-        docker push shyim/shopware-nginx:${t}
+        docker push shyim/shopware-classic-nginx:${t}
+        docker push shyim/shopware-platform-nginx:${t}
     fi
 done
 

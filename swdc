@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 export COMPOSE_PROJECT_NAME="shopware-docker"
+export DOCKER_COMPOSE_FILE="/tmp/swdc-docker-compose.yml";
 
 FILE="$0"
 
@@ -10,6 +11,7 @@ fi
 
 DIR="$(dirname ${FILE})"
 export DIR="${DIR}"
+export REALDIR=$(realpath ${DIR})
 
 if [[ ! -f "${HOME}/.swdc_env" ]]; then
   if [[ -f "${DIR}/.env" ]]; then
@@ -46,4 +48,4 @@ then
     exit 0
 fi
 
-docker-compose exec cli bash /opt/swdc/swdc-inside "$@"
+docker-compose -f ${DOCKER_COMPOSE_FILE} exec cli bash /opt/swdc/swdc-inside "$@"
