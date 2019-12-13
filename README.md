@@ -15,11 +15,18 @@ This setup works for Shopware 5, Shopware 5 Composer Project and Platform
 * Run `swdc build [Folder Name]`
 * After the installation succeed, can you open the shop with the command `swdc open [Folder Name]`
 
-
 ### Custom code directory
 
 * You may change the code directory which the shopware installations lie in by
   modifying the `CODE_DIRECTORY` variable in `$HOME/.swdc_env`
+
+## Custom options
+
+* You can override the image and the hosts of an folder
+
+Example: If your folder is named `sw6` you can set following enviroment variables `VHOST_SW6_HOSTS` and `VHOST_SW6_IMAGE`.
+`VHOST_XXX_HOSTS` can be multiple seperated by comma. The first host will be used for installation
+
 
 ## Which commands exist?
 
@@ -46,6 +53,7 @@ This setup works for Shopware 5, Shopware 5 Composer Project and Platform
 * `swdc config`                    Applies fixture to the config.php
 * `swdc download-testimages`       Download and extract shopware testimages
 * `swdc hooks`                     Fixes the hooks for git
+* `swdc mink`                      Run mink tests
 * `swdc snippets`                  Reimports all snippets
 * `swdc test`                      Runs all tests
 * `swdc unit`                      Runs only unit tests
@@ -53,7 +61,7 @@ This setup works for Shopware 5, Shopware 5 Composer Project and Platform
 
 ### Module: classic-composer
 
-* `swdc build`                     Reinstalls the database           
+* `swdc build`                     Reinstalls the database         
 
 ### Module: docker
 
@@ -65,14 +73,14 @@ This setup works for Shopware 5, Shopware 5 Composer Project and Platform
 ### Module: local
 
 * `swdc configure`                 Opens the configuration .env file with your favourite editor
-* `swdc local-rebuild`             Rebuilds used docker images
-* `swdc local-up`                  Starts the stack with local images if they are defined
 
 ### Module: platform
 
 * `swdc admin-build`               Builds the administration and executes assets install
 * `swdc admin-watch`               Start the admin watcher at port 8181
 * `swdc build`                     Reinstalls the database
+* `swdc storefront-build`          Builds the storefront
+* `swdc storefront-watch`          Recompile the storefront when changes in its resources are detected
 * `swdc unit`                      Runs all unit tests
 
 ## Which images and tags are available?
