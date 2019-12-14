@@ -54,7 +54,7 @@ function create_mysql() {
         echo "      - /var/lib/mysql" >> ${DOCKER_COMPOSE_FILE}
     else
         echo "    volumes:" >> ${DOCKER_COMPOSE_FILE}
-        echo "      - ./mysql-data:/var/lib/mysql:delegated" >> ${DOCKER_COMPOSE_FILE}
+        echo "      - ${REALDIR}/mysql-data:/var/lib/mysql:delegated" >> ${DOCKER_COMPOSE_FILE}
     fi
 }
 
