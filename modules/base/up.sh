@@ -7,6 +7,7 @@ CODE_FOLDER_CONTENT="$(ls -A ${CODE_DIRECTORY})"
 
 MYSQL_VERSION=$(echo ${MYSQL_VERSION} | sed 's/\.//g')
 PHP_VERSION=$(echo ${PHP_VERSION} | sed 's/\.//g')
+export XDEBUG_ENABLE=$2
 
 echo "version: '3.7'" > ${DOCKER_COMPOSE_FILE}
 echo "services:" >> ${DOCKER_COMPOSE_FILE}

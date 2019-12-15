@@ -62,6 +62,11 @@ function get_image()
     var="VHOST_${folder^^}_IMAGE"
     var="${var//-/_}"
     val=${!var}
+    SUFFIX=""
+
+    if [[ $XDEBUG_ENABLE == "xdebug" ]]; then
+        SUFFIX="-xdebug"
+    fi
 
     if [[ ! -z $val ]]; then
         echo $val
@@ -71,7 +76,7 @@ function get_image()
             IMAGE="shyim/shopware-platform-nginx"
         fi
 
-        echo "${IMAGE}:php${PHP_VERSION}"
+        echo "${IMAGE}:php${PHP_VERSION}${SUFFIX}"
     fi
 }
 

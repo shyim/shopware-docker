@@ -47,7 +47,7 @@ steps:
   displayName: 'Push XDebug Shopware 6 Images'
   inputs:
     containerRegistry: 'Docker Hub'
-    repository: 'shopware-platform-nginx'
+    repository: 'shyim/shopware-platform-nginx'
     command: 'push'
     tags: |
       php74-xdebug
@@ -60,7 +60,7 @@ steps:
   displayName: 'Push XDebug Shopware 5 Images'
   inputs:
     containerRegistry: 'Docker Hub'
-    repository: 'shopware-classic-nginx'
+    repository: 'shyim/shopware-classic-nginx'
     command: 'push'
     tags: |
       php74-xdebug
@@ -73,7 +73,7 @@ steps:
   displayName: 'Push Nginx Shopware 6 Images'
   inputs:
     containerRegistry: 'Docker Hub'
-    repository: 'shopware-platform-nginx'
+    repository: 'shyim/shopware-platform-nginx'
     command: 'push'
     tags: |
       php71
@@ -86,7 +86,7 @@ steps:
   displayName: 'Push Nginx Shopware 5 Images'
   inputs:
     containerRegistry: 'Docker Hub'
-    repository: 'shopware-classic-nginx'
+    repository: 'shyim/shopware-classic-nginx'
     command: 'push'
     tags: |
       php71
@@ -99,7 +99,7 @@ steps:
   displayName: 'Push Cli Images'
   inputs:
     containerRegistry: 'Docker Hub'
-    repository: 'shyim/shopware-cli'
+    repository: 'shyim/shyim/shopware-cli'
     command: 'push'
     tags: |
       php71
