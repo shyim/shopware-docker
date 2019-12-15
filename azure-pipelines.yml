@@ -99,7 +99,7 @@ steps:
   displayName: 'Push Cli Images'
   inputs:
     containerRegistry: 'Docker Hub'
-    repository: 'shyim/shyim/shopware-cli'
+    repository: 'shyim/shopware-cli'
     command: 'push'
     tags: |
       php71
