@@ -6,12 +6,12 @@ This setup works for Shopware 5, Shopware 5 Composer Project and Platform
 
 * Clone the repository somewhere
 * Optional: Do a symlink from swdc to `/usr/local/bin/swdc`
-* Copy .env.dist to $HOME/.swdc_env or just run swdc
+* Copy `.env.dist` to `$HOME/.swdc_env` or just run `swdc`
 * `swdc up`: Starts the docker-compose with the containers
 
 ## Creating projects
 
-* Create a new folder in ~/Code/ with your project name and checkout a shopware installation
+* Create a new folder in `~/Code/` with your project name and checkout a shopware installation
 * Run `swdc build [Folder Name]`
 * After the installation succeed, can you open the shop with the command `swdc open [Folder Name]`
 
@@ -45,6 +45,7 @@ Example: If your folder is named `sw6` you can set following enviroment variable
 * `swdc shell`                     Joins into the cli container as normal user
 * `swdc update-images`             Updates used docker images
 * `swdc up`                        Starts the containers
+* `swdc up xdebug`                 Starts the containers with xdebug enabled
 
 ### Module: classic
 
@@ -103,7 +104,13 @@ I dont't develop on Windows or Mac. Try it out by own
 
 ### SMTP
 
-Mailhog: http://mail.localhost
+MailDev: http://mail.localhost
+Host: smtp
+Port: 25
+no Login
+no Encryption
+no authetification
+
 
 ### MySQL
 
