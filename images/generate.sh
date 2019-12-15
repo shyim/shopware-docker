@@ -27,6 +27,7 @@ done
 
 for t in ${xdebugPhpVersions[@]}; do
     dockerPHP=$(echo "${t:3:1}.${t:4:1}")
+    phpVersionNumeric=$(echo "${t:3:1}${t:4:1}")
     
     if [ ! -d "nginx/${t}-xdebug" ]; then
         mkdir nginx/${t}-xdebug
@@ -36,8 +37,8 @@ for t in ${xdebugPhpVersions[@]}; do
         mkdir cli/${t}-xdebug
     fi
 
-    node "${DIR}/twig.js" cli/Dockerfile.twig "{\"phpVersion\": \"$dockerPHP\", \"phpVersioNumeric\": $phpVersionNumeric, \"xdebug\": true}" > cli/${t}-xdebug/Dockerfile
-    node "${DIR}/twig.js" nginx/Dockerfile.twig "{\"phpVersion\": \"$dockerPHP\", \"phpVersioNumeric\": $phpVersionNumeric, \"xdebug\": true}" > nginx/${t}-xdebug/Dockerfile
+    node "${DIR}/twig.js" cli/Dockerfile.twig "{\"phpVersion\": \"$dockerPHP\", \"phpVersionNumeric\": $phpVersionNumeric, \"xdebug\": true}" > cli/${t}-xdebug/Dockerfile
+    node "${DIR}/twig.js" nginx/Dockerfile.twig "{\"phpVersion\": \"$dockerPHP\", \"phpVersionNumeric\": $phpVersionNumeric, \"xdebug\": true}" > nginx/${t}-xdebug/Dockerfile
 done
 
 for t in ${xdebugPhpVersions[@]}; do
