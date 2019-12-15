@@ -34,7 +34,7 @@ bin/console database:migrate-destructive --all Shopware\\
 bin/console bundle:dump
 bin/console scheduled-task:register
 bin/console user:create admin --password=shopware
-bin/console sales-channel:create:storefront --url="http://${SHOPWARE_PROJECT}.platform.localhost"
+bin/console sales-channel:create:storefront --url="$(get_url $SHOPWARE_PROJECT)"
 
 
 if [[ ! "$@" == *"--without-demo-data" ]]; then
