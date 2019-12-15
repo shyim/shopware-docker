@@ -14,6 +14,8 @@ echo "services:" >> ${DOCKER_COMPOSE_FILE}
 
 echo "  smtp:" >> ${DOCKER_COMPOSE_FILE}
 echo "    image: djfarrelly/maildev" >> ${DOCKER_COMPOSE_FILE}
+echo "    environment:" >> ${DOCKER_COMPOSE_FILE}
+echo "      VIRTUAL_HOST: mail.localhost" >> ${DOCKER_COMPOSE_FILE}
 
 echo "  proxy:" >> ${DOCKER_COMPOSE_FILE}
 echo "    image: jwilder/nginx-proxy" >> ${DOCKER_COMPOSE_FILE}
