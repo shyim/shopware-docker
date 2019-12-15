@@ -44,10 +44,23 @@ steps:
 
 - task: Docker@2
   condition: eq(variables['MODULE'], 'xdebug')
-  displayName: 'Push XDebug Images'
+  displayName: 'Push XDebug Shopware 6 Images'
   inputs:
     containerRegistry: 'Docker Hub'
-    repository: 'shyim/shopware-nginx'
+    repository: 'shopware-platform-nginx'
+    command: 'push'
+    tags: |
+      php74-xdebug
+      php73-xdebug
+      php72-xdebug
+      php71-xdebug
+
+- task: Docker@2
+  condition: eq(variables['MODULE'], 'xdebug')
+  displayName: 'Push XDebug Shopware 5 Images'
+  inputs:
+    containerRegistry: 'Docker Hub'
+    repository: 'shopware-classic-nginx'
     command: 'push'
     tags: |
       php74-xdebug

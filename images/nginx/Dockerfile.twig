@@ -28,13 +28,14 @@ RUN set -x && \
       build-base \
       autoconf \
       automake && \
+    {% if phpVersionNumeric < 74 %}
     docker-php-ext-configure zip \
       --with-libzip && \
+    {% endif %}
     docker-php-ext-configure gd \
     {% if phpVersionNumeric >= 74 %}
       --enable-gd \
       --with-freetype \
-      --with-png \
       --with-jpeg \
       --with-webp && \
     {% else %}
