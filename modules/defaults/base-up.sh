@@ -24,6 +24,7 @@ function create_nginx (){
             echo "    environment:" >> ${DOCKER_COMPOSE_FILE}
             echo "      VIRTUAL_HOST: ${hosts}" >> ${DOCKER_COMPOSE_FILE}
             echo "      CERT_NAME: shared" >> ${DOCKER_COMPOSE_FILE}
+            echo "      HTTPS_METHOD: noredirect" >> ${DOCKER_COMPOSE_FILE}
             echo "    volumes:" >> ${DOCKER_COMPOSE_FILE}
             if [[ ${Platform} != "Linux" ]]; then
                 echo "      - ${d}:/var/www/html:cached" >> ${DOCKER_COMPOSE_FILE}
