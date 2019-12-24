@@ -106,6 +106,7 @@ function create_cli () {
 function create_es () {
     echo "  elastic:" >> ${DOCKER_COMPOSE_FILE}
     echo "    image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTICSEARCH_VERSION}" >> ${DOCKER_COMPOSE_FILE}
+    echo "    command: [ \"bin/elasticsearch\", \"-Expack.security.enabled=false\", \"-Ediscovery.type=single-node\" ]" >> ${DOCKER_COMPOSE_FILE}
     echo "    environment:" >> ${DOCKER_COMPOSE_FILE}
     echo "      VIRTUAL_HOST: es.localhost" >> ${DOCKER_COMPOSE_FILE}
     echo "      VIRTUAL_PORT: 9200" >> ${DOCKER_COMPOSE_FILE}
