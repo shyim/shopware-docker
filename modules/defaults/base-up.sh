@@ -3,43 +3,41 @@
 export Platform=$(uname -s)
 
 function create_nginx (){
-    for d in ${CODE_DIRECTORY}/* ; do
-        if [[ -d "$d" ]]; then
-            NAME=$(basename $d)
-            hosts=$(get_hosts $NAME)
-            
-            echo "  app_${NAME}:" >> ${DOCKER_COMPOSE_FILE}
+    while IFS= read -r NAME; do
+        d="${CODE_DIRECTORY}/${NAME}"
 
-            IMAGE=$(get_image $NAME $d)
-            echo "    image: ${IMAGE}" >> ${DOCKER_COMPOSE_FILE}
-            echo "    env_file:" >> ${DOCKER_COMPOSE_FILE}
-            echo "      - ${REALDIR}/docker.env" >> ${DOCKER_COMPOSE_FILE}
-            echo "      - ~/.swdc_env" >> ${DOCKER_COMPOSE_FILE}
-            echo "    extra_hosts:" >> ${DOCKER_COMPOSE_FILE}
+        hosts=$(get_hosts $NAME)
+        echo "  app_${NAME}:" >> ${DOCKER_COMPOSE_FILE}
 
-            for i in ${hosts//,/ }; do
-                echo "      ${i}: 127.0.0.1" >> ${DOCKER_COMPOSE_FILE}
-            done
+        IMAGE=$(get_image $NAME $d)
+        echo "    image: ${IMAGE}" >> ${DOCKER_COMPOSE_FILE}
+        echo "    env_file:" >> ${DOCKER_COMPOSE_FILE}
+        echo "      - ${REALDIR}/docker.env" >> ${DOCKER_COMPOSE_FILE}
+        echo "      - ~/.swdc_env" >> ${DOCKER_COMPOSE_FILE}
+        echo "    extra_hosts:" >> ${DOCKER_COMPOSE_FILE}
 
-            echo "    environment:" >> ${DOCKER_COMPOSE_FILE}
-            echo "      VIRTUAL_HOST: ${hosts}" >> ${DOCKER_COMPOSE_FILE}
-            echo "      CERT_NAME: shared" >> ${DOCKER_COMPOSE_FILE}
-            echo "      HTTPS_METHOD: noredirect" >> ${DOCKER_COMPOSE_FILE}
-            echo "    volumes:" >> ${DOCKER_COMPOSE_FILE}
-            if [[ ${Platform} != "Linux" ]]; then
-                echo "      - ${d}:/var/www/html:cached" >> ${DOCKER_COMPOSE_FILE}
-                if [[ ${CACHE_VOLUMES} == "true" ]]; then
-                    echo "      - ${NAME}_var_cache:/var/www/html/var/cache:delegated" >> ${DOCKER_COMPOSE_FILE}
-                    echo "      - ${NAME}_web_cache:/var/www/html/web/cache:delegated" >> ${DOCKER_COMPOSE_FILE}
-                else
-                    echo "      - ${CODE_DIRECTORY}/${NAME}/var/cache:/var/www/html/var/cache:delegated" >> ${DOCKER_COMPOSE_FILE}
-                    echo "      - ${CODE_DIRECTORY}/${NAME}/web/cache:/var/www/html/web/cache:delegated" >> ${DOCKER_COMPOSE_FILE}
-                fi
+        for i in ${hosts//,/ }; do
+            echo "      ${i}: 127.0.0.1" >> ${DOCKER_COMPOSE_FILE}
+        done
+
+        echo "    environment:" >> ${DOCKER_COMPOSE_FILE}
+        echo "      VIRTUAL_HOST: ${hosts}" >> ${DOCKER_COMPOSE_FILE}
+        echo "      CERT_NAME: shared" >> ${DOCKER_COMPOSE_FILE}
+        echo "      HTTPS_METHOD: noredirect" >> ${DOCKER_COMPOSE_FILE}
+        echo "    volumes:" >> ${DOCKER_COMPOSE_FILE}
+        if [[ ${Platform} != "Linux" ]]; then
+            echo "      - ${d}:/var/www/html:cached" >> ${DOCKER_COMPOSE_FILE}
+            if [[ ${CACHE_VOLUMES} == "true" ]]; then
+                echo "      - ${NAME}_var_cache:/var/www/html/var/cache:delegated" >> ${DOCKER_COMPOSE_FILE}
+                echo "      - ${NAME}_web_cache:/var/www/html/web/cache:delegated" >> ${DOCKER_COMPOSE_FILE}
             else
-                echo "      - ${d}:/var/www/html" >> ${DOCKER_COMPOSE_FILE}
+                echo "      - ${CODE_DIRECTORY}/${NAME}/var/cache:/var/www/html/var/cache:delegated" >> ${DOCKER_COMPOSE_FILE}
+                echo "      - ${CODE_DIRECTORY}/${NAME}/web/cache:/var/www/html/web/cache:delegated" >> ${DOCKER_COMPOSE_FILE}
             fi
+        else
+            echo "      - ${d}:/var/www/html" >> ${DOCKER_COMPOSE_FILE}
         fi
-    done
+    done <<< "$(get_serve_folders)"
 }
 
 function create_mysql() {
@@ -70,33 +68,28 @@ function create_cli () {
     echo "      - 8181:8181" >> ${DOCKER_COMPOSE_FILE}
     if [[ ${CODE_FOLDER_CONTENT} ]]; then
         echo "    links:" >> ${DOCKER_COMPOSE_FILE}
-        for d in ${CODE_DIRECTORY}/* ; do
-            if [[ -d "$d" ]]; then
-                NAME=$(basename $d)
-                hosts=$(get_hosts $NAME)
-                for i in ${hosts//,/ }; do
-                    echo "      - app_${NAME}:${i}" >> ${DOCKER_COMPOSE_FILE}
-                done
-            fi
-        done
+        while IFS= read -r NAME; do
+            hosts=$(get_hosts $NAME)
+            for i in ${hosts//,/ }; do
+                echo "      - app_${NAME}:${i}" >> ${DOCKER_COMPOSE_FILE}
+            done
+        done <<< "$(get_serve_folders)"
         echo "    volumes:" >> ${DOCKER_COMPOSE_FILE}
         echo "      - ${REALDIR}:/opt/swdc/" >> ${DOCKER_COMPOSE_FILE}
         if [[ ${Platform} != "Linux" ]]; then
             echo "      - ${CODE_DIRECTORY}:/var/www/html:cached" >> ${DOCKER_COMPOSE_FILE}
-            for d in ${CODE_DIRECTORY}/* ; do
-                if [[ -d "$d" ]]; then
-                    NAME=$(basename $d)
-                    echo "      - ${CODE_DIRECTORY}/${NAME}/media:/var/www/html/${NAME}/media:cached" >> ${DOCKER_COMPOSE_FILE}
-                    echo "      - ${CODE_DIRECTORY}/${NAME}/files:/var/www/html/${NAME}/files:cached" >> ${DOCKER_COMPOSE_FILE}
-                    if [[ ${CACHE_VOLUMES} == "true" ]]; then
-                        echo "      - ${NAME}_var_cache:/var/www/html/${NAME}/var/cache:delegated" >> ${DOCKER_COMPOSE_FILE}
-                        echo "      - ${NAME}_web_cache:/var/www/html/${NAME}/web/cache:delegated" >> ${DOCKER_COMPOSE_FILE}
-                    else
-                        echo "      - ${CODE_DIRECTORY}/${NAME}/var/cache:/var/www/html/${NAME}/var/cache:delegated" >> ${DOCKER_COMPOSE_FILE}
-                        echo "      - ${CODE_DIRECTORY}/${NAME}/web/cache:/var/www/html/${NAME}/web/cache:delegated" >> ${DOCKER_COMPOSE_FILE}
-                    fi
+
+            while IFS= read -r NAME; do
+                echo "      - ${CODE_DIRECTORY}/${NAME}/media:/var/www/html/${NAME}/media:cached" >> ${DOCKER_COMPOSE_FILE}
+                echo "      - ${CODE_DIRECTORY}/${NAME}/files:/var/www/html/${NAME}/files:cached" >> ${DOCKER_COMPOSE_FILE}
+                if [[ ${CACHE_VOLUMES} == "true" ]]; then
+                    echo "      - ${NAME}_var_cache:/var/www/html/${NAME}/var/cache:delegated" >> ${DOCKER_COMPOSE_FILE}
+                    echo "      - ${NAME}_web_cache:/var/www/html/${NAME}/web/cache:delegated" >> ${DOCKER_COMPOSE_FILE}
+                else
+                    echo "      - ${CODE_DIRECTORY}/${NAME}/var/cache:/var/www/html/${NAME}/var/cache:delegated" >> ${DOCKER_COMPOSE_FILE}
+                    echo "      - ${CODE_DIRECTORY}/${NAME}/web/cache:/var/www/html/${NAME}/web/cache:delegated" >> ${DOCKER_COMPOSE_FILE}
                 fi
-            done
+            done <<< "$(get_serve_folders)"
         else
             echo "      - ${CODE_DIRECTORY}:/var/www/html" >> ${DOCKER_COMPOSE_FILE}
         fi
@@ -159,15 +152,12 @@ function create_selenium () {
     if [[ ${CODE_FOLDER_CONTENT} ]]; then
         echo "    links:" >> ${DOCKER_COMPOSE_FILE}
 
-        for d in ${CODE_DIRECTORY}/* ; do
-            if [[ -d "$d" ]]; then
-                NAME=$(basename $d)
-                hosts=$(get_hosts $NAME)
-                for i in ${hosts//,/ }; do
-                    echo "      - app_${NAME}:${i}" >> ${DOCKER_COMPOSE_FILE}
-                done
-            fi
-        done
+        while IFS= read -r NAME; do
+            hosts=$(get_hosts $NAME)
+            for i in ${hosts//,/ }; do
+                echo "      - app_${NAME}:${i}" >> ${DOCKER_COMPOSE_FILE}
+            done
+        done <<< "$(get_serve_folders)"
     fi
 }
 
@@ -182,14 +172,12 @@ function create_blackfire () {
 function create_caching () {
     if [[ ${CODE_FOLDER_CONTENT} ]]; then
         echo "volumes:" >> ${DOCKER_COMPOSE_FILE}
-        for d in ${CODE_DIRECTORY}/* ; do
-            if [[ -d "$d" ]]; then
-                NAME=$(basename $d)
-                echo "  ${NAME}_var_cache:" >> ${DOCKER_COMPOSE_FILE}
-                echo "    driver: local" >> ${DOCKER_COMPOSE_FILE}
-                echo "  ${NAME}_web_cache:" >> ${DOCKER_COMPOSE_FILE}
-                echo "    driver: local" >> ${DOCKER_COMPOSE_FILE}
-            fi
-        done
+
+        while IFS= read -r NAME; do
+            echo "  ${NAME}_var_cache:" >> ${DOCKER_COMPOSE_FILE}
+            echo "    driver: local" >> ${DOCKER_COMPOSE_FILE}
+            echo "  ${NAME}_web_cache:" >> ${DOCKER_COMPOSE_FILE}
+            echo "    driver: local" >> ${DOCKER_COMPOSE_FILE}
+        done <<< "$(get_serve_folders)"
     fi
 }

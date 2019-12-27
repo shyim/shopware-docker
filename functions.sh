@@ -22,8 +22,8 @@ mysqlVersions=(55 56 57 8)
 
 function fixHooks()
 {
-    rm ${SHOPWARE_FOLDER}/.git/hooks/pre-commit
-    cd ${SHOPWARE_FOLDER}
+    rm "${SHOPWARE_FOLDER}/.git/hooks/pre-commit"
+    cd "${SHOPWARE_FOLDER}" || exit
     ln -s ../../build/gitHooks/pre-commit .git/hooks/pre-commit
     echo "Hooks fixed"
 }
@@ -31,7 +31,7 @@ function fixHooks()
 function clearCache()
 {
     if [ -d "${SHOPWARE_FOLDER}/var/cache" ]; then
-        find ${SHOPWARE_FOLDER}/var/cache -mindepth 1 -maxdepth 1 -type d -exec rm -r {} \;
+        find "${SHOPWARE_FOLDER}/var/cache" -mindepth 1 -maxdepth 1 -type d -exec rm -r {} \;
     fi
 }
 
@@ -96,7 +96,7 @@ function get_hosts()
 
 function get_url()
 {
-    hosts=$(get_hosts $1)
+    hosts=$(get_hosts "$1")
     host=$(cut -d ',' -f 1 <<< "${hosts}")
 
     if [[ $USE_SSL_DEFAULT == "true" ]]; then
@@ -104,4 +104,15 @@ function get_url()
     else
         echo "http://${host}"
     fi
+}
+
+function get_serve_folders()
+{
+    for d in ${CODE_DIRECTORY}/* ; do
+        if [[ -d "$d" ]]; then
+            if [ -f "$d/public/index.php" ] || [ -f "$d/shopware.php" ]; then
+                echo $(basename $d)
+            fi
+        fi
+    done
 }
