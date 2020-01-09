@@ -2,7 +2,6 @@
 
 checkParameter
 clearCache
-mysql -h mysql -u root -proot -e "CREATE DATABASE IF NOT EXISTS $SHOPWARE_PROJECT"
 cd "/var/www/html/${SHOPWARE_PROJECT}"
 
 if [[ $3 == "--with-coverage" ]]; then

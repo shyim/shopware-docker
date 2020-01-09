@@ -116,3 +116,8 @@ function get_serve_folders()
         fi
     done
 }
+
+function compose()
+{
+    docker-compose -f ${DOCKER_COMPOSE_FILE} $@
+}

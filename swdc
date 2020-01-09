@@ -30,22 +30,23 @@ source "${DIR}/functions.sh"
 # Need to be in docker folder for docker-compose
 cd "${DIR}"
 
+modules=(base)
+
+if [[ -f "${CODE_DIRECTORY}/${2}/src/Kernel.php" ]]; then
+  modules=(base platform-local)
+fi
+
 if [[ "${1}" == "" ]];
 then
   source modules/base/command-list.sh
   exit "1"
 fi
 
-if [[ -f "./modules/base/${1}.sh" ]];
-then
-    source "./modules/base/${1}.sh"
+for module in ${modules[@]}; do
+  if [[ -f "./modules/${module}/${1}.sh" ]]; then
+    source "./modules/${module}/${1}.sh"
     exit 0
-fi
+  fi
+done
 
-if [[ -f "./modules/local/${1}.sh" ]];
-then
-    source "./modules/local/${1}.sh"
-    exit 0
-fi
-
-docker-compose -f ${DOCKER_COMPOSE_FILE} exec cli bash /opt/swdc/swdc-inside "$@"
+compose exec cli bash /opt/swdc/swdc-inside "$@"

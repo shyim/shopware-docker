@@ -37,12 +37,12 @@ bin/console user:create admin --password=shopware
 bin/console sales-channel:create:storefront --url="$URL"
 
 
-if [[ ! "$@" == *"--without-demo-data" ]]; then
+if [[ ! "$@" == *"--without-demo-data"* ]]; then
     APP_ENV=prod bin/console framework:demodata
     bin/console dal:refresh:index
 fi
 
-if [[ ! "$@" == *"--without-building" ]]; then
+if [[ ! "$@" == *"--without-building"* ]]; then
     npm clean-install --prefix vendor/shopware/platform/src/Administration/Resources
     npm run --prefix vendor/shopware/platform/src/Administration/Resources lerna -- bootstrap
     npm run --prefix vendor/shopware/platform/src/Administration/Resources/app/administration/ build
@@ -52,7 +52,7 @@ if [[ ! "$@" == *"--without-building" ]]; then
     npm --prefix vendor/shopware/platform/src/Storefront/Resources/app/storefront/ run production
     
     php bin/console assets:install
-    bin/console theme:refresh
-    bin/console theme:change Storefront --all
-    bin/console theme:compile
 fi
+
+bin/console theme:refresh
+bin/console theme:change Storefront --all
