@@ -28,9 +28,17 @@ composer install -o
 
 php dev-ops/generate_ssl.php
 
-mysql -h mysql -u root -proot $SHOPWARE_PROJECT < vendor/shopware/platform/src/Core/schema.sql 
-bin/console database:migrate --all
-bin/console database:migrate-destructive --all
+mysql -h mysql -u root -proot $SHOPWARE_PROJECT < vendor/shopware/platform/src/Core/schema.sql
+
+bin/console database:migrate --all Shopware\\
+
+if [[ $? == 0 ]]; then
+    bin/console database:migrate-destructive --all Shopware\\
+else
+    bin/console database:migrate --all
+    bin/console database:migrate-destructive --all
+fi
+
 bin/console bundle:dump
 bin/console scheduled-task:register
 bin/console user:create admin --password=shopware
