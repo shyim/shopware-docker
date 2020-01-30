@@ -66,6 +66,7 @@ RUN set -x && \
     rm -rf /var/lib/nginx/tmp && \
     ln -sf /tmp /var/lib/nginx/tmp && \
     mkdir /etc/supervisor.d/ && \
+    mkdir -p /var/tmp/nginx/ || true && \
     chown -R www-data:www-data /var/lib/nginx /var/tmp/nginx/ && \
     chmod 777 -R /var/tmp/nginx/ && \
     pecl install {% if xdebug %}xdebug {% endif %}redis && \
