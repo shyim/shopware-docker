@@ -162,6 +162,28 @@ function create_selenium () {
     fi
 }
 
+function create_cypress () {
+    echo "  cypress:" >> ${DOCKER_COMPOSE_FILE}
+    echo "    image: cypress/included:3.8.1" >> ${DOCKER_COMPOSE_FILE}
+    echo "    shm_size: 2g" >> ${DOCKER_COMPOSE_FILE}
+    echo "    environment:" >> ${DOCKER_COMPOSE_FILE}
+    echo "      - DISPLAY" >> ${DOCKER_COMPOSE_FILE}
+    echo "    volumes:" >> ${DOCKER_COMPOSE_FILE}
+    echo "      - ${CODE_DIRECTORY}:/var/www/html" >> ${DOCKER_COMPOSE_FILE}
+    echo "      - /tmp/.X11-unix:/tmp/.X11-unix" >> ${DOCKER_COMPOSE_FILE}
+
+    if [[ ${CODE_FOLDER_CONTENT} ]]; then
+        echo "    links:" >> ${DOCKER_COMPOSE_FILE}
+
+        while IFS= read -r NAME; do
+            hosts=$(get_hosts $NAME)
+            for i in ${hosts//,/ }; do
+                echo "      - app_${NAME}:${i}" >> ${DOCKER_COMPOSE_FILE}
+            done
+        done <<< "$(get_serve_folders)"
+    fi
+}
+
 function create_blackfire () {
     echo "  blackfire:" >> ${DOCKER_COMPOSE_FILE}
     echo "    image: blackfire/blackfire" >> ${DOCKER_COMPOSE_FILE}

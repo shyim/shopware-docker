@@ -116,6 +116,6 @@ RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
 ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
 
 COPY rootfs/ /
-EXPOSE 80
+EXPOSE 80 8005
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]

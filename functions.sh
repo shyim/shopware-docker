@@ -94,10 +94,16 @@ function get_hosts()
     fi
 }
 
-function get_url()
+function get_host()
 {
     hosts=$(get_hosts "$1")
     host=$(cut -d ',' -f 1 <<< "${hosts}")
+    echo $host
+}
+
+function get_url()
+{
+    host=$(get_host "$1")
 
     if [[ $USE_SSL_DEFAULT == "true" ]]; then
         echo "https://${host}"

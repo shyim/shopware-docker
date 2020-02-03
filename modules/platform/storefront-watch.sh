@@ -9,4 +9,4 @@ URL=$(get_url $SHOPWARE_PROJECT)
 cd ${PROJECT_ROOT}
 
 bin/console bundle:dump
-APP_URL=$URL PROJECT_ROOT=$PROJECT_ROOT npm --prefix vendor/shopware/platform/src/Storefront/Resources/ run watch
+APP_URL=$URL PROJECT_ROOT=$PROJECT_ROOT npm --prefix vendor/shopware/platform/src/Storefront/Resources/app/storefront/ run watch

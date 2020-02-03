@@ -24,6 +24,7 @@ if [[ ! -f "${HOME}/.swdc_env" ]]; then
 fi
 
 
+source "${DIR}/.env.dist"
 source "${HOME}/.swdc_env"
 source "${DIR}/functions.sh"
 

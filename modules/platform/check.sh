@@ -1,5 +1,8 @@
 cd "/var/www/html/${SHOPWARE_PROJECT}"
 
+composer install -d dev-ops/analyze
+composer dump-autoload
+
 php dev-ops/analyze/vendor/bin/ecs check --fix vendor/shopware/platform/src --config vendor/shopware/platform/easy-coding-standard.yml
 
 php dev-ops/analyze/phpstan-config-generator.php

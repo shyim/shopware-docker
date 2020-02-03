@@ -50,6 +50,10 @@ if [[ ${ENABLE_SELENIUM} == "true" ]]; then
     create_selenium
 fi
 
+if [[ ${ENABLE_CYPRESS} == "true" ]]; then
+    create_cypress
+fi
+
 if [[ ${ENABLE_BLACKFIRE} == "true" ]]; then
     create_blackfire
 fi
