@@ -11,7 +11,7 @@ URL=$(get_url $SHOPWARE_PROJECT)
 echo "APP_ENV=dev
 APP_SECRET=8583a6ff63c5894a3195331701749943
 APP_URL=$URL
-MAILER_URL=null://localhost
+MAILER_URL=\"sendmail://localhost?command=ssmtp -t\"
 INSTANCE_ID=test
 DATABASE_URL=mysql://root:${MYSQL_ROOT_PASSWORD}@mysql:3306/${SHOPWARE_PROJECT}
 SHOPWARE_ES_HOSTS=elastic

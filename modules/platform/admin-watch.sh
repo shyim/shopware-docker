@@ -3,6 +3,7 @@
 checkParameter
 cd "/var/www/html/${SHOPWARE_PROJECT}"
 
+export USE_SSL_DEFAULT=false
 URL=$(get_url $SHOPWARE_PROJECT)
 export PROJECT_ROOT=$SHOPWARE_FOLDER
 
