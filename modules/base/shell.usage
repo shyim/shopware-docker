@@ -1,1 +1,13 @@
 Joins into the cli container as normal user
+If an argument is given to the command, it will be executed inside the cli-container
+using the bash shell.
+
+Usage:
+  shell [command...]
+
+Examples:
+
+  swdc shell
+    # Creates an interactive bash shell-session inside the cli container
+  swdc shell composer install -d shopware
+    # Executes a composer install inside the "shopware" project directory
