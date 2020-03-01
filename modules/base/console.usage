@@ -1,0 +1,10 @@
+Executes the symfony console for the given project
+
+Usage:
+  console project_dir [command...]
+
+Examples:
+
+  swdc console shopware-5 sw:cache:clear
+
+  swdc console sw6 plugin:refresh && swdc console sw6 plugin:install -c --activate MyAwesomePlugin

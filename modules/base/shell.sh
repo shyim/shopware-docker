@@ -1,3 +1,8 @@
 #!/usr/bin/env bash
 
-docker-compose -f ${DOCKER_COMPOSE_FILE} exec -e COLUMNS="`tput cols`" -e LINES="`tput lines`" -e SHELL=bash cli bash
+if [[ -z "$2" ]]; then
+  docker-compose -f ${DOCKER_COMPOSE_FILE} exec -e COLUMNS -e LINES -e SHELL=bash cli bash
+else
+  shift
+  docker-compose -f ${DOCKER_COMPOSE_FILE} exec -e COLUMNS -e LINES -e SHELL=bash cli "$@"
+fi
