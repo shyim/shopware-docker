@@ -80,6 +80,9 @@ Example: If your folder is named `sw6` you can set following enviroment variable
 * `swdc admin-build`               Builds the administration and executes assets install
 * `swdc admin-watch`               Start the admin watcher at port 8181
 * `swdc build`                     Reinstalls the database
+  * available parameter
+    * `--without-demo-data`          Don't generate demo-data
+    * `--without-building`           Don't build the storefront and administration
 * `swdc storefront-build`          Builds the storefront
 * `swdc storefront-watch`          Recompile the storefront when changes in its resources are detected
 * `swdc unit`                      Runs all unit tests
