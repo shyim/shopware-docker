@@ -4,7 +4,6 @@ set -o nounset
 set -o errexit
 set -o pipefail
 
-
 DIR=$(dirname $0)
 
 source "${DIR}/../functions.sh"
@@ -42,7 +41,11 @@ for t in ${phpVersions[@]}; do
 
     if [[ $1 == "blackfire" || $1 == "all" ]]; then
         if [[ -d "./nginx/${t}-blackfire" ]]; then
-            docker build -t shyim/shopware-nginx:${t}-blackfire -f ./nginx/${t}-blackfire/Dockerfile ./nginx/
+            cp nginx/10-classic.conf nginx/rootfs/etc/nginx/sites-enabled/www.conf
+            docker build -t shyim/shopware-classic-nginx:${t}-blackfire -f ./nginx/${t}-blackfire/Dockerfile ./nginx/
+
+            cp nginx/10-platform.conf nginx/rootfs/etc/nginx/sites-enabled/www.conf
+            docker build -t shyim/shopware-platform-nginx:${t}-blackfire -f ./nginx/${t}-blackfire/Dockerfile ./nginx/
         fi
     fi
 done

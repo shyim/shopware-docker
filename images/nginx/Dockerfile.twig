@@ -20,6 +20,7 @@ RUN set -x && \
       libxslt-dev \
       libffi-dev \
       pcre-dev \
+      gmp-dev \
       unzip \
       wget \
       ssmtp && \
@@ -56,6 +57,7 @@ RUN set -x && \
       pdo_mysql \
       sockets \
       bz2 \
+      gmp \
       intl \
       soap \
       zip {% if phpVersionNumeric >= 74 %} ffi {% endif %} > /dev/null && \
@@ -93,7 +95,7 @@ RUN set -x && \
     echo 'xdebug.show_mem_delta=1' >> /usr/local/etc/php/conf.d/ext-xdebug.ini
 {% endif %}
 
-{% if phpVersionNumeric >= 71 %}
+{% if phpVersionNumeric >= 71 and xdebug is not defined %}
 RUN cd /opt/ && \
     wget https://github.com/shyim/var-dumper-server-prefixed/archive/master.zip && \
     unzip master.zip && \
@@ -101,6 +103,7 @@ RUN cd /opt/ && \
     mv var-dumper-server-prefixed-master var-dumper-server && \
     echo "auto_prepend_file = /opt/var-dumper-server/bin/init.php" > /usr/local/etc/php/conf.d/vardumpserver.ini
 {% endif %}
+
 
 {% if blackfire is defined %}
 ENV current_os=alpine
