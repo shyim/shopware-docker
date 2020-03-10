@@ -1,0 +1,1 @@
+docker-compose -f ${DOCKER_COMPOSE_FILE} exec cli curl -X DELETE 'http://elastic:9200/_all'

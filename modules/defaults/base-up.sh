@@ -130,13 +130,17 @@ function create_database_tool () {
     if [[ ${DATABASE_TOOL} == "phpmyadmin" ]]; then
         echo "  phpmyadmin:" >> ${DOCKER_COMPOSE_FILE}
         echo "    image: phpmyadmin/phpmyadmin" >> ${DOCKER_COMPOSE_FILE}
-        echo "    env_file: ${REALDIR}/docker.env" >> ${DOCKER_COMPOSE_FILE}
+        echo "    env_file:" >> ${DOCKER_COMPOSE_FILE}
+        echo "      - ${REALDIR}/docker.env" >> ${DOCKER_COMPOSE_FILE}
+        echo "      - ${REALDIR}/phpmyadmin.env" >> ${DOCKER_COMPOSE_FILE}
         echo "    environment:" >> ${DOCKER_COMPOSE_FILE}
         echo "      VIRTUAL_HOST: db.localhost" >> ${DOCKER_COMPOSE_FILE}
     else
         echo "  adminer:" >> ${DOCKER_COMPOSE_FILE}
         echo "    image: adminer" >> ${DOCKER_COMPOSE_FILE}
-        echo "    env_file: ${REALDIR}/docker.env" >> ${DOCKER_COMPOSE_FILE}
+        echo "    env_file:" >> ${DOCKER_COMPOSE_FILE}
+        echo "      - ${REALDIR}/docker.env" >> ${DOCKER_COMPOSE_FILE}
+        echo "      - ${REALDIR}/adminer.env" >> ${DOCKER_COMPOSE_FILE}
         echo "    environment:" >> ${DOCKER_COMPOSE_FILE}
         echo "      VIRTUAL_HOST: db.localhost" >> ${DOCKER_COMPOSE_FILE}
         echo "      VIRTUAL_PORT: 8080" >> ${DOCKER_COMPOSE_FILE}

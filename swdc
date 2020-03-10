@@ -27,6 +27,10 @@ fi
 source "${DIR}/.env.dist"
 source "${HOME}/.swdc_env"
 source "${DIR}/functions.sh"
+source "${DIR}/docker.env"
+
+SHOPWARE_PROJECT="$2"
+SHOPWARE_FOLDER="${CODE_DIRECTORY}/$SHOPWARE_PROJECT"
 
 # Need to be in docker folder for docker-compose
 cd "${DIR}"
