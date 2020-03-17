@@ -112,6 +112,21 @@ function get_url()
     fi
 }
 
+function get_cert_name()
+{
+    folder=$1
+    var="VHOST_${folder^^}_CERT_NAME"
+    var="${var//-/_}"
+    val=${!var}
+
+    if [[ ! -z $val ]]; then
+        echo $val
+    else
+        echo "shared"
+    fi
+}
+
+
 function get_serve_folders()
 {
     for d in ${CODE_DIRECTORY}/* ; do

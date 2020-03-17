@@ -7,6 +7,7 @@ function create_nginx (){
         d="${CODE_DIRECTORY}/${NAME}"
 
         hosts=$(get_hosts $NAME)
+        certName=$(get_cert_name $NAME)
         echo "  app_${NAME}:" >> ${DOCKER_COMPOSE_FILE}
 
         IMAGE=$(get_image $NAME $d)
@@ -22,7 +23,7 @@ function create_nginx (){
 
         echo "    environment:" >> ${DOCKER_COMPOSE_FILE}
         echo "      VIRTUAL_HOST: ${hosts}" >> ${DOCKER_COMPOSE_FILE}
-        echo "      CERT_NAME: shared" >> ${DOCKER_COMPOSE_FILE}
+        echo "      CERT_NAME: ${certName}" >> ${DOCKER_COMPOSE_FILE}
         echo "      HTTPS_METHOD: noredirect" >> ${DOCKER_COMPOSE_FILE}
         echo "    volumes:" >> ${DOCKER_COMPOSE_FILE}
         if [[ ${Platform} != "Linux" ]]; then
