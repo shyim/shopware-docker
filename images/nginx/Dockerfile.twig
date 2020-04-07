@@ -95,7 +95,7 @@ RUN set -x && \
     echo 'xdebug.show_mem_delta=1' >> /usr/local/etc/php/conf.d/ext-xdebug.ini
 {% endif %}
 
-{% if phpVersionNumeric >= 71 and xdebug is not defined %}
+{% if phpVersionNumeric >= 71 and xdebug == false %}
 RUN cd /opt/ && \
     wget https://github.com/shyim/var-dumper-server-prefixed/archive/master.zip && \
     unzip master.zip && \
