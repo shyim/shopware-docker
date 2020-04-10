@@ -71,7 +71,7 @@ RUN set -x && \
     mkdir -p /var/tmp/nginx/ || true && \
     chown -R www-data:www-data /var/lib/nginx /var/tmp/nginx/ && \
     chmod 777 -R /var/tmp/nginx/ && \
-    pecl install {% if xdebug %}xdebug {% endif %}redis && \
+    pecl install {% if xdebug %}xdebug{% if phpVersionNumeric <= 70 %}-2.5.5{% endif %} {% endif %}redis{% if phpVersionNumeric <= 70 %}-4.3.0{% endif %} && \
     docker-php-ext-enable {% if xdebug %}xdebug {% endif %}redis && \
     apk del build-deps && \
     rm -rf /tmp/* && \

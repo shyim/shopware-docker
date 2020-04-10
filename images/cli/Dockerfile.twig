@@ -1,3 +1,4 @@
+{% if phpVersionNumeric >= 71 %}
 FROM debian:stretch-slim as builder
 
 RUN mkdir -p /usr/share/man/man1/ && \
@@ -13,9 +14,8 @@ RUN mkdir -p /usr/share/man/man1/ && \
     ./configure --enable-pcov && \
     make
 
+{% endif %}
 FROM debian:stretch-slim
-
-ENV SHOPWARE_ENV docker
 
 RUN mkdir -p /usr/share/man/man1/ && \
     apt-get update && \
@@ -55,11 +55,13 @@ RUN mkdir -p /usr/share/man/man1/ && \
     && mkdir /home/dev \
     && chown -R dev: /home/dev \
     && curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash - \
-    && apt-get install nodejs -y \
+    && apt-get install nodejs -y{% if phpVersionNumeric >= 71 %} \
     && echo "extension=/usr/php-pcov.so" >> /etc/php/{{ phpVersion }}/cli/php.ini \
     && echo "pcov.enabled = 0" >> /etc/php/{{ phpVersion }}/cli/php.ini
 
 COPY --from=builder /root/pcov/modules/pcov.so /usr/php-pcov.so
+
+{% endif %}
 
 ENV HOME /home/dev
 USER dev
