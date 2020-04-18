@@ -1,0 +1,35 @@
+images:
+  -
+    image: shyim/shopware-classic-nginx-production
+    buildTags: [ 'production' ]
+    dockerFile: nginx/Dockerfile
+    context: nginx 
+    templates:
+      nginx/Dockerfile.twig: nginx/Dockerfile
+      nginx/10-classic.conf: nginx/rootfs/etc/nginx/sites-enabled/www.conf
+    variables:
+      production: true
+    tags:
+      php73:
+        phpVersion: '7.3'
+        phpVersionNumeric: 73
+      php74:
+        phpVersion: '7.4'
+        phpVersionNumeric: 74
+  -
+    image: shyim/shopware-platform-nginx-production
+    buildTags: [ 'production' ]
+    dockerFile: nginx/Dockerfile
+    context: nginx 
+    templates:
+      nginx/Dockerfile.twig: nginx/Dockerfile
+      nginx/10-platform.conf: nginx/rootfs/etc/nginx/sites-enabled/www.conf
+    variables:
+      production: true
+    tags:
+      php73:
+        phpVersion: '7.3'
+        phpVersionNumeric: 73
+      php74:
+        phpVersion: '7.4'
+        phpVersionNumeric: 74

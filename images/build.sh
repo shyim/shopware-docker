@@ -23,6 +23,15 @@ for t in ${phpVersions[@]}; do
         docker build -t shyim/shopware-platform-nginx:${t} -f ./nginx/${t}/Dockerfile ./nginx/
     fi
 
+    if [[ $1 == "production" || $1 == "all" ]]; then
+        echo "Building production nginx container for $t"
+        cp nginx/10-classic.conf nginx/rootfs/etc/nginx/sites-enabled/www.conf
+        docker build -t shyim/shopware-classic-nginx-production:${t} -f ./nginx/${t}-production/Dockerfile ./nginx/
+
+        cp nginx/10-platform.conf nginx/rootfs/etc/nginx/sites-enabled/www.conf
+        docker build -t shyim/shopware-platform-nginx-production:${t} -f ./nginx/${t}-production/Dockerfile ./nginx/
+    fi
+
     if [[ $1 == "xdebug" || $1 == "all" ]]; then
         if [[ -d "./nginx/${t}-xdebug" ]]; then
             cp nginx/10-classic.conf nginx/rootfs/etc/nginx/sites-enabled/www.conf

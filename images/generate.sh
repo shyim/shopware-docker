@@ -13,6 +13,10 @@ for t in ${phpVersions[@]}; do
     dockerPHP=$(echo "${t:3:1}.${t:4:1}")
     phpVersionNumeric=$(echo "${t:3:1}${t:4:1}")
 
+    echo $dockerPHP
+    echo $phpVersionNumeric
+    exit 0
+
     if [[ ! -d "cli/${t}" ]]; then
         mkdir cli/${t}
     fi
@@ -21,8 +25,24 @@ for t in ${phpVersions[@]}; do
         mkdir nginx/${t}
     fi
 
-    node "${DIR}/twig.js" cli/Dockerfile.twig "{\"phpVersion\": \"$dockerPHP\", \"phpVersionNumeric\": $phpVersionNumeric, \"xdebug\": false}" > cli/${t}/Dockerfile
-    node "${DIR}/twig.js" nginx/Dockerfile.twig "{\"phpVersion\": \"$dockerPHP\", \"phpVersionNumeric\": $phpVersionNumeric, \"xdebug\": false}" > nginx/${t}/Dockerfile
+    node "${DIR}/twig.js" cli/Dockerfile.twig "{\"phpVersion\": \"$dockerPHP\", \"phpVersionNumeric\": $phpVersionNumeric, \"xdebug\": false, \"production\": false}" > cli/${t}/Dockerfile
+    node "${DIR}/twig.js" nginx/Dockerfile.twig "{\"phpVersion\": \"$dockerPHP\", \"phpVersionNumeric\": $phpVersionNumeric, \"xdebug\": false, \"production\": false}" > nginx/${t}/Dockerfile
+done
+
+for t in ${phpVersions[@]}; do
+    dockerPHP=$(echo "${t:3:1}.${t:4:1}")
+    phpVersionNumeric=$(echo "${t:3:1}${t:4:1}")
+
+    if [[ ! -d "cli/${t}-production" ]]; then
+        mkdir cli/${t}-production
+    fi
+
+    if [[ ! -d "nginx/${t}-production" ]]; then
+        mkdir nginx/${t}-production
+    fi
+
+    node "${DIR}/twig.js" cli/Dockerfile.twig "{\"phpVersion\": \"$dockerPHP\", \"phpVersionNumeric\": $phpVersionNumeric, \"xdebug\": false, \"production\": true}" > cli/${t}-production/Dockerfile
+    node "${DIR}/twig.js" nginx/Dockerfile.twig "{\"phpVersion\": \"$dockerPHP\", \"phpVersionNumeric\": $phpVersionNumeric, \"xdebug\": false, \"production\": true}" > nginx/${t}-production/Dockerfile
 done
 
 for t in ${xdebugPhpVersions[@]}; do
@@ -37,8 +57,8 @@ for t in ${xdebugPhpVersions[@]}; do
         mkdir cli/${t}-xdebug
     fi
 
-    node "${DIR}/twig.js" cli/Dockerfile.twig "{\"phpVersion\": \"$dockerPHP\", \"phpVersionNumeric\": $phpVersionNumeric, \"xdebug\": true}" > cli/${t}-xdebug/Dockerfile
-    node "${DIR}/twig.js" nginx/Dockerfile.twig "{\"phpVersion\": \"$dockerPHP\", \"phpVersionNumeric\": $phpVersionNumeric, \"xdebug\": true}" > nginx/${t}-xdebug/Dockerfile
+    node "${DIR}/twig.js" cli/Dockerfile.twig "{\"phpVersion\": \"$dockerPHP\", \"phpVersionNumeric\": $phpVersionNumeric, \"xdebug\": true, \"production\": false}" > cli/${t}-xdebug/Dockerfile
+    node "${DIR}/twig.js" nginx/Dockerfile.twig "{\"phpVersion\": \"$dockerPHP\", \"phpVersionNumeric\": $phpVersionNumeric, \"xdebug\": true, \"production\": false}" > nginx/${t}-xdebug/Dockerfile
 done
 
 for t in ${xdebugPhpVersions[@]}; do
@@ -48,7 +68,7 @@ for t in ${xdebugPhpVersions[@]}; do
         mkdir nginx/${t}-blackfire
     fi
 
-    node "${DIR}/twig.js" nginx/Dockerfile.twig "{\"phpVersion\": \"$dockerPHP\", \"phpVersioNumeric\": $phpVersionNumeric, \"blackfire\": true}" > nginx/${t}-blackfire/Dockerfile
+    node "${DIR}/twig.js" nginx/Dockerfile.twig "{\"phpVersion\": \"$dockerPHP\", \"phpVersioNumeric\": $phpVersionNumeric, \"blackfire\": true, \"production\": false}" > nginx/${t}-blackfire/Dockerfile
 done
 
 for t in ${mysqlVersions[@]}; do

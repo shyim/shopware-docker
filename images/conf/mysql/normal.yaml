@@ -1,0 +1,14 @@
+images:
+  -
+    image: shyim/shopware-mysql
+    buildTags: [ 'mysql' ]
+    dockerFile: mysql/Dockerfile
+    context: mysql 
+    templates:
+      mysql/Dockerfile.twig: mysql/Dockerfile
+      mysql/dev.twig: mysql/dev.cnf
+    tags:
+      57:
+        mysqlVersion: '5.7'
+      8:
+        mysqlVersion: '8'

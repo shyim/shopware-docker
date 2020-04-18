@@ -1,0 +1,50 @@
+images:
+  -
+    image: shyim/shopware-classic-nginx
+    buildTags: [ 'blackfire' ]
+    dockerFile: nginx/Dockerfile
+    context: nginx 
+    templates:
+      nginx/Dockerfile.twig: nginx/Dockerfile
+      nginx/10-classic.conf: nginx/rootfs/etc/nginx/sites-enabled/www.conf
+    variables:
+      blackfire: true
+    tags:
+      php56-blackfire:
+        phpVersion: '5.6'
+        phpVersionNumeric: 56
+      php70-blackfire:
+        phpVersion: '7.0'
+        phpVersionNumeric: 70
+      php71-blackfire:
+        phpVersion: '7.1'
+        phpVersionNumeric: 71
+      php72-blackfire:
+        phpVersion: '7.2'
+        phpVersionNumeric: 72
+      php73-blackfire:
+        phpVersion: '7.3'
+        phpVersionNumeric: 73
+      php74-blackfire:
+        phpVersion: '7.4'
+        phpVersionNumeric: 74
+  -
+    image: shyim/shopware-platform-nginx
+    buildTags: [ 'blackfire' ]
+    dockerFile: nginx/Dockerfile
+    context: nginx 
+    templates:
+      nginx/Dockerfile.twig: nginx/Dockerfile
+      nginx/10-platform.conf: nginx/rootfs/etc/nginx/sites-enabled/www.conf
+    variables:
+      blackfire: true
+    tags:
+      php72-blackfire:
+        phpVersion: '7.2'
+        phpVersionNumeric: 72
+      php73-blackfire:
+        phpVersion: '7.3'
+        phpVersionNumeric: 73
+      php74-blackfire:
+        phpVersion: '7.4'
+        phpVersionNumeric: 74
