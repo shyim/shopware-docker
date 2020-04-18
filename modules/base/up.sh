@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source "${HOME}/.swdc_env"
+source "${HOME}/.config/swdc/env"
 source "${DIR}/modules/defaults/base-up.sh"
 
 CODE_FOLDER_CONTENT="$(ls -A ${CODE_DIRECTORY})"
@@ -21,7 +21,7 @@ echo "  proxy:" >> ${DOCKER_COMPOSE_FILE}
 echo "    image: jwilder/nginx-proxy" >> ${DOCKER_COMPOSE_FILE}
 echo "    volumes:" >> ${DOCKER_COMPOSE_FILE}
 echo "      - /var/run/docker.sock:/tmp/docker.sock:ro" >> ${DOCKER_COMPOSE_FILE}
-echo "      - ${REALDIR}/ssl:/etc/nginx/certs" >> ${DOCKER_COMPOSE_FILE}
+echo "      - ${HOME}/.config/swdc/ssl:/etc/nginx/certs" >> ${DOCKER_COMPOSE_FILE}
 echo "    ports:" >> ${DOCKER_COMPOSE_FILE}
 echo "      - 80:80" >> ${DOCKER_COMPOSE_FILE}
 echo "      - 443:443" >> ${DOCKER_COMPOSE_FILE}

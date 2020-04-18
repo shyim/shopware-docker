@@ -3,5 +3,5 @@ if [[ -z $EDITOR ]]; then
     exit 0
 fi
 
-$EDITOR "${HOME}/.swdc_env"
+$EDITOR "${HOME}/.config/swdc/env"
 

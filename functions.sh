@@ -16,10 +16,6 @@ modulesClassicComposerProject=(base classic-composer classic)
 modulesPlatform=(base platform)
 modulesLocal=(base local)
 
-phpVersions=(php56 php70 php71 php72 php73 php74)
-xdebugPhpVersions=(php56 php70 php71 php72 php73 php74)
-mysqlVersions=(55 56 57 8)
-
 function fixHooks()
 {
     rm "${SHOPWARE_FOLDER}/.git/hooks/pre-commit"
@@ -141,4 +137,12 @@ function get_serve_folders()
 function compose()
 {
     docker-compose -f ${DOCKER_COMPOSE_FILE} $@
+}
+
+function generate_wildcard_certs()
+{
+    openssl genrsa -out "${HOME}/.config/swdc/ssl/ca.key" 2048
+    openssl req -new -x509 -sha256 -days 20000 -key "${HOME}/.config/swdc/ssl/ca.key" -subj "/C=CN/ST=GD/L=SZ/O=SWDC./CN=SWDC CA" -out "${HOME}/.config/swdc/ssl/ca.crt"
+    openssl req -newkey rsa:2048 -nodes -keyout "${HOME}/.config/swdc/ssl/shared.key" -subj "/C=CN/ST=GD/L=SZ/O=SWDC, Inc./CN=*.dev.localhost" -out "${HOME}/.config/swdc/ssl/shared.csr"
+    openssl x509 -req -sha256 -extfile <(printf "subjectAltName=DNS:*.dev.localhost") -days 20000 -in "${HOME}/.config/swdc/ssl/shared.csr" -CA "${HOME}/.config/swdc/ssl/ca.crt" -CAkey "${HOME}/.config/swdc/ssl/ca.key" -CAcreateserial -out "${HOME}/.config/swdc/ssl/shared.crt"
 }

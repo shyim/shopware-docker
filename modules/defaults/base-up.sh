@@ -14,7 +14,7 @@ function create_nginx (){
         echo "    image: ${IMAGE}" >> ${DOCKER_COMPOSE_FILE}
         echo "    env_file:" >> ${DOCKER_COMPOSE_FILE}
         echo "      - ${REALDIR}/docker.env" >> ${DOCKER_COMPOSE_FILE}
-        echo "      - ~/.swdc_env" >> ${DOCKER_COMPOSE_FILE}
+        echo "      - ~/.config/swdc/env" >> ${DOCKER_COMPOSE_FILE}
         echo "    extra_hosts:" >> ${DOCKER_COMPOSE_FILE}
 
         for i in ${hosts//,/ }; do
@@ -63,7 +63,7 @@ function create_cli () {
     echo "    image: shyim/shopware-cli:php${PHP_VERSION}" >> ${DOCKER_COMPOSE_FILE}
     echo "    env_file:" >> ${DOCKER_COMPOSE_FILE}
     echo "      - ${REALDIR}/docker.env" >> ${DOCKER_COMPOSE_FILE}
-    echo "      - ~/.swdc_env" >> ${DOCKER_COMPOSE_FILE}
+    echo "      - ~/.config/swdc/env" >> ${DOCKER_COMPOSE_FILE}
     echo "    tty: true" >> ${DOCKER_COMPOSE_FILE}
     echo "    ports:" >> ${DOCKER_COMPOSE_FILE}
     echo "      - 8181:8181" >> ${DOCKER_COMPOSE_FILE}
