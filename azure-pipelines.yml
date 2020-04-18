@@ -139,7 +139,7 @@ steps:
       php73
       php74
 
-  - task: Docker@2
+- task: Docker@2
   condition: eq(variables['MODULE'], 'production')
   displayName: 'Push Production SW6'
   inputs:
