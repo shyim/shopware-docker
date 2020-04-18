@@ -48,7 +48,7 @@ const run = async() => {
             }
 
             for (let tagName of Object.keys(image.tags)) {
-                await exec('docker', ['push', `${image.image}:${tagName}`]);
+                await exec('docker', ['push', `${image.image}:${tagName}`], `Pushing ${image.image}:${tagName}`);
             }
         }
     }
