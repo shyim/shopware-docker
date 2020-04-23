@@ -54,7 +54,7 @@ RUN mkdir -p /usr/share/man/man1/ && \
     && useradd dev \
     && mkdir /home/dev \
     && chown -R dev: /home/dev \
-    && curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash - \
+    && curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash - \
     && apt-get install nodejs -y{% if phpVersionNumeric >= 71 %} \
     && echo "extension=/usr/php-pcov.so" >> /etc/php/{{ phpVersion }}/cli/php.ini \
     && echo "pcov.enabled = 0" >> /etc/php/{{ phpVersion }}/cli/php.ini
