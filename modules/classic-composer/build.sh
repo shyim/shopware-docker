@@ -2,7 +2,7 @@
 
 checkParameter
 clearCache
-mysql -h mysql -u root -proot -e "CREATE DATABASE IF NOT EXISTS $SHOPWARE_PROJECT"
+mysql -h mysql -u root -proot -e "CREATE DATABASE IF NOT EXISTS \`$SHOPWARE_PROJECT\`"
 URL=$(get_url $SHOPWARE_PROJECT)
 cd "/var/www/html/${SHOPWARE_PROJECT}"
 

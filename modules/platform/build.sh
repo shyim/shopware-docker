@@ -3,22 +3,24 @@
 checkParameter
 clearCache
 
-mysql -h mysql -u root -proot -e "DROP DATABASE IF EXISTS $SHOPWARE_PROJECT"
-mysql -h mysql -u root -proot -e "CREATE DATABASE $SHOPWARE_PROJECT"
+mysql -h mysql -u root -proot -e "DROP DATABASE IF EXISTS \`$SHOPWARE_PROJECT\`"
+mysql -h mysql -u root -proot -e "CREATE DATABASE \`$SHOPWARE_PROJECT\`"
 cd "/var/www/html/${SHOPWARE_PROJECT}"
 URL=$(get_url $SHOPWARE_PROJECT)
+SECRET=$(openssl rand -hex 32)
+INSTANCE_ID=$(openssl rand -hex 32)
 
 echo "APP_ENV=dev
-APP_SECRET=8583a6ff63c5894a3195331701749943
-APP_URL=$URL
+APP_SECRET=${SECRET}
+APP_URL=${URL}
 MAILER_URL=\"sendmail://localhost?command=ssmtp -t\"
-INSTANCE_ID=test
+INSTANCE_ID=${INSTANCE_ID}
 DATABASE_URL=mysql://root:${MYSQL_ROOT_PASSWORD}@mysql:3306/${SHOPWARE_PROJECT}
 SHOPWARE_ES_HOSTS=elastic
 SHOPWARE_ES_ENABLED=0
 SHOPWARE_ES_INDEXING_ENABLED=0
 SHOPWARE_ES_INDEX_PREFIX=test_
-COMPOSER_HOME=/tmp/composer-tmp-${SHOPWARE_PROJECT}
+COMPOSER_HOME=/tmp/composer-tmp-${SECRET}
 SHOPWARE_HTTP_CACHE_ENABLED=0
 SHOPWARE_HTTP_DEFAULT_TTL=7200" > .env
 
@@ -28,7 +30,7 @@ composer install -o
 
 php dev-ops/generate_ssl.php
 
-mysql -h mysql -u root -proot $SHOPWARE_PROJECT < vendor/shopware/platform/src/Core/schema.sql
+mysql -h mysql -u root -proot "$SHOPWARE_PROJECT" < vendor/shopware/platform/src/Core/schema.sql
 
 bin/console database:migrate --all Shopware\\
 
