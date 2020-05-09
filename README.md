@@ -20,13 +20,18 @@ This setup works for Shopware 5, Shopware 5 Composer Project and 6 (Development 
 * You may change the code directory which the shopware installations lie in by
   modifying the `CODE_DIRECTORY` variable in `$HOME/.config/swdc/env`
 
-## Custom options
+## Custom options per directory
 
-* You can override the image and the hosts of an folder
+* You can override the image, hosts and the used ssl certificate
 
-Example: If your folder is named `sw6` you can set following enviroment variables `VHOST_SW6_HOSTS` and `VHOST_SW6_IMAGE`.
-`VHOST_XXX_HOSTS` can be multiple seperated by comma. The first host will be used for installation
-
+* VHOST_**FOLDER_NAME**_IMAGE
+  * Allows changing the image that is used for this directory.
+  * Files are mount to /var/www/html, the image should expose a webservice at port 80
+* VHOST_**FOLDER_NAME**_HOSTS
+  * This can be an list of hosts comma seperated. The first host will be used for the Installation
+* VHOST_**FOLDER_NAME**_CERT_NAME
+  * This can be used to define another ssl certificate for this vhost.
+  * Example: `shop`. You will need following files  `~/.config/swdc/ssl/shop.crt` and `~/.config/swdc/ssl/shop.key`
 
 ## Which commands exist?
 
@@ -89,14 +94,16 @@ Example: If your folder is named `sw6` you can set following enviroment variable
 
 ## Which images and tags are available?
 
-* [shopware/shopware-nginx](https://hub.docker.com/r/shyim/shopware-nginx/tags)
+* [shopware/shopware-classic-nginx](https://hub.docker.com/r/shyim/shopware-classic-nginx/tags)
+* [shopware/shopware-platform-nginx](https://hub.docker.com/r/shyim/shopware-platform-nginx/tags)
+* [shopware/shopware-classic-apache](https://hub.docker.com/r/shyim/shopware-classic-apache/tags)
+* [shopware/shopware-platform-apache](https://hub.docker.com/r/shyim/shopware-platform-apache/tags)
 * [shopware/shopware-mysql](https://hub.docker.com/r/shyim/shopware-mysql/tags)
 * [shopware/shopware-cli](https://hub.docker.com/r/shyim/shopware-cli/tags)
 
 ## How can i access the shop?
 
-* For Shopware 5 you can use http://**FOLDERNAME**.dev.localhost
-* For Shopware Platform you can use http://**FOLDERNAME**.platform.localhost
+* You can use http://**FOLDERNAME**.dev.localhost
 * Or use `swdc open [Folder Name]`
 
 ## Can i use it on Windows / Mac?
