@@ -23,6 +23,7 @@ This setup works for Shopware 5, Shopware 5 Composer Project and 6 (Development 
 ## Custom options per directory
 
 * You can override the image, hosts and the used ssl certificate
+* **FOLDER_NAME** has to be in uppercase. Example for image: Folder name is: **sw5**, VHOST_**SW5**_IMAGE
 
 * VHOST_**FOLDER_NAME**_IMAGE
   * Allows changing the image that is used for this directory.
