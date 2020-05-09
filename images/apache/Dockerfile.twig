@@ -1,0 +1,119 @@
+FROM php:{{ phpVersion }}-fpm-alpine
+
+COPY --from=ochinchina/supervisord:latest /usr/local/bin/supervisord /usr/bin/supervisord
+
+RUN set -x && \
+      apk add --no-cache \
+      apache2 \
+      apache2-ctl \
+      apache2-proxy \
+      shadow \
+	    bzip2-dev \
+      libzip-dev \
+      gettext \
+      ca-certificates \
+      freetype-dev \
+      icu-dev \
+      libjpeg-turbo-dev \
+      libpng-dev \
+      libzip-dev \
+      libwebp-dev \
+      libxml2-dev \
+      libxslt-dev \
+      libffi-dev \
+      pcre-dev \
+      gmp-dev \
+      unzip \
+      wget \
+      ssmtp && \
+    apk add --no-cache --virtual build-deps \
+      coreutils \
+      build-base \
+      autoconf \
+      automake && \
+    {% if phpVersionNumeric < 74 %}
+    docker-php-ext-configure zip \
+      --with-libzip && \
+    {% endif %}
+    docker-php-ext-configure gd \
+    {% if phpVersionNumeric >= 74 %}
+      --enable-gd \
+      --with-freetype \
+      --with-jpeg \
+      --with-webp && \
+    {% else %}
+      --with-gd \
+      --with-freetype-dir=/usr/include/ \
+      --with-png-dir=/usr/include/ \
+      --with-jpeg-dir=/usr/include/ \
+      --with-webp-dir && \
+    {% endif %}
+    {% if phpVersionNumeric >= 74 %}
+    docker-php-ext-configure ffi --with-ffi && \
+    {% endif %}
+    docker-php-ext-install -j$(nproc) \
+      bcmath \
+      gd \
+      intl \
+      mysqli \
+      pdo_mysql \
+      sockets \
+      bz2 \
+      gmp \
+      intl \
+      soap \
+      zip {% if phpVersionNumeric >= 74 %} ffi {% endif %} {% if production %} opcache {% endif %} > /dev/null && \
+    update-ca-certificates && \
+    ln -s /usr/local/bin/php /usr/bin/php && \
+    mkdir /etc/supervisor.d/ && \
+    pecl install {% if xdebug %}xdebug{% if phpVersionNumeric <= 70 %}-2.5.5{% endif %} {% endif %}redis{% if phpVersionNumeric <= 70 %}-4.3.0{% endif %} && \
+    docker-php-ext-enable {% if xdebug %}xdebug {% endif %}redis && \
+    apk del build-deps && \
+    rm -rf /tmp/* && \
+    chown -R www-data:www-data /var/www && \
+    usermod -u 1000 www-data && \
+    apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/community gnu-libiconv{% if xdebug %} && \
+    echo 'xdebug.remote_enable=1' > /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.remote_autostart=0' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.remote_connect_back=1' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.remote_port=9000' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.remote_log=/tmp/xdebug.log' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.idekey=PHPSTORM' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.profiler_enable=0' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.profiler_enable_trigger=1' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.profiler_output_dir="/tmp/xdebug"' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.profiler_output_name = "cachegrind.out.%R.%t"' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.auto_trace=0' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.trace_enable_trigger=1' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.trace_output_dir="/var/www/html/traces"' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.trace_output_name="trace.%R.%t"' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.show_mem_delta=1' >> /usr/local/etc/php/conf.d/ext-xdebug.ini
+{% endif %}
+
+{% if phpVersionNumeric >= 71 and xdebug == false and production == false %}
+RUN cd /opt/ && \
+    wget https://github.com/shyim/var-dumper-server-prefixed/archive/master.zip && \
+    unzip master.zip && \
+    rm master.zip && \
+    mv var-dumper-server-prefixed-master var-dumper-server && \
+    echo "auto_prepend_file = /opt/var-dumper-server/bin/init.php" > /usr/local/etc/php/conf.d/vardumpserver.ini
+{% endif %}
+
+
+{% if blackfire == true %}
+ENV current_os=alpine
+RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
+    && curl -A "Docker" -o /tmp/blackfire-probe.tar.gz -D - -L -s https://blackfire.io/api/v1/releases/probe/php/$current_os/amd64/$version \
+    && mkdir -p /tmp/blackfire \
+    && tar zxpf /tmp/blackfire-probe.tar.gz -C /tmp/blackfire \
+    && mv /tmp/blackfire/blackfire-*.so $(php -r "echo ini_get('extension_dir');")/blackfire.so \
+    && printf "extension=blackfire.so\nblackfire.agent_socket=tcp://blackfire:8707\n" > $PHP_INI_DIR/conf.d/blackfire.ini \
+    && rm -rf /tmp/blackfire /tmp/blackfire-probe.tar.gz
+{% endif %}
+
+ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
+
+COPY rootfs/ /
+EXPOSE 80 8005
+
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]

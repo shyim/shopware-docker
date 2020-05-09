@@ -1,0 +1,46 @@
+images:
+  -
+    image: shyim/shopware-classic-apache
+    buildTags: [ 'apache' ]
+    dockerFile: apache/Dockerfile
+    context: apache
+    templates:
+      apache/Dockerfile.twig: apache/Dockerfile
+      apache/classic-vhost.conf: apache/rootfs/etc/apache2/conf.d/vhost.conf
+    tags:
+      php56:
+        phpVersion: '5.6'
+        phpVersionNumeric: 56
+      php70:
+        phpVersion: '7.0'
+        phpVersionNumeric: 70
+      php71:
+        phpVersion: '7.1'
+        phpVersionNumeric: 71
+      php72:
+        phpVersion: '7.2'
+        phpVersionNumeric: 72
+      php73:
+        phpVersion: '7.3'
+        phpVersionNumeric: 73
+      php74:
+        phpVersion: '7.4'
+        phpVersionNumeric: 74
+  -
+    image: shyim/shopware-platform-apache
+    buildTags: [ 'apache' ]
+    dockerFile: apache/Dockerfile
+    context: apache
+    templates:
+      apache/Dockerfile.twig: apache/Dockerfile
+      apache/platform-vhost.conf: apache/rootfs/etc/apache2/conf.d/vhost.conf
+    tags:
+      php72:
+        phpVersion: '7.2'
+        phpVersionNumeric: 72
+      php73:
+        phpVersion: '7.3'
+        phpVersionNumeric: 73
+      php74:
+        phpVersion: '7.4'
+        phpVersionNumeric: 74
