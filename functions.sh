@@ -86,7 +86,7 @@ function get_hosts()
     if [[ ! -z $val ]]; then
         echo $val
     else
-        echo "${folder}.dev.localhost"
+        echo "${folder}.${DEFAULT_DOMAIN}"
     fi
 }
 
@@ -143,6 +143,6 @@ function generate_wildcard_certs()
 {
     openssl genrsa -out "${HOME}/.config/swdc/ssl/ca.key" 2048
     openssl req -new -x509 -sha256 -days 20000 -key "${HOME}/.config/swdc/ssl/ca.key" -subj "/C=CN/ST=GD/L=SZ/O=SWDC./CN=SWDC CA" -out "${HOME}/.config/swdc/ssl/ca.crt"
-    openssl req -newkey rsa:2048 -nodes -keyout "${HOME}/.config/swdc/ssl/shared.key" -subj "/C=CN/ST=GD/L=SZ/O=SWDC, Inc./CN=*.dev.localhost" -out "${HOME}/.config/swdc/ssl/shared.csr"
-    openssl x509 -req -sha256 -extfile <(printf "subjectAltName=DNS:*.dev.localhost") -days 20000 -in "${HOME}/.config/swdc/ssl/shared.csr" -CA "${HOME}/.config/swdc/ssl/ca.crt" -CAkey "${HOME}/.config/swdc/ssl/ca.key" -CAcreateserial -out "${HOME}/.config/swdc/ssl/shared.crt"
+    openssl req -newkey rsa:2048 -nodes -keyout "${HOME}/.config/swdc/ssl/shared.key" -subj "/C=CN/ST=GD/L=SZ/O=SWDC, Inc./CN=*.${DEFAULT_DOMAIN}" -out "${HOME}/.config/swdc/ssl/shared.csr"
+    openssl x509 -req -sha256 -extfile <(printf "subjectAltName=DNS:*.${DEFAULT_DOMAIN}") -days 20000 -in "${HOME}/.config/swdc/ssl/shared.csr" -CA "${HOME}/.config/swdc/ssl/ca.crt" -CAkey "${HOME}/.config/swdc/ssl/ca.key" -CAcreateserial -out "${HOME}/.config/swdc/ssl/shared.crt"
 }

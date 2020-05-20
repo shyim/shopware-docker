@@ -22,13 +22,16 @@ if [[ ! -d "${HOME}/.config/swdc" ]]; then
   else
     cp "${DIR}/.env.dist" "${HOME}/.config/swdc/env"
   fi
-
-  generate_wildcard_certs
 fi
 
 source "${DIR}/.env.dist"
 source "${HOME}/.config/swdc/env"
 source "${DIR}/docker.env"
+
+if [[ ! -d "${HOME}/.config/swdc/ssl" ]]; then
+  mkdir -p "${HOME}/.config/swdc/ssl"
+  generate_wildcard_certs
+fi
 
 SHOPWARE_PROJECT="$2"
 SHOPWARE_FOLDER="${CODE_DIRECTORY}/$SHOPWARE_PROJECT"
