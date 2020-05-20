@@ -15,8 +15,6 @@ export REALDIR=$(realpath ${DIR})
 source "${DIR}/functions.sh"
 
 if [[ ! -d "${HOME}/.config/swdc" ]]; then
-  mkdir -p "${HOME}/.config/swdc/ssl"
-
   if [[ -f "${HOME}/.swdc_env" ]]; then
     mv "${HOME}/.swdc_env" "${HOME}/.config/swdc/env"
   else
