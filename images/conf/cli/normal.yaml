@@ -7,15 +7,6 @@ images:
     templates:
       cli/Dockerfile.twig: cli/Dockerfile
     tags:
-      php56:
-        phpVersion: '5.6'
-        phpVersionNumeric: 56
-      php70:
-        phpVersion: '7.0'
-        phpVersionNumeric: 70
-      php71:
-        phpVersion: '7.1'
-        phpVersionNumeric: 71
       php72:
         phpVersion: '7.2'
         phpVersionNumeric: 72
@@ -35,21 +26,12 @@ images:
     templates:
       cli/Dockerfile.twig: cli/Dockerfile
     tags:
-      php56:
-        phpVersion: '5.6'
-        phpVersionNumeric: 56
-      php70:
-        phpVersion: '7.0'
-        phpVersionNumeric: 70
-      php71:
-        phpVersion: '7.1'
-        phpVersionNumeric: 71
-      php72:
+      php72-xdebug:
         phpVersion: '7.2'
         phpVersionNumeric: 72
-      php73:
+      php73-xdebug:
         phpVersion: '7.3'
         phpVersionNumeric: 73
-      php74:
+      php74-xdebug:
         phpVersion: '7.4'
         phpVersionNumeric: 74

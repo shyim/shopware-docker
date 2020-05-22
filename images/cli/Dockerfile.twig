@@ -1,66 +1,94 @@
-{% if phpVersionNumeric >= 71 %}
-FROM debian:stretch-slim as builder
+FROM php:{{ phpVersion }}-cli-alpine
 
-RUN mkdir -p /usr/share/man/man1/ && \
-    apt-get update && \
-    apt-get install --no-install-recommends -y curl wget ca-certificates git make && \
-    curl https://packages.sury.org/php/README.txt | bash && \
-    apt-get update && apt-get install -y \
-    php{{ phpVersion }}-dev -y && \
-    cd /root && \
-    git clone https://github.com/krakjoe/pcov.git && \
-    cd pcov && \
-    phpize && \
-    ./configure --enable-pcov && \
-    make
-
-{% endif %}
-FROM debian:stretch-slim
-
-RUN mkdir -p /usr/share/man/man1/ && \
-    apt-get update && \
-    apt-get install --no-install-recommends -y curl wget ca-certificates && \
-    curl https://packages.sury.org/php/README.txt | bash && \
-    apt-get update && apt-get install --no-install-recommends -y \
-    bash-completion \
-    patch \
-    mariadb-client \
-    php-redis \
-    php{{ phpVersion }}-cli \
-    php{{ phpVersion }}-xml \
-    php{{ phpVersion }}-zip \
-    php{{ phpVersion }}-json \
-    php{{ phpVersion }}-zip \
-    php{{ phpVersion }}-gmp \
-    php{{ phpVersion }}-mysql \
-    php{{ phpVersion }}-sqlite3 \
-    php{{ phpVersion }}-mbstring \
-    php{{ phpVersion }}-bcmath \
-    php{{ phpVersion }}-gd \
-    php{{ phpVersion }}-curl \
-    php{{ phpVersion }}-soap \
-    php{{ phpVersion }}-intl {% if xdebug %}php-xdebug {% endif %} \
-    git \
-    sudo \
-    gpg \
-    gpg-agent \
-    curl \
-    wget \
-    nano \
-    ssmtp \
-    unzip \
-    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
-    && useradd dev \
-    && mkdir /home/dev \
-    && chown -R dev: /home/dev \
-    && curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash - \
-    && apt-get install nodejs -y{% if phpVersionNumeric >= 71 %} \
-    && echo "extension=/usr/php-pcov.so" >> /etc/php/{{ phpVersion }}/cli/php.ini \
-    && echo "pcov.enabled = 0" >> /etc/php/{{ phpVersion }}/cli/php.ini
-
-COPY --from=builder /root/pcov/modules/pcov.so /usr/php-pcov.so
-
+RUN set -x && \
+      apk add --no-cache \
+      nginx \
+      shadow \
+      bzip2-dev \
+      libzip-dev \
+      gettext \
+      ca-certificates \
+      freetype-dev \
+      icu-dev \
+      libjpeg-turbo-dev \
+      libpng-dev \
+      libzip-dev \
+      libwebp-dev \
+      libxml2-dev \
+      libxslt-dev \
+      libffi-dev \
+      pcre-dev \
+      gmp-dev \
+      unzip \
+      bash \
+      wget \
+      git \
+      bash-completion \
+      patch \
+      mariadb-client \
+      nodejs \
+      npm \
+      ssmtp && \
+    apk add --no-cache --virtual build-deps \
+      coreutils \
+      build-base \
+      autoconf \
+      automake && \
+    {% if phpVersionNumeric < 74 %}
+    docker-php-ext-configure zip \
+      --with-libzip && \
+    {% endif %}
+    docker-php-ext-configure gd \
+    {% if phpVersionNumeric >= 74 %}
+      --enable-gd \
+      --with-freetype \
+      --with-jpeg \
+      --with-webp && \
+    {% else %}
+      --with-gd \
+      --with-freetype-dir=/usr/include/ \
+      --with-png-dir=/usr/include/ \
+      --with-jpeg-dir=/usr/include/ \
+      --with-webp-dir && \
+    {% endif %}
+    {% if phpVersionNumeric >= 74 %}
+    docker-php-ext-configure ffi --with-ffi && \
+    {% endif %}
+    docker-php-ext-install -j$(nproc) \
+      bcmath \
+      gd \
+      intl \
+      mysqli \
+      pdo_mysql \
+      sockets \
+      bz2 \
+      gmp \
+      intl \
+      soap \
+      zip {% if phpVersionNumeric >= 74 %} ffi {% endif %} > /dev/null && \
+    update-ca-certificates && \
+    apk del build-deps && \
+    rm -rf /tmp/* && \
+    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
+    useradd dev && \
+    mkdir /home/dev && \
+    chown -R dev /home/dev && \
+    apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/community gnu-libiconv{% if xdebug %} && \
+    echo 'xdebug.remote_enable=1' > /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.remote_autostart=0' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.remote_connect_back=1' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.remote_port=9000' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.remote_log=/tmp/xdebug.log' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.idekey=PHPSTORM' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.profiler_enable=0' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.profiler_enable_trigger=1' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.profiler_output_dir="/tmp/xdebug"' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.profiler_output_name = "cachegrind.out.%R.%t"' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.auto_trace=0' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.trace_enable_trigger=1' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.trace_output_dir="/var/www/html/traces"' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.trace_output_name="trace.%R.%t"' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
+    echo 'xdebug.show_mem_delta=1' >> /usr/local/etc/php/conf.d/ext-xdebug.ini
 {% endif %}
 
 ENV HOME /home/dev
@@ -71,3 +99,5 @@ COPY rootfs/ /
 RUN composer global require hirak/prestissimo
 
 WORKDIR /var/www/html
+
+ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
