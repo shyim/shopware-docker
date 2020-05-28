@@ -64,6 +64,7 @@ RUN set -x && \
       bz2 \
       gmp \
       intl \
+      pcntl \
       soap \
       zip {% if phpVersionNumeric >= 74 %} ffi {% endif %} > /dev/null && \
     update-ca-certificates && \
