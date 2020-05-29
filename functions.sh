@@ -86,7 +86,7 @@ function get_hosts()
     if [[ ! -z $val ]]; then
         echo $val
     else
-        echo "${folder}.${DEFAULT_DOMAIN}"
+        echo "${folder}.${DEFAULT_DOMAIN}" | tr -d '"'
     fi
 }
 
