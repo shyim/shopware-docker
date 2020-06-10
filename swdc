@@ -31,6 +31,8 @@ if [[ ! -d "${HOME}/.config/swdc/ssl" ]]; then
   generate_wildcard_certs
 fi
 
+check_env_compability
+
 SHOPWARE_PROJECT="$2"
 SHOPWARE_FOLDER="${CODE_DIRECTORY}/$SHOPWARE_PROJECT"
 

@@ -43,7 +43,7 @@ function create_nginx (){
 
 function create_mysql() {
     echo "  mysql:" >> ${DOCKER_COMPOSE_FILE}
-    echo "    image: shyim/shopware-mysql:${MYSQL_VERSION}" >> ${DOCKER_COMPOSE_FILE}
+    echo "    image: ${MYSQL_VERSION}" >> ${DOCKER_COMPOSE_FILE}
     echo "    env_file: ${REALDIR}/docker.env" >> ${DOCKER_COMPOSE_FILE}
     if [[ ${EXPOSE_MYSQL_LOCAL} == "true" ]]; then
         echo "    ports:" >> ${DOCKER_COMPOSE_FILE}
@@ -55,6 +55,10 @@ function create_mysql() {
     else
         echo "    volumes:" >> ${DOCKER_COMPOSE_FILE}
         echo "      - ${REALDIR}/mysql-data:/var/lib/mysql:delegated" >> ${DOCKER_COMPOSE_FILE}
+    fi
+
+    if [[ ${MYSQL_VERSION} == "shyim/shopware-mysql:8" ]]; then
+        echo "    command: [\"mysqld\", \"--default-authentication-plugin=mysql_native_password\"]" >> ${DOCKER_COMPOSE_FILE}
     fi
 }
 

@@ -146,3 +146,11 @@ function generate_wildcard_certs()
     openssl req -newkey rsa:2048 -nodes -keyout "${HOME}/.config/swdc/ssl/shared.key" -subj "/C=CN/ST=GD/L=SZ/O=SWDC, Inc./CN=*.${DEFAULT_DOMAIN}" -out "${HOME}/.config/swdc/ssl/shared.csr"
     openssl x509 -req -sha256 -extfile <(printf "subjectAltName=DNS:*.${DEFAULT_DOMAIN}") -days 20000 -in "${HOME}/.config/swdc/ssl/shared.csr" -CA "${HOME}/.config/swdc/ssl/ca.crt" -CAkey "${HOME}/.config/swdc/ssl/ca.key" -CAcreateserial -out "${HOME}/.config/swdc/ssl/shared.crt"
 }
+
+function check_env_compability()
+{
+    if [ ${MYSQL_VERSION} == "56" ] || [ ${MYSQL_VERSION} == "57" ] || [ ${MYSQL_VERSION} == "8" ]; then
+        echo "${red}Please change your \$MYSQL_VERSION variable to shyim/shopware-mysql:${MYSQL_VERSION}${reset}"
+        exit 1
+    fi
+}
