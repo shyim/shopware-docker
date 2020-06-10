@@ -1,6 +1,6 @@
 # shopware-docker
 
-This setup works for Shopware 5, Shopware 5 Composer Project and 6 (Development Template)
+This setup works for Shopware 5 and Shopware 6
 
 ## How to setup?
 
