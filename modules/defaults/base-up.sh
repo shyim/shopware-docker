@@ -143,7 +143,7 @@ function create_database_tool () {
         echo "      VIRTUAL_HOST: db.localhost" >> ${DOCKER_COMPOSE_FILE}
     else
         echo "  adminer:" >> ${DOCKER_COMPOSE_FILE}
-        echo "    image: adminer" >> ${DOCKER_COMPOSE_FILE}
+        echo "    image: shyim/adminer" >> ${DOCKER_COMPOSE_FILE}
         echo "    env_file:" >> ${DOCKER_COMPOSE_FILE}
         echo "      - ${REALDIR}/docker.env" >> ${DOCKER_COMPOSE_FILE}
         echo "      - ${REALDIR}/adminer.env" >> ${DOCKER_COMPOSE_FILE}

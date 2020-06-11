@@ -110,6 +110,10 @@ const addDefaults = (config) => {
         if (image.variables === undefined) {
             image.variables = [];
         }
+
+		if (image.templates === undefined) {
+			image.templates = [];
+		}
     }
 
     return config;

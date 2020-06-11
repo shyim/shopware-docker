@@ -1,0 +1,9 @@
+images:
+  -
+    image: shyim/adminer
+    buildTags: [ 'adminer' ]
+    dockerFile: adminer/Dockerfile
+    context: adminer
+    tags:
+      latest:
+        phpVersion: '7.2'
