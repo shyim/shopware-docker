@@ -57,7 +57,7 @@ function create_mysql() {
         echo "      - ${REALDIR}/mysql-data:/var/lib/mysql:delegated" >> ${DOCKER_COMPOSE_FILE}
     fi
 
-    if [[ ${MYSQL_VERSION} == "shyim/shopware-mysql:8" ]]; then
+    if [[ ${MYSQL_VERSION} == "shyim/shopware-mysql:8" || ${MYSQL_VERSION} == "mysql:8"* ]]; then
         echo "    command: [\"mysqld\", \"--default-authentication-plugin=mysql_native_password\"]" >> ${DOCKER_COMPOSE_FILE}
     fi
 }
@@ -130,6 +130,9 @@ function create_minio () {
     echo "    command: server /data" >> ${DOCKER_COMPOSE_FILE}
     echo "    ports:" >> ${DOCKER_COMPOSE_FILE}
     echo "      - 9000:9000" >> ${DOCKER_COMPOSE_FILE}
+    echo "    environment:" >> ${DOCKER_COMPOSE_FILE}
+    echo "      VIRTUAL_HOST: s3.localhost" >> ${DOCKER_COMPOSE_FILE}
+    echo "      VIRTUAL_PORT: 9000" >> ${DOCKER_COMPOSE_FILE}
 }
 
 function create_database_tool () {
