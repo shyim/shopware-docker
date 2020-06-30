@@ -5,7 +5,6 @@ source "${DIR}/modules/defaults/base-up.sh"
 
 CODE_FOLDER_CONTENT="$(ls -A ${CODE_DIRECTORY})"
 
-MYSQL_VERSION=$(echo ${MYSQL_VERSION} | sed 's/\.//g')
 PHP_VERSION=$(echo ${PHP_VERSION} | sed 's/\.//g')
 export XDEBUG_ENABLE=$2
 
