@@ -1,81 +1,22 @@
 FROM {% block image_from %}php:{{ phpVersion }}-fpm-alpine{% endblock %}
 
 COPY --from=ochinchina/supervisord:latest /usr/local/bin/supervisord /usr/bin/supervisord
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/
 
 RUN set -x && \
       apk add --no-cache \
       nginx \
       shadow \
-      bzip2-dev \
-      libzip-dev \
-      gettext \
-      ca-certificates \
-      freetype-dev \
-      icu-dev \
-      libjpeg-turbo-dev \
-      libpng-dev \
-      libzip-dev \
-      libwebp-dev \
-      libxml2-dev \
-      libxslt-dev \
-      libffi-dev \
-      pcre-dev \
-      gmp-dev \
-      unzip \
-      wget \
       ssmtp && \
-    apk add --no-cache --virtual build-deps \
-      coreutils \
-      build-base \
-      autoconf \
-      automake && \
-    {% if phpVersionNumeric < 74 %}
-    docker-php-ext-configure zip \
-      --with-libzip && \
-    {% endif %}
-    docker-php-ext-configure gd \
-    {% if phpVersionNumeric >= 74 %}
-      --enable-gd \
-      --with-freetype \
-      --with-jpeg \
-      --with-webp && \
-    {% else %}
-      --with-gd \
-      --with-freetype-dir=/usr/include/ \
-      --with-png-dir=/usr/include/ \
-      --with-jpeg-dir=/usr/include/ \
-      --with-webp-dir && \
-    {% endif %}
-    {% if phpVersionNumeric >= 74 %}
-    docker-php-ext-configure ffi --with-ffi && \
-    {% endif %}
-    docker-php-ext-install -j$(nproc) \
-      bcmath \
-      gd \
-      intl \
-      mysqli \
-      pdo_mysql \
-      sockets \
-      bz2 \
-      gmp \
-      intl \
-      soap \
-      zip {% if phpVersionNumeric >= 74 %} ffi {% endif %} {% if production %} opcache {% endif %} > /dev/null && \
-    update-ca-certificates && \
+    install-php-extensions bcmath gd intl mysqli pdo_mysql sockets bz2 gmp soap zip gmp ffi {% if production %} opcache {% endif %} {% if xdebug %} xdebug {% endif %} && \
     ln -s /usr/local/bin/php /usr/bin/php && \
     ln -sf /dev/stdout /var/log/nginx/access.log && \
     ln -sf /dev/stderr /var/log/nginx/error.log && \
     rm -rf /var/lib/nginx/tmp && \
     ln -sf /tmp /var/lib/nginx/tmp && \
-    mkdir /etc/supervisor.d/ && \
     mkdir -p /var/tmp/nginx/ || true && \
     chown -R www-data:www-data /var/lib/nginx /var/tmp/nginx/ && \
     chmod 777 -R /var/tmp/nginx/ && \
-    {% if phpVersionNumeric < 80 %}
-    pecl install {% if xdebug %}xdebug{% if phpVersionNumeric <= 70 %}-2.5.5{% endif %} {% endif %}redis{% if phpVersionNumeric <= 70 %}-4.3.0{% endif %} && \
-    docker-php-ext-enable {% if xdebug %}xdebug {% endif %}redis && \
-    {% endif %}
-    apk del build-deps && \
     rm -rf /tmp/* && \
     chown -R www-data:www-data /var/www && \
     usermod -u 1000 www-data && \
@@ -121,6 +62,6 @@ RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
 ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
 
 COPY rootfs/ /
-EXPOSE 80 8005
+EXPOSE 80
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]

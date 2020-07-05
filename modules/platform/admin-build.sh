@@ -2,14 +2,13 @@ checkParameter
 
 cd "/var/www/html/${SHOPWARE_PROJECT}"
 export PROJECT_ROOT="/var/www/html/${SHOPWARE_PROJECT}"
+export ENV_FILE="${PROJECT_ROOT}/.env"
 
 bin/console bundle:dump
 
 if [[ -e vendor/shopware/platform ]]; then
-    npm install --prefix vendor/shopware/platform/src/Administration/Resources/app/administration/
     npm run --prefix vendor/shopware/platform/src/Administration/Resources/app/administration/ build
 else
-    npm install --prefix vendor/shopware/administration/Resources/app/administration/
     npm run --prefix vendor/shopware/administration/Resources/app/administration/ build
 fi
 
