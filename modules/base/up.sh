@@ -22,8 +22,8 @@ echo "    volumes:" >> ${DOCKER_COMPOSE_FILE}
 echo "      - /var/run/docker.sock:/tmp/docker.sock:ro" >> ${DOCKER_COMPOSE_FILE}
 echo "      - ${HOME}/.config/swdc/ssl:/etc/nginx/certs" >> ${DOCKER_COMPOSE_FILE}
 echo "    ports:" >> ${DOCKER_COMPOSE_FILE}
-echo "      - 80:80" >> ${DOCKER_COMPOSE_FILE}
-echo "      - 443:443" >> ${DOCKER_COMPOSE_FILE}
+echo "      - ${HTTP_PORT}:80" >> ${DOCKER_COMPOSE_FILE}
+echo "      - ${HTTPS_PORT}:443" >> ${DOCKER_COMPOSE_FILE}
 
 create_nginx
 create_mysql
