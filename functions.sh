@@ -102,9 +102,9 @@ function get_url()
     host=$(get_host "$1")
 
     if [[ $USE_SSL_DEFAULT == "true" ]]; then
-        echo "https://${host}"
+        echo "https://${host}:${HTTPS_PORT}"
     else
-        echo "http://${host}"
+        echo "http://${host}:${HTTP_PORT}"
     fi
 }
 
