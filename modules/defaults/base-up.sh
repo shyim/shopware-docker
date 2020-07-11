@@ -62,6 +62,26 @@ function create_mysql() {
     fi
 }
 
+function create_start_mysql() {
+  cat <<EOF >> ${DOCKER_COMPOSE_FILE}
+  start_mysql:
+    image: busybox:latest
+    entrypoint:
+      - sh
+    command: >
+      -c "
+        while !(nc -z mysql 3306)
+        do
+          echo -n '.'
+          sleep 1
+        done;
+        echo 'database ready!'
+      "
+    depends_on:
+      - mysql
+EOF
+}
+
 function create_cli () {
     echo "  cli:" >> ${DOCKER_COMPOSE_FILE}
     echo "    image: shyim/shopware-cli:php${PHP_VERSION}" >> ${DOCKER_COMPOSE_FILE}

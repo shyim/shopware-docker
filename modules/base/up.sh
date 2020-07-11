@@ -27,6 +27,7 @@ echo "      - ${HTTPS_PORT}:443" >> ${DOCKER_COMPOSE_FILE}
 
 create_nginx
 create_mysql
+create_start_mysql
 create_cli
 
 # Build alias for cli
@@ -61,4 +62,5 @@ if [[ ${CACHE_VOLUMES} == "true" ]]; then
     create_caching
 fi
 
+docker-compose -f ${DOCKER_COMPOSE_FILE} run --rm start_mysql
 docker-compose -f ${DOCKER_COMPOSE_FILE} up -d --remove-orphans
