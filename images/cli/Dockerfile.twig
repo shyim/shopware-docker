@@ -1,26 +1,15 @@
 FROM php:{{ phpVersion }}-cli-alpine
 
 ENV PS1 '${debian_chroot:+($debian_chroot)}\[\033[01;31m\]\u\[\033[01;33m\]@\[\033[01;36m\]\h \[\033[01;33m\]\w \[\033[01;35m\]\$ \[\033[00m\]'
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/
+COPY --from=composer /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer2
 
 RUN set -x && \
       apk add --no-cache \
       nginx \
       shadow \
-      bzip2-dev \
-      libzip-dev \
       gettext \
-      ca-certificates \
-      freetype-dev \
-      icu-dev \
-      libjpeg-turbo-dev \
-      libpng-dev \
-      libzip-dev \
-      libwebp-dev \
-      libxml2-dev \
-      libxslt-dev \
-      libffi-dev \
-      pcre-dev \
-      gmp-dev \
       unzip \
       bash \
       wget \
@@ -31,48 +20,8 @@ RUN set -x && \
       nodejs \
       npm \
       ssmtp && \
-    apk add --no-cache --virtual build-deps \
-      coreutils \
-      build-base \
-      autoconf \
-      automake && \
-    {% if phpVersionNumeric < 74 %}
-    docker-php-ext-configure zip \
-      --with-libzip && \
-    {% endif %}
-    docker-php-ext-configure gd \
-    {% if phpVersionNumeric >= 74 %}
-      --enable-gd \
-      --with-freetype \
-      --with-jpeg \
-      --with-webp && \
-    {% else %}
-      --with-gd \
-      --with-freetype-dir=/usr/include/ \
-      --with-png-dir=/usr/include/ \
-      --with-jpeg-dir=/usr/include/ \
-      --with-webp-dir && \
-    {% endif %}
-    {% if phpVersionNumeric >= 74 %}
-    docker-php-ext-configure ffi --with-ffi && \
-    {% endif %}
-    docker-php-ext-install -j$(nproc) \
-      bcmath \
-      gd \
-      intl \
-      mysqli \
-      pdo_mysql \
-      sockets \
-      bz2 \
-      gmp \
-      intl \
-      pcntl \
-      soap \
-      zip {% if phpVersionNumeric >= 74 %} ffi {% endif %} > /dev/null && \
-    update-ca-certificates && \
-    apk del build-deps && \
+    install-php-extensions bcmath gd intl mysqli pdo_mysql sockets bz2 gmp soap zip gmp redis {% if phpVersionNumeric >= 74 %} ffi {% endif %} {% if production %} opcache {% endif %} {% if xdebug %} xdebug {% endif %} && \
     rm -rf /tmp/* && \
-    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
     useradd dev && \
     mkdir /home/dev && \
     chown -R dev /home/dev && \
