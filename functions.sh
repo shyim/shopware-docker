@@ -101,10 +101,25 @@ function get_url()
 {
     host=$(get_host "$1")
 
+
     if [[ $USE_SSL_DEFAULT == "true" ]]; then
-        echo "https://${host}:${HTTPS_PORT}"
+        PORT=${HTTPS_PORT}
+        if [[ ${HTTPS_PORT} == "443" ]]; then
+            PORT=""
+        else
+            PORT=":${PORT}"
+        fi
+
+        echo "https://${host}${PORT}"
     else
-        echo "http://${host}:${HTTP_PORT}"
+        PORT=${HTTP_PORT}
+        if [[ ${HTTP_PORT} == "80" ]]; then
+            PORT=""
+        else
+            PORT=":${HTTP_PORT}"
+        fi
+
+        echo "http://${host}${PORT}"
     fi
 }
 
