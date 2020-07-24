@@ -169,3 +169,14 @@ function check_env_compability()
         exit 1
     fi
 }
+
+function platform_component()
+{
+    NAME=$1
+
+    if [[ -e vendor/shopware/platform ]]; then
+        echo "vendor/shopware/platform/src/${NAME}/"
+    else
+        echo "vendor/shopware/${NAME,,}"
+    fi    
+}

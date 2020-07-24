@@ -15,8 +15,10 @@ export ESLINT_DISABLE=true
 export ENV_FILE=$SHOPWARE_FOLDER/.env
 export APP_URL=$URL
 
-if [[ -e vendor/shopware/platform ]]; then
-    npm run --prefix vendor/shopware/platform/src/Administration/Resources/app/administration/ dev -- $URL
+PLATFORM_PATH=$(platform_component Administration)
+
+if [[ -e $PLATFORM_PATH/Resources/app/administration/build/build.js ]]; then
+    npm run --prefix $PLATFORM_PATH/Resources/app/administration/ dev -- $URL
 else
-    npm run --prefix vendor/shopware/administration/Resources/app/administration/ dev -- $URL
+    npm run --prefix $PLATFORM_PATH/Resources/app/administration/ dev
 fi
