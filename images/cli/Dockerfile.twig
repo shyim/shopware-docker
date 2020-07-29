@@ -1,4 +1,4 @@
-FROM php:{{ phpVersion }}-cli-alpine
+FROM {% block image_from %}php:{{ phpVersion }}-cli-alpine{% endblock %}
 
 ENV PS1 '${debian_chroot:+($debian_chroot)}\[\033[01;31m\]\u\[\033[01;33m\]@\[\033[01;36m\]\h \[\033[01;33m\]\w \[\033[01;35m\]\$ \[\033[00m\]'
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/
@@ -21,7 +21,7 @@ RUN set -x && \
       nodejs \
       npm \
       ssmtp && \
-    install-php-extensions bcmath gd intl mysqli pdo_mysql sockets bz2 gmp soap zip gmp redis {% if phpVersionNumeric >= 74 %} ffi {% endif %} {% if production %} opcache {% endif %} {% if xdebug %} xdebug {% endif %} && \
+    install-php-extensions bcmath gd intl mysqli pdo_mysql sockets bz2 gmp soap zip gmp {% if phpVersionNumeric < 80 %} redis {% endif %}{% if phpVersionNumeric >= 74 %} ffi {% endif %} {% if production %} opcache {% endif %} {% if xdebug %} xdebug {% endif %} && \
     rm -rf /tmp/* && \
     useradd dev && \
     mkdir /home/dev && \

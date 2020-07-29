@@ -1,0 +1,12 @@
+images:
+  -
+    image: shyim/shopware-cli
+    buildTags: [ 'cli', 'nightly' ]
+    dockerFile: cli/Dockerfile
+    context: cli 
+    templates:
+      cli/Dockerfile.nightly.twig: cli/Dockerfile
+    tags:
+      php80:
+        phpVersion: '8.0'
+        phpVersionNumeric: 80

@@ -1,7 +1,7 @@
 images:
   -
     image: shyim/shopware-classic-nginx
-    buildTags: [ 'nginx' ]
+    buildTags: [ 'nginx', 'nightly' ]
     dockerFile: nginx/Dockerfile
     context: nginx 
     templates:
@@ -13,7 +13,7 @@ images:
         phpVersionNumeric: 80
   -
     image: shyim/shopware-platform-nginx
-    buildTags: [ 'nginx' ]
+    buildTags: [ 'nginx', 'nightly' ]
     dockerFile: nginx/Dockerfile
     context: nginx 
     templates:
