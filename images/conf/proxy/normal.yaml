@@ -1,0 +1,8 @@
+images:
+  -
+    image: shyim/nginx-proxy
+    buildTags: [ 'nginx-proxy' ]
+    dockerFile: proxy/Dockerfile
+    context: cli 
+    tags:
+      latest:
