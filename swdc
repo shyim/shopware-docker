@@ -15,11 +15,13 @@ export REALDIR=$(realpath ${DIR})
 source "${DIR}/functions.sh"
 
 if [[ ! -d "${HOME}/.config/swdc" ]]; then
-  if [[ -f "${HOME}/.swdc_env" ]]; then
-    mv "${HOME}/.swdc_env" "${HOME}/.config/swdc/env"
-  else
-    cp "${DIR}/.env.dist" "${HOME}/.config/swdc/env"
-  fi
+  mkdir -p "${HOME}/.config/swdc"
+fi
+
+if [[ -f "${HOME}/.swdc_env" ]]; then
+  mv "${HOME}/.swdc_env" "${HOME}/.config/swdc/env"
+else
+  cp "${DIR}/.env.dist" "${HOME}/.config/swdc/env"
 fi
 
 source "${DIR}/.env.dist"
