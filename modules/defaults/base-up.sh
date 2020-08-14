@@ -237,3 +237,12 @@ function create_caching () {
         done <<< "$(get_serve_folders)"
     fi
 }
+
+function create_varnish() {
+    echo "  varnish:" >> ${DOCKER_COMPOSE_FILE}
+    echo "    image: varnish" >> ${DOCKER_COMPOSE_FILE}
+    echo "    ports:" >> ${DOCKER_COMPOSE_FILE}
+    echo "      - ${HTTP_PORT}:80" >> ${DOCKER_COMPOSE_FILE}
+    echo "    volumes:" >> ${DOCKER_COMPOSE_FILE}
+    echo "      - ${REALDIR}/default.vcl:/etc/varnish/default.vcl" >> ${DOCKER_COMPOSE_FILE}
+}

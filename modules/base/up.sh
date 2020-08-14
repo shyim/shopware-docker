@@ -21,20 +21,25 @@ echo "    image: shyim/nginx-proxy:latest" >> ${DOCKER_COMPOSE_FILE}
 echo "    volumes:" >> ${DOCKER_COMPOSE_FILE}
 echo "      - /var/run/docker.sock:/tmp/docker.sock:ro" >> ${DOCKER_COMPOSE_FILE}
 echo "      - ${HOME}/.config/swdc/ssl:/etc/nginx/certs" >> ${DOCKER_COMPOSE_FILE}
-echo "    ports:" >> ${DOCKER_COMPOSE_FILE}
-echo "      - ${HTTP_PORT}:80" >> ${DOCKER_COMPOSE_FILE}
-echo "      - ${HTTPS_PORT}:443" >> ${DOCKER_COMPOSE_FILE}
+if [[ ${ENABLE_VARNISH} == "false" ]]; then
+    echo "    ports:" >> ${DOCKER_COMPOSE_FILE}
+    echo "      - ${HTTP_PORT}:80" >> ${DOCKER_COMPOSE_FILE}
+    echo "      - ${HTTPS_PORT}:443" >> ${DOCKER_COMPOSE_FILE}
+fi
 
 create_nginx
 create_mysql
 create_start_mysql
 create_cli
 
+if [[ ${ENABLE_VARNISH} == "true" ]]; then
+    create_varnish
+fi
+
 # Build alias for cli
 if [[ ${ENABLE_ELASTICSEARCH} == "true" ]]; then
     create_es
 fi
-
 
 if [[ ${ENABLE_REDIS} == "true" ]]; then
     create_redis
