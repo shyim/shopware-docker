@@ -22,7 +22,7 @@ RUN set -x && \
       npm \
       make \
       ssmtp && \
-    install-php-extensions bcmath gd intl mysqli pdo_mysql sockets bz2 gmp soap zip gmp {% if phpVersionNumeric < 80 %} redis {% endif %}{% if phpVersionNumeric >= 74 %} ffi {% endif %} {% if production %} opcache {% endif %} {% if xdebug %} xdebug {% endif %} && \
+    install-php-extensions bcmath gd intl mysqli pdo_mysql sockets bz2 gmp soap zip gmp pcntl posix {% if phpVersionNumeric < 80 %} redis {% endif %}{% if phpVersionNumeric >= 74 %} ffi {% endif %} {% if production %} opcache {% endif %} {% if xdebug %} xdebug {% endif %} && \
     rm -rf /tmp/* && \
     useradd dev && \
     mkdir /home/dev && \
