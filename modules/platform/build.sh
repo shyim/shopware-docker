@@ -26,19 +26,27 @@ SHOPWARE_HTTP_DEFAULT_TTL=7200" > .env
 
 export PROJECT_ROOT=$SHOPWARE_FOLDER
 
+PLATFORM_PATH=$(platform_component Core)
+
 composer install -o
 
 php dev-ops/generate_ssl.php
+echo ''
 
-mysql -h mysql -u root -proot "$SHOPWARE_PROJECT" < vendor/shopware/platform/src/Core/schema.sql
+mysql -h mysql -u root -proot "$SHOPWARE_PROJECT" < $PLATFORM_PATH/schema.sql
 
-bin/console database:migrate --all Shopware\\
-
-if [[ $? == 0 ]]; then
-    bin/console database:migrate-destructive --all Shopware\\
-else
+if [[ -d $PLATFORM_PATH/Framework/App ]]; then
     bin/console database:migrate --all
     bin/console database:migrate-destructive --all
+else
+    bin/console database:migrate --all Shopware\\
+
+    if [[ $? == 0 ]]; then
+        bin/console database:migrate-destructive --all Shopware\\
+    else
+        bin/console database:migrate --all
+        bin/console database:migrate-destructive --all
+    fi
 fi
 
 bin/console bundle:dump
