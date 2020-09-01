@@ -2,7 +2,7 @@ images:
   -
     image: 
       - shyim/shopware-classic-nginx
-      - ghcr.io/shyim/shopware-nginx-sw5
+      - ghcr.io/shyim/shopware-nginx-5
     buildTags: [ 'blackfire' ]
     dockerFile: nginx/Dockerfile
     context: nginx 
@@ -33,7 +33,7 @@ images:
   -
     image: 
       - shyim/shopware-platform-nginx
-      - ghcr.io/shyim/shopware-nginx-sw6
+      - ghcr.io/shyim/shopware-nginx-6
     buildTags: [ 'blackfire' ]
     dockerFile: nginx/Dockerfile
     context: nginx 

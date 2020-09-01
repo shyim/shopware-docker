@@ -2,7 +2,7 @@ images:
   -
     image: 
       - shyim/shopware-classic-nginx-production
-      - ghcr.io/shyim/shopware-nginx-production-sw5
+      - ghcr.io/shyim/shopware-nginx-production-5
     buildTags: [ 'production' ]
     dockerFile: nginx/Dockerfile
     context: nginx 
@@ -21,7 +21,7 @@ images:
   -
     image: 
       - shyim/shopware-platform-nginx-production
-      - ghcr.io/shyim/shopware-nginx-production-sw6
+      - ghcr.io/shyim/shopware-nginx-production-6
     buildTags: [ 'production' ]
     dockerFile: nginx/Dockerfile
     context: nginx 
