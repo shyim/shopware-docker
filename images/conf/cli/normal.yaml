@@ -2,7 +2,7 @@ images:
   -
     image: 
       - shyim/shopware-cli
-      - docker.pkg.github.com/shyim/shopware-docker/cli
+      - ghcr.io/shyim/shopware-cli
     buildTags: [ 'cli' ]
     dockerFile: cli/Dockerfile
     context: cli 
@@ -19,7 +19,9 @@ images:
         phpVersion: '7.4'
         phpVersionNumeric: 74
   -
-    image: shyim/shopware-cli
+    image: 
+      - shyim/shopware-cli
+      - ghcr.io/shyim/shopware-cli
     buildTags: [ 'cli-xdebug' ]
     dockerFile: cli/Dockerfile
     context: cli

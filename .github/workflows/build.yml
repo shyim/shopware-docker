@@ -21,7 +21,7 @@ jobs:
       run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "shyim" --password-stdin
 
     - name: Login into Github Docker Registery
-      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u shyim --password-stdin
+      run: echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u shyim --password-stdin
 
     - name: Build image and push
       run: |
