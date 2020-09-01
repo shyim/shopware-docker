@@ -20,6 +20,7 @@ RUN set -x && \
     rm -rf /tmp/* && \
     chown -R www-data:www-data /var/www && \
     usermod -u 1000 www-data && \
+    chmod -R 1000:1000 /opt && \
     apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/community gnu-libiconv{% if xdebug %} && \
     echo 'xdebug.remote_enable=1' > /usr/local/etc/php/conf.d/ext-xdebug.ini && \
     echo 'xdebug.remote_autostart=0' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
@@ -56,7 +57,11 @@ RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
     && tar zxpf /tmp/blackfire-probe.tar.gz -C /tmp/blackfire \
     && mv /tmp/blackfire/blackfire-*.so $(php -r "echo ini_get('extension_dir');")/blackfire.so \
     && printf "extension=blackfire.so\nblackfire.agent_socket=tcp://blackfire:8707\n" > $PHP_INI_DIR/conf.d/blackfire.ini \
-    && rm -rf /tmp/blackfire /tmp/blackfire-probe.tar.gz
+    && rm -rf /tmp/blackfire /tmp/blackfire-probe.tar.gz \\
+    && mkdir -p /tmp/blackfire \
+    && curl -A "Docker" -L https://blackfire.io/api/v1/releases/client/linux_static/amd64 | tar zxp -C /tmp/blackfire \
+    && mv /tmp/blackfire/blackfire /usr/bin/blackfire \
+    && rm -Rf /tmp/blackfire
 {% endif %}
 
 ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php

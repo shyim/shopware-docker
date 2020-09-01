@@ -89,6 +89,9 @@ function create_cli () {
     echo "      - ${REALDIR}/docker.env" >> ${DOCKER_COMPOSE_FILE}
     echo "      - ${REALDIR}/.env.dist" >> ${DOCKER_COMPOSE_FILE}
     echo "      - ~/.config/swdc/env" >> ${DOCKER_COMPOSE_FILE}
+    echo "    environment:" >> ${DOCKER_COMPOSE_FILE}
+    echo "      BLACKFIRE_CLIENT_ID: ${BLACKFIRE_SERVER_ID}" >> ${DOCKER_COMPOSE_FILE}
+    echo "      BLACKFIRE_CLIENT_TOKEN: ${BLACKFIRE_SERVER_TOKEN}" >> ${DOCKER_COMPOSE_FILE}
     echo "    tty: true" >> ${DOCKER_COMPOSE_FILE}
     echo "    ports:" >> ${DOCKER_COMPOSE_FILE}
     echo "      - 8181:8181" >> ${DOCKER_COMPOSE_FILE}
