@@ -1,6 +1,8 @@
 images:
   -
-    image: shyim/shopware-classic-nginx-production
+    image: 
+      - shyim/shopware-classic-nginx-production
+      - docker.pkg.github.com/shyim/shopware-docker/nginx-production-sw5
     buildTags: [ 'production' ]
     dockerFile: nginx/Dockerfile
     context: nginx 
@@ -17,7 +19,9 @@ images:
         phpVersion: '7.4'
         phpVersionNumeric: 74
   -
-    image: shyim/shopware-platform-nginx-production
+    image: 
+      - shyim/shopware-platform-nginx-production
+      - docker.pkg.github.com/shyim/shopware-docker/nginx-production-sw6
     buildTags: [ 'production' ]
     dockerFile: nginx/Dockerfile
     context: nginx 

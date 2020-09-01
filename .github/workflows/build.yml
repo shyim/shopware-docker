@@ -17,9 +17,14 @@ jobs:
       with:
         node-version: '12.x'
 
+    - name: Login into Docker Registery
+      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "shyim" --password-stdin
+
+    - name: Login into Github Docker Registery
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u shyim --password-stdin
+
     - name: Build image and push
       run: |
-        echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "shyim" --password-stdin
         cd images/
         npm install
         node build.js build ${{ matrix.module }}

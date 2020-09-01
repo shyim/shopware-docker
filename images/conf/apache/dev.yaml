@@ -1,6 +1,8 @@
 images:
   -
-    image: shyim/shopware-classic-apache
+    image: 
+      - shyim/shopware-classic-apache
+      - docker.pkg.github.com/shyim/shopware-docker/apache-sw5
     buildTags: [ 'apache' ]
     dockerFile: apache/Dockerfile
     context: apache
@@ -27,7 +29,9 @@ images:
         phpVersion: '7.4'
         phpVersionNumeric: 74
   -
-    image: shyim/shopware-platform-apache
+    image: 
+      - shyim/shopware-platform-apache
+      - docker.pkg.github.com/shyim/shopware-docker/apache-sw6
     buildTags: [ 'apache' ]
     dockerFile: apache/Dockerfile
     context: apache

@@ -1,6 +1,8 @@
 images:
   -
-    image: shyim/adminer
+    image: 
+       - shyim/adminer
+       - docker.pkg.github.com/shyim/shopware-docker/adminer
     buildTags: [ 'adminer' ]
     dockerFile: adminer/Dockerfile
     context: adminer

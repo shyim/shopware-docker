@@ -1,6 +1,8 @@
 images:
   -
-    image: shyim/shopware-classic-nginx
+    image: 
+      - shyim/shopware-classic-nginx
+      - docker.pkg.github.com/shyim/shopware-docker/nginx-sw5
     buildTags: [ 'nginx' ]
     dockerFile: nginx/Dockerfile
     context: nginx 
@@ -27,7 +29,9 @@ images:
         phpVersion: '7.4'
         phpVersionNumeric: 74
   -
-    image: shyim/shopware-platform-nginx
+    image: 
+      - shyim/shopware-platform-nginx
+      - docker.pkg.github.com/shyim/shopware-docker/nginx-sw6
     buildTags: [ 'nginx' ]
     dockerFile: nginx/Dockerfile
     context: nginx 

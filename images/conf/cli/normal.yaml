@@ -1,6 +1,8 @@
 images:
   -
-    image: shyim/shopware-cli
+    image: 
+      - shyim/shopware-cli
+      - docker.pkg.github.com/shyim/shopware-docker/cli
     buildTags: [ 'cli' ]
     dockerFile: cli/Dockerfile
     context: cli 

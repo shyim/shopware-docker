@@ -30,8 +30,14 @@ const run = async() => {
                     cleanupList.push(saveFile);
                 }
 
+                if (typeof image.image === 'string') {
+                    image.image = [image.image];
+                }
+
                 // Build that image
-                await exec('docker', ['build', '-t', `${image.image}:${tagName}`,  `-f`, image.dockerFile, image.context], `Building ${image.image}:${tagName}`);
+                for (let imageName of image.image) {
+                    await exec('docker', ['build', '-t', `${imageName}:${tagName}`,  `-f`, image.dockerFile, image.context], `Building ${imageName}:${tagName}`);
+                }
 
                 // Cleanup rendered files
                 for (let file of cleanupList) {
@@ -48,7 +54,13 @@ const run = async() => {
             }
 
             for (let tagName of Object.keys(image.tags)) {
-                await exec('docker', ['push', `${image.image}:${tagName}`], `Pushing ${image.image}:${tagName}`);
+                if (typeof image.image === 'string') {
+                    image.image = [image.image];
+                }
+
+                for (let imageName of image.image) {
+                    await exec('docker', ['push', `${imageName}:${tagName}`], `Pushing ${imageName}:${tagName}`);
+                }
             }
         }
     }
