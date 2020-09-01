@@ -26,7 +26,8 @@ RUN set -x && \
     rm -rf /tmp/* && \
     useradd dev && \
     mkdir /home/dev && \
-    chown -R dev /home/dev && \
+    mkdir -p /opt/phpstorm-coverage && \
+    chown -R dev /home/dev /opt/ && \
     npm install -g pnpm && \
     apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/community gnu-libiconv{% if xdebug %} && \
     echo 'xdebug.remote_enable=1' > /usr/local/etc/php/conf.d/ext-xdebug.ini && \
