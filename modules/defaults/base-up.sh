@@ -135,6 +135,8 @@ function create_es () {
 
     echo "  cerebro:" >> ${DOCKER_COMPOSE_FILE}
     echo "    image: lmenezes/cerebro" >> ${DOCKER_COMPOSE_FILE}
+    echo "    expose:" >> ${DOCKER_COMPOSE_FILE}
+    echo "     - '9000'" >> ${DOCKER_COMPOSE_FILE}
     echo "    environment:" >> ${DOCKER_COMPOSE_FILE}
     echo "      VIRTUAL_HOST: cerebro.localhost" >> ${DOCKER_COMPOSE_FILE}
     echo "      VIRTUAL_PORT: 9000" >> ${DOCKER_COMPOSE_FILE}
