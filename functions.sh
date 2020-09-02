@@ -67,9 +67,9 @@ function get_image()
     if [[ ! -z $val ]]; then
         echo $val
     else
-        IMAGE="shyim/shopware-classic-nginx"
+        IMAGE="ghcr.io/shyim/shopware-docker/5/nginx"
         if [[ -f "$2/public/index.php" ]]; then
-            IMAGE="shyim/shopware-platform-nginx"
+            IMAGE="ghcr.io/shyim/shopware-docker/5/nginx"
         fi
 
         echo "${IMAGE}:php${PHP_VERSION}${SUFFIX}"
@@ -165,7 +165,7 @@ function generate_wildcard_certs()
 function check_env_compability()
 {
     if [ ${MYSQL_VERSION} == "56" ] || [ ${MYSQL_VERSION} == "57" ] || [ ${MYSQL_VERSION} == "8" ]; then
-        echo "${red}Please change your \$MYSQL_VERSION variable to shyim/shopware-mysql:${MYSQL_VERSION}${reset}"
+        echo "${red}Please change your \$MYSQL_VERSION variable to ghcr.io/shyim/shopware-docker/mysql:${MYSQL_VERSION}${reset}"
         exit 1
     fi
 }

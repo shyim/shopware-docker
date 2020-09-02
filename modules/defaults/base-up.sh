@@ -57,7 +57,7 @@ function create_mysql() {
         echo "      - ${REALDIR}/mysql-data:/var/lib/mysql:delegated" >> ${DOCKER_COMPOSE_FILE}
     fi
 
-    if [[ ${MYSQL_VERSION} == "shyim/shopware-mysql:8" || ${MYSQL_VERSION} == "mysql:8"* ]]; then
+    if [[ ${MYSQL_VERSION} == "shyim/shopware-mysql:8" || ${MYSQL_VERSION} == "ghcr.io/shyim/shopware-docker/mysql:8" || ${MYSQL_VERSION} == "mysql:8"* ]]; then
         echo "    command: [\"mysqld\", \"--default-authentication-plugin=mysql_native_password\"]" >> ${DOCKER_COMPOSE_FILE}
     fi
 }
@@ -84,7 +84,7 @@ EOF
 
 function create_cli () {
     echo "  cli:" >> ${DOCKER_COMPOSE_FILE}
-    echo "    image: shyim/shopware-cli:php${PHP_VERSION}" >> ${DOCKER_COMPOSE_FILE}
+    echo "    image: ghcr.io/shyim/shopware-docker/cli:php${PHP_VERSION}" >> ${DOCKER_COMPOSE_FILE}
     echo "    env_file:" >> ${DOCKER_COMPOSE_FILE}
     echo "      - ${REALDIR}/docker.env" >> ${DOCKER_COMPOSE_FILE}
     echo "      - ${REALDIR}/.env.dist" >> ${DOCKER_COMPOSE_FILE}
@@ -128,8 +128,7 @@ function create_cli () {
 
 function create_es () {
     echo "  elastic:" >> ${DOCKER_COMPOSE_FILE}
-    echo "    image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTICSEARCH_VERSION}" >> ${DOCKER_COMPOSE_FILE}
-    echo "    command: [ \"bin/elasticsearch\", \"-Expack.security.enabled=false\", \"-Ediscovery.type=single-node\" ]" >> ${DOCKER_COMPOSE_FILE}
+    echo "    image: blacktop/elasticsearch:${ELASTICSEARCH_VERSION}" >> ${DOCKER_COMPOSE_FILE}
     echo "    environment:" >> ${DOCKER_COMPOSE_FILE}
     echo "      VIRTUAL_HOST: es.localhost" >> ${DOCKER_COMPOSE_FILE}
     echo "      VIRTUAL_PORT: 9200" >> ${DOCKER_COMPOSE_FILE}
@@ -169,7 +168,7 @@ function create_database_tool () {
         echo "      VIRTUAL_HOST: db.localhost" >> ${DOCKER_COMPOSE_FILE}
     else
         echo "  adminer:" >> ${DOCKER_COMPOSE_FILE}
-        echo "    image: shyim/adminer" >> ${DOCKER_COMPOSE_FILE}
+        echo "    image: ghcr.io/shyim/shopware-docker/adminer" >> ${DOCKER_COMPOSE_FILE}
         echo "    env_file:" >> ${DOCKER_COMPOSE_FILE}
         echo "      - ${REALDIR}/docker.env" >> ${DOCKER_COMPOSE_FILE}
         echo "      - ${REALDIR}/adminer.env" >> ${DOCKER_COMPOSE_FILE}
@@ -181,7 +180,7 @@ function create_database_tool () {
 
 function create_selenium () {
     echo "  selenium:" >> ${DOCKER_COMPOSE_FILE}
-    echo "    image: selenium/standalone-chrome:3.8.1" >> ${DOCKER_COMPOSE_FILE}
+    echo "    image: selenium/standalone-chrome:84.0" >> ${DOCKER_COMPOSE_FILE}
     echo "    shm_size: 2g" >> ${DOCKER_COMPOSE_FILE}
     echo "    environment:" >> ${DOCKER_COMPOSE_FILE}
     echo "      DBUS_SESSION_BUS_ADDRESS: /dev/null" >> ${DOCKER_COMPOSE_FILE}
