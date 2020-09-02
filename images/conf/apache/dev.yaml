@@ -2,7 +2,7 @@ images:
   -
     image: 
       - shyim/shopware-classic-apache
-      - ghcr.io/shyim/shopware-apache-5
+      - ghcr.io/shyim/shopware-docker/5/apache
     buildTags: [ 'apache' ]
     dockerFile: apache/Dockerfile
     context: apache
@@ -31,7 +31,7 @@ images:
   -
     image: 
       - shyim/shopware-platform-apache
-      - ghcr.io/shyim/shopware-apache-6
+      - ghcr.io/shyim/shopware-docker/6/apache
     buildTags: [ 'apache' ]
     dockerFile: apache/Dockerfile
     context: apache

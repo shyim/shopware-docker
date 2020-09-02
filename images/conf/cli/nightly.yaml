@@ -2,7 +2,7 @@ images:
   -
     image: 
       - shyim/shopware-cli
-      - ghcr.io/shyim/shopware-cli
+      - ghcr.io/shyim/shopware-docker/cli
     buildTags: [ 'cli', 'nightly' ]
     dockerFile: cli/Dockerfile
     context: cli 

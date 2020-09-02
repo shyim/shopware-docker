@@ -2,7 +2,7 @@ images:
   -
     image: 
       - shyim/shopware-cli
-      - ghcr.io/shyim/shopware-cli
+      - ghcr.io/shyim/shopware-docker/cli
     buildTags: [ 'cli' ]
     dockerFile: cli/Dockerfile
     context: cli 
@@ -21,7 +21,7 @@ images:
   -
     image: 
       - shyim/shopware-cli
-      - ghcr.io/shyim/shopware-cli
+      - ghcr.io/shyim/shopware-docker/cli
     buildTags: [ 'cli-xdebug' ]
     dockerFile: cli/Dockerfile
     context: cli
