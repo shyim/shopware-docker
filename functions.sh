@@ -69,7 +69,7 @@ function get_image()
     else
         IMAGE="ghcr.io/shyim/shopware-docker/5/nginx"
         if [[ -f "$2/public/index.php" ]]; then
-            IMAGE="ghcr.io/shyim/shopware-docker/5/nginx"
+            IMAGE="ghcr.io/shyim/shopware-docker/6/nginx"
         fi
 
         echo "${IMAGE}:php${PHP_VERSION}${SUFFIX}"
