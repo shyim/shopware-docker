@@ -26,9 +26,9 @@ SHOPWARE_HTTP_DEFAULT_TTL=7200" > .env
 
 export PROJECT_ROOT=$SHOPWARE_FOLDER
 
-PLATFORM_PATH=$(platform_component Core)
-
 composer install -o
+
+PLATFORM_PATH=$(platform_component Core)
 
 php dev-ops/generate_ssl.php
 echo ''
