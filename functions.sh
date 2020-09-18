@@ -55,7 +55,7 @@ function trim_whitespace() {
 function get_image()
 {
     folder=$1
-    var="VHOST_${folder^^}_IMAGE"
+    var="VHOST_${folder}_IMAGE"
     var="${var//-/_}"
     val=${!var}
     SUFFIX=""
@@ -79,7 +79,7 @@ function get_image()
 function get_hosts()
 {
     folder=$1
-    var="VHOST_${folder^^}_HOSTS"
+    var="VHOST_${folder}_HOSTS"
     var="${var//-/_}"
     val=${!var}
 
@@ -126,7 +126,7 @@ function get_url()
 function get_cert_name()
 {
     folder=$1
-    var="VHOST_${folder^^}_CERT_NAME"
+    var="VHOST_${folder}_CERT_NAME"
     var="${var//-/_}"
     val=${!var}
 
