@@ -111,6 +111,9 @@ This setup works for Shopware 5 and Shopware 6
 
 I dont't develop on Windows or Mac. Try it out by own
 
+### macOS
+It is working on macOS if you have `realpath` available. I tested with: [realpath for OS X](https://github.com/harto/realpath-osx)
+
 ## What are the passwords?
 
 ### SMTP
