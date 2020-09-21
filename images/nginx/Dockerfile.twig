@@ -1,5 +1,6 @@
 FROM {% block image_from %}php:{{ phpVersion }}-fpm-alpine{% endblock %}
 
+LABEL org.opencontainers.image.source https://github.com/shyim/shopware-docker
 COPY --from=ochinchina/supervisord:latest /usr/local/bin/supervisord /usr/bin/supervisord
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/
 

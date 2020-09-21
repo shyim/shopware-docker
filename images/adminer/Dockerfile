@@ -1,5 +1,7 @@
 FROM adminer
 
+LABEL org.opencontainers.image.source https://github.com/shyim/shopware-docker
+
 USER root
 COPY patch.php /tmp/patch.php
 

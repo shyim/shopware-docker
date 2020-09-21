@@ -1,5 +1,6 @@
 FROM php:{{ phpVersion }}-fpm-alpine
 
+LABEL org.opencontainers.image.source https://github.com/shyim/shopware-docker
 COPY --from=ochinchina/supervisord:latest /usr/local/bin/supervisord /usr/bin/supervisord
 
 RUN set -x && \
