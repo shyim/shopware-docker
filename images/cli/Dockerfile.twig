@@ -48,6 +48,8 @@ RUN set -x && \
     echo 'xdebug.show_mem_delta=1' >> /usr/local/etc/php/conf.d/ext-xdebug.ini
 {% endif %}
 
+{% block after_install %}{% endblock %}
+
 ENV HOME /home/dev
 USER dev
 
