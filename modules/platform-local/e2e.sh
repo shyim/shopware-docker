@@ -1,5 +1,6 @@
 SHOPWARE_PROJECT=$2
 MODULE=$3
+export USE_SSL_DEFAULT=false
 URL=$(get_url $SHOPWARE_PROJECT)
 
 if [[ -z $MODULE ]]; then
