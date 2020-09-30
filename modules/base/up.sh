@@ -21,11 +21,9 @@ echo "    image: ghcr.io/shyim/shopware-docker/proxy" >> ${DOCKER_COMPOSE_FILE}
 echo "    volumes:" >> ${DOCKER_COMPOSE_FILE}
 echo "      - /var/run/docker.sock:/tmp/docker.sock:ro" >> ${DOCKER_COMPOSE_FILE}
 echo "      - ${HOME}/.config/swdc/ssl:/etc/nginx/certs" >> ${DOCKER_COMPOSE_FILE}
-if [[ ${ENABLE_VARNISH} == "false" ]]; then
-    echo "    ports:" >> ${DOCKER_COMPOSE_FILE}
-    echo "      - ${HTTP_PORT}:80" >> ${DOCKER_COMPOSE_FILE}
-    echo "      - ${HTTPS_PORT}:443" >> ${DOCKER_COMPOSE_FILE}
-fi
+echo "    ports:" >> ${DOCKER_COMPOSE_FILE}
+echo "      - ${HTTP_PORT}:80" >> ${DOCKER_COMPOSE_FILE}
+echo "      - ${HTTPS_PORT}:443" >> ${DOCKER_COMPOSE_FILE}
 
 create_nginx
 create_mysql

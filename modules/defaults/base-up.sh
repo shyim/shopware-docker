@@ -21,10 +21,12 @@ function create_nginx (){
             echo "      ${i}: 127.0.0.1" >> ${DOCKER_COMPOSE_FILE}
         done
 
-        echo "    environment:" >> ${DOCKER_COMPOSE_FILE}
-        echo "      VIRTUAL_HOST: ${hosts}" >> ${DOCKER_COMPOSE_FILE}
-        echo "      CERT_NAME: ${certName}" >> ${DOCKER_COMPOSE_FILE}
-        echo "      HTTPS_METHOD: noredirect" >> ${DOCKER_COMPOSE_FILE}
+        if [[ ${ENABLE_VARNISH} == "false" ]]; then
+            echo "    environment:" >> ${DOCKER_COMPOSE_FILE}
+            echo "      VIRTUAL_HOST: ${hosts}" >> ${DOCKER_COMPOSE_FILE}
+            echo "      CERT_NAME: ${certName}" >> ${DOCKER_COMPOSE_FILE}
+            echo "      HTTPS_METHOD: noredirect" >> ${DOCKER_COMPOSE_FILE}
+        fi
         echo "    volumes:" >> ${DOCKER_COMPOSE_FILE}
         if [[ ${Platform} != "Linux" ]]; then
             echo "      - ${d}:/var/www/html:cached" >> ${DOCKER_COMPOSE_FILE}
@@ -245,8 +247,10 @@ function create_caching () {
 function create_varnish() {
     echo "  varnish:" >> ${DOCKER_COMPOSE_FILE}
     echo "    image: varnish" >> ${DOCKER_COMPOSE_FILE}
-    echo "    ports:" >> ${DOCKER_COMPOSE_FILE}
-    echo "      - ${HTTP_PORT}:80" >> ${DOCKER_COMPOSE_FILE}
+    echo "    environment:" >> ${DOCKER_COMPOSE_FILE}
+    echo "      VIRTUAL_HOST: '*.sw.shop'" >> ${DOCKER_COMPOSE_FILE}
+    echo "      CERT_NAME: shared" >> ${DOCKER_COMPOSE_FILE}
+    echo "      HTTPS_METHOD: noredirect" >> ${DOCKER_COMPOSE_FILE}
     echo "    volumes:" >> ${DOCKER_COMPOSE_FILE}
     echo "      - ${REALDIR}/default.vcl:/etc/varnish/default.vcl" >> ${DOCKER_COMPOSE_FILE}
 }
