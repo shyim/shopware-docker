@@ -28,7 +28,7 @@ if (isset($_SERVER['argv'][2])) {
 		case 'elastic':
 			$config['es'] = [
 			    'enabled' => true,
-		        'number_of_replicas' => null,
+		        'number_of_replicas' => 1,
 		        'number_of_shards' => 1,
 		        'client' => [
 		            'hosts' => [
