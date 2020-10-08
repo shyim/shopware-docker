@@ -7,11 +7,11 @@ images:
     dockerFile: nginx/Dockerfile
     context: nginx 
     templates:
-      nginx/Dockerfile.nightly.twig: nginx/Dockerfile
+      nginx/Dockerfile.twig: nginx/Dockerfile
       nginx/10-classic.conf: nginx/rootfs/etc/nginx/sites-enabled/www.conf
     tags:
       php80:
-        phpVersion: '8.0'
+        phpVersion: '8.0.0rc1'
         phpVersionNumeric: 80
   -
     image: 
@@ -21,9 +21,9 @@ images:
     dockerFile: nginx/Dockerfile
     context: nginx 
     templates:
-      nginx/Dockerfile.nightly.twig: nginx/Dockerfile
+      nginx/Dockerfile.twig: nginx/Dockerfile
       nginx/10-platform.conf: nginx/rootfs/etc/nginx/sites-enabled/www.conf
     tags:
       php80:
-        phpVersion: '8.0'
+        phpVersion: '8.0.0rc1'
         phpVersionNumeric: 80

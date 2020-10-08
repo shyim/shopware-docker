@@ -7,8 +7,8 @@ images:
     dockerFile: cli/Dockerfile
     context: cli 
     templates:
-      cli/Dockerfile.nightly.twig: cli/Dockerfile
+      cli/Dockerfile.twig: cli/Dockerfile
     tags:
       php80:
-        phpVersion: '8.0'
+        phpVersion: '8.0.0rc1'
         phpVersionNumeric: 80
