@@ -4,6 +4,16 @@ LABEL org.opencontainers.image.source https://github.com/shyim/shopware-docker
 COPY --from=ochinchina/supervisord:latest /usr/local/bin/supervisord /usr/bin/supervisord
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/
 
+ENV TZ=Europe/Berlin \
+    FPM_PM=dynamic \
+    FPM_PM_MAX_CHILDREN=5 \
+    FPM_PM_START_SERVERS=2 \
+    FPM_PM_MIN_SPARE_SERVERS=1 \
+    FPM_PM_MAX_SPARE_SERVERS=3 \
+    PHP_MAX_UPLOAD_SIZE=128m \
+    PHP_MAX_EXECUTION_TIME=300 \
+    PHP_MEMORY_LIMIT=512m
+
 RUN set -x && \
       apk add --no-cache \
       nginx \

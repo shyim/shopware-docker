@@ -23,6 +23,8 @@ const run = async() => {
     
                 // Render templates
                 let variables = {...config.variables, ... image.variables, ... tag};
+                variables._image = image;
+                variables._tag = tag;
                 for (let fileName of Object.keys(image.templates)) {
                     let saveFile = image.templates[fileName];
                     let content = await renderFile(fileName, variables);
