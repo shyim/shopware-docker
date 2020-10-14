@@ -98,6 +98,8 @@ function create_cli () {
     echo "    ports:" >> ${DOCKER_COMPOSE_FILE}
     echo "      - 8181:8181" >> ${DOCKER_COMPOSE_FILE}
     echo "      - 8005:8005" >> ${DOCKER_COMPOSE_FILE}
+    echo "      - 9998:9998" >> ${DOCKER_COMPOSE_FILE}
+    echo "      - 9999:9999" >> ${DOCKER_COMPOSE_FILE}
     if [[ ${CODE_FOLDER_CONTENT} ]]; then
         echo "    links:" >> ${DOCKER_COMPOSE_FILE}
         while IFS= read -r NAME; do

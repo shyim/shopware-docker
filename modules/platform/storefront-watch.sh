@@ -8,14 +8,12 @@ URL=$(get_url $SHOPWARE_PROJECT)
 
 cd ${PROJECT_ROOT}
 
-bin/console bundle:dump
+bin/console theme:dump
 export APP_URL=$URL
 export PROJECT_ROOT=$PROJECT_ROOT
 
-if [[ -e vendor/shopware/platform ]]; then
-    npm --prefix vendor/shopware/platform/src/Storefront/Resources/app/storefront/ install
-    npm --prefix vendor/shopware/platform/src/Storefront/Resources/app/storefront/ run watch
-else
-    npm --prefix vendor/shopware/storefront/Resources/app/storefront/ install
-    npm --prefix vendor/shopware/storefront/Resources/app/storefront/ run watch
-fi
+PLATFORM_PATH=$(platform_component Storefront)
+
+cp /opt/swdc/modules/platform/hot-proxy-patched.js $PLATFORM_PATH/Resources/app/storefront/build/proxy-server-hot/index.js
+
+npm --prefix $PLATFORM_PATH/Resources/app/storefront/ run hot-proxy
