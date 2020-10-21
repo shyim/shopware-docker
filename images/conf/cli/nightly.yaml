@@ -10,5 +10,5 @@ images:
       cli/Dockerfile.twig: cli/Dockerfile
     tags:
       php80:
-        phpVersion: '8.0.0rc1'
+        phpVersion: '8.0.0rc2'
         phpVersionNumeric: 80
