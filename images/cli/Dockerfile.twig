@@ -55,7 +55,8 @@ USER dev
 
 COPY rootfs/ /
 
-RUN composer global require hirak/prestissimo
+RUN composer global require hirak/prestissimo && \
+    echo "alias ll=\"ls -lha\"" >> ~/.bashrc
 
 WORKDIR /var/www/html
 
