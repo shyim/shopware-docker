@@ -11,7 +11,7 @@ images:
       nginx/10-classic.conf: nginx/rootfs/etc/nginx/sites-enabled/www.conf
     tags:
       php80:
-        phpVersion: '8.0.0RC2'
+        phpVersion: '8.0.0RC3'
         phpVersionNumeric: 80
   -
     image: 
