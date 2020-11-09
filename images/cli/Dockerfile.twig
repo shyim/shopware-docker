@@ -3,7 +3,7 @@ FROM {% block image_from %}php:{{ phpVersion }}-cli-alpine{% endblock %}
 LABEL org.opencontainers.image.source https://github.com/shyim/shopware-docker
 ENV PS1 '${debian_chroot:+($debian_chroot)}\[\033[01;31m\]\u\[\033[01;33m\]@\[\033[01;36m\]\h \[\033[01;33m\]\w \[\033[01;35m\]\$ \[\033[00m\]'
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/
-COPY --from=composer /usr/bin/composer /usr/bin/composer
+COPY --from=composer:1 /usr/bin/composer /usr/bin/composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer2
 
 RUN set -x && \
