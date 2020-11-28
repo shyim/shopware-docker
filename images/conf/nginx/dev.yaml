@@ -28,6 +28,9 @@ images:
       php74:
         phpVersion: '7.4'
         phpVersionNumeric: 74
+      php80:
+        phpVersion: '8.0.0RC5'
+        phpVersionNumeric: 80
   -
     image: 
       - shyim/shopware-platform-nginx
@@ -48,3 +51,6 @@ images:
       php74:
         phpVersion: '7.4'
         phpVersionNumeric: 74
+      php80:
+        phpVersion: '8.0.0RC5'
+        phpVersionNumeric: 80
