@@ -1,5 +1,6 @@
 images:
   -
+    name: Adminer
     image: 
        - shyim/adminer
        - ghcr.io/shyim/shopware-docker/adminer
@@ -8,4 +9,3 @@ images:
     context: adminer
     tags:
       latest:
-        phpVersion: '7.2'

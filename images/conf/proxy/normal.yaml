@@ -1,5 +1,6 @@
 images:
   -
+    name: Nginx Proxy
     image: 
       - shyim/nginx-proxy
       - ghcr.io/shyim/shopware-docker/proxy

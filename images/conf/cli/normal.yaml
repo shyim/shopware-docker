@@ -18,6 +18,9 @@ images:
       php74:
         phpVersion: '7.4'
         phpVersionNumeric: 74
+      php80:
+        phpVersion: '8.0.0RC5'
+        phpVersionNumeric: 80
   -
     image: 
       - shyim/shopware-cli
@@ -39,3 +42,6 @@ images:
       php74-xdebug:
         phpVersion: '7.4'
         phpVersionNumeric: 74
+      php80-xdebug:
+        phpVersion: '8.0.0RC5'
+        phpVersionNumeric: 80
