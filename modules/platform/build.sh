@@ -13,6 +13,7 @@ INSTANCE_ID=$(openssl rand -hex 32)
 echo "APP_ENV=dev
 APP_SECRET=${SECRET}
 APP_URL=${URL}
+BLUE_GREEN_DEPLOYMENT=1
 MAILER_URL=\"sendmail://localhost?command=ssmtp -t\"
 INSTANCE_ID=${INSTANCE_ID}
 DATABASE_URL=mysql://root:${MYSQL_ROOT_PASSWORD}@mysql:3306/${SHOPWARE_PROJECT}
@@ -23,6 +24,16 @@ SHOPWARE_ES_INDEX_PREFIX=test_
 COMPOSER_HOME=/tmp/composer-tmp-${SECRET}
 SHOPWARE_HTTP_CACHE_ENABLED=0
 SHOPWARE_HTTP_DEFAULT_TTL=7200" > .env
+
+echo "const:
+  APP_ENV: dev
+  APP_URL: \"${URL}\"
+  DB_USER: root
+  DB_PASSWORD: \"${MYSQL_ROOT_PASSWORD}\"
+  DB_HOST: mysql
+  DB_PORT: 3306
+  DB_NAME: \"${SHOPWARE_PROJECT}\"
+  APP_MAILER_URL: \"smtp://smtp:25\"" > .psh.yaml.override
 
 export PROJECT_ROOT=$SHOPWARE_FOLDER
 
