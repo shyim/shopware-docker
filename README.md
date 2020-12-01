@@ -102,6 +102,12 @@ This setup works for Shopware 5 and Shopware 6
 * [shopware/shopware-mysql](https://hub.docker.com/r/shyim/shopware-mysql/tags)
 * [shopware/shopware-cli](https://hub.docker.com/r/shyim/shopware-cli/tags)
 
+## Can I use PSH in this Setup?
+
+* You can use `swdc shell` to enter the cli container
+* Switch to your project `cd project`
+* And run `./psh.phar command`
+
 ## How can i access the shop?
 
 * You can use http://**FOLDERNAME**.dev.localhost
