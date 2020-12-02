@@ -29,7 +29,7 @@ images:
         phpVersion: '7.4'
         phpVersionNumeric: 74
       php80:
-        phpVersion: '8.0.0RC5'
+        phpVersion: '8.0'
         phpVersionNumeric: 80
   -
     image: 
@@ -52,5 +52,5 @@ images:
         phpVersion: '7.4'
         phpVersionNumeric: 74
       php80:
-        phpVersion: '8.0.0RC5'
+        phpVersion: '8.0'
         phpVersionNumeric: 80
