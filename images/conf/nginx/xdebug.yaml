@@ -3,7 +3,7 @@ images:
     image: 
       - shyim/shopware-classic-nginx
       - ghcr.io/shyim/shopware-docker/5/nginx
-    buildTags: [ 'xdebug' , 'test' ]
+    buildTags: [ 'xdebug' ]
     dockerFile: nginx/Dockerfile
     context: nginx 
     templates:
@@ -12,6 +12,21 @@ images:
     variables:
       xdebug: true
     tags:
+      php56-xdebug:
+        phpVersion: '5.6'
+        phpVersionNumeric: 56
+      php70-xdebug:
+        phpVersion: '7.0'
+        phpVersionNumeric: 70
+      php71-xdebug:
+        phpVersion: '7.1'
+        phpVersionNumeric: 71
+      php72-xdebug:
+        phpVersion: '7.2'
+        phpVersionNumeric: 72
+      php73-xdebug:
+        phpVersion: '7.3'
+        phpVersionNumeric: 73
       php74-xdebug:
         phpVersion: '7.4'
         phpVersionNumeric: 74
