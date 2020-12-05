@@ -72,12 +72,9 @@ const run = async() => {
                     cleanupList.push(saveFile);
                 }
 
-                console.log(image.dockerFile);
-
                 // Build that image
                 for (let imageName of image.image) {
-                    await exec('docker', ['build', '-t', `${imageName}:${tagName}`,  `-f`, image.dockerFile, image.context], `Building ${imageName}:${tagName}`);
-                    await exec('docker', ['push', `${imageName}:${tagName}`], `Pushing ${imageName}:${tagName}`);
+                    await exec('docker', ['buildx', 'build', '--platform', image.platforms.join(','), '--output', 'type=image,push=true', '--tag', `${imageName}:${tagName}`, '--file', image.dockerFile, image.context]);
                 }
 
                 // Cleanup rendered files
@@ -130,29 +127,18 @@ const run = async() => {
             return buildName(null, imageName);
         };
 
-        const builds = {};
-
         for (let image of config.images) {
             for (let tagName of Object.keys(image.tags)) {
                 const fqnImageName = image.image[0] + ':' + tagName;
-                const key = buildName(image.tags[tagName], image.name ? image.name : fqnImageName);
 
-                if (builds[key] === undefined) {
-                    builds[key] = [];
-                }
-
-                builds[key].push(`node build.js buildAndPushCI ${fqnImageName}`);
+                ghConfig.matrix.include.push({
+                    name: fqnImageName,
+                    os: 'ubuntu-latest',
+                    runs: {
+                        build: `cd images; docker buildx create --use --name build --node build --driver-opt network=host; npm install; node build.js buildAndPushCI ${fqnImageName}`
+                    }
+                })
             }
-        }
-
-        for (let jobKey of Object.keys(builds)) {
-            ghConfig.matrix.include.push({
-                name: jobKey,
-                os: 'ubuntu-latest',
-                runs: {
-                    build: 'cd images; npm install ; ' + builds[jobKey].join('; ')
-                }
-            })
         }
 
         console.log(JSON.stringify(ghConfig));
@@ -208,6 +194,10 @@ const addDefaults = (config) => {
     }
 
     for (let image of config.images) {
+        if (image.platforms === undefined) {
+            image.platforms = ['linux/amd64'];
+        }
+
         if (image.buildTags === undefined) {
             image.buildTags = [];
         }

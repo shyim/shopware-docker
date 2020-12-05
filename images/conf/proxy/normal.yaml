@@ -1,6 +1,9 @@
 images:
   -
     name: Nginx Proxy
+    platforms:
+      - linux/amd64
+      - linux/arm64
     image: 
       - shyim/nginx-proxy
       - ghcr.io/shyim/shopware-docker/proxy
