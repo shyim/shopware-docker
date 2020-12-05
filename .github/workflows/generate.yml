@@ -12,7 +12,7 @@ defaults:
 jobs:
   generate-jobs:
     name: Generate Jobs
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     outputs:
       strategy: ${{ steps.generate-jobs.outputs.strategy }}
     steps:
@@ -35,7 +35,7 @@ jobs:
     needs: generate-jobs
     strategy: ${{ fromJson(needs.generate-jobs.outputs.strategy) }}
     name: ${{ matrix.name }}
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
     
