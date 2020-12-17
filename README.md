@@ -140,7 +140,7 @@ PhpMyAdmin / Adminer: http://db.localhost
 Access es directly: http://es.localhost  
 Access cerebro: http://cerebro.localhost
 
-### Shopware
+### Shopware 5
 
 User: demo  
 Password: demo
