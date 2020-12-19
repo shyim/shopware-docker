@@ -93,6 +93,9 @@ if (isset($_SERVER['argv'][2])) {
 					]
 				]
 			];
+            break;
+        case 'httpcache':
+            $config['httpcache']['enabled'] = true;
 			break;
 	}
 }
