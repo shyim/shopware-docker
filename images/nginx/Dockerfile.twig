@@ -18,6 +18,7 @@ RUN set -x && \
       apk add --no-cache \
       nginx \
       shadow \
+      socat \
       ssmtp && \
     install-php-extensions bcmath gd intl mysqli pdo_mysql sockets bz2 gmp soap zip gmp redis {% if phpVersionNumeric >= 74 %} ffi {% endif %} {% if production %} opcache {% endif %} {% if xdebug %} xdebug{% if phpVersionNumeric >= 71 and phpVersionNumeric < 80 %}-2.9.8{% endif %}{% endif %} && \
     ln -s /usr/local/bin/php /usr/bin/php && \
@@ -32,21 +33,21 @@ RUN set -x && \
     chown -R www-data:www-data /var/www && \
     usermod -u 1000 www-data && \
     apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/community gnu-libiconv{% if xdebug %} && \
-    echo 'xdebug.remote_enable=1' > /usr/local/etc/php/conf.d/ext-xdebug.ini && \
-    echo 'xdebug.remote_autostart=0' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
-    echo 'xdebug.remote_connect_back=1' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
-    echo 'xdebug.remote_port=9000' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
-    echo 'xdebug.remote_log=/tmp/xdebug.log' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
-    echo 'xdebug.idekey=PHPSTORM' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
-    echo 'xdebug.profiler_enable=0' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
-    echo 'xdebug.profiler_enable_trigger=1' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
-    echo 'xdebug.profiler_output_dir="/tmp/xdebug"' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
-    echo 'xdebug.profiler_output_name = "cachegrind.out.%R.%t"' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
-    echo 'xdebug.auto_trace=0' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
-    echo 'xdebug.trace_enable_trigger=1' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
-    echo 'xdebug.trace_output_dir="/var/www/html/traces"' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
-    echo 'xdebug.trace_output_name="trace.%R.%t"' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
-    echo 'xdebug.show_mem_delta=1' >> /usr/local/etc/php/conf.d/ext-xdebug.ini
+    echo 'xdebug.remote_enable=1' > /usr/local/etc/php/conf.d/xdebug.ini && \
+    echo 'xdebug.remote_autostart=0' >> /usr/local/etc/php/conf.d/xdebug.ini && \
+    echo 'xdebug.remote_connect_back=1' >> /usr/local/etc/php/conf.d/xdebug.ini && \
+    echo 'xdebug.remote_port=9000' >> /usr/local/etc/php/conf.d/xdebug.ini && \
+    echo 'xdebug.remote_log=/tmp/xdebug.log' >> /usr/local/etc/php/conf.d/xdebug.ini && \
+    echo 'xdebug.idekey=PHPSTORM' >> /usr/local/etc/php/conf.d/xdebug.ini && \
+    echo 'xdebug.profiler_enable=0' >> /usr/local/etc/php/conf.d/xdebug.ini && \
+    echo 'xdebug.profiler_enable_trigger=1' >> /usr/local/etc/php/conf.d/xdebug.ini && \
+    echo 'xdebug.profiler_output_dir="/tmp/xdebug"' >> /usr/local/etc/php/conf.d/xdebug.ini && \
+    echo 'xdebug.profiler_output_name = "cachegrind.out.%R.%t"' >> /usr/local/etc/php/conf.d/xdebug.ini && \
+    echo 'xdebug.auto_trace=0' >> /usr/local/etc/php/conf.d/xdebug.ini && \
+    echo 'xdebug.trace_enable_trigger=1' >> /usr/local/etc/php/conf.d/xdebug.ini && \
+    echo 'xdebug.trace_output_dir="/var/www/html/traces"' >> /usr/local/etc/php/conf.d/xdebug.ini && \
+    echo 'xdebug.trace_output_name="trace.%R.%t"' >> /usr/local/etc/php/conf.d/xdebug.ini && \
+    echo 'xdebug.show_mem_delta=1' >> /usr/local/etc/php/conf.d/xdebug.ini
 {% endif %}
 
 {% if phpVersionNumeric >= 71 and xdebug == false and production == false %}
@@ -79,4 +80,4 @@ ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
 COPY rootfs/ /
 EXPOSE 80
 
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
+ENTRYPOINT ["/entrypoint.sh"]

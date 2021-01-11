@@ -67,3 +67,7 @@ fi
 
 docker-compose -f ${DOCKER_COMPOSE_FILE} run --rm start_mysql
 docker-compose -f ${DOCKER_COMPOSE_FILE} up -d --remove-orphans
+
+if [[ $WSL_XDEBUG_TUNNEL == "true" ]]; then
+    nohup socat UNIX-LISTEN:$REALDIR/xdebug.sock,fork TCP:localhost:9000 >/dev/null 2>&1 &
+fi

@@ -28,6 +28,7 @@ function create_nginx (){
             echo "      HTTPS_METHOD: noredirect" >> ${DOCKER_COMPOSE_FILE}
         fi
         echo "    volumes:" >> ${DOCKER_COMPOSE_FILE}
+        echo "      - ${REALDIR}:/opt/swdc/" >> ${DOCKER_COMPOSE_FILE}
         if [[ ${Platform} != "Linux" ]]; then
             echo "      - ${d}:/var/www/html:cached" >> ${DOCKER_COMPOSE_FILE}
             if [[ ${CACHE_VOLUMES} == "true" ]]; then
