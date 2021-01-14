@@ -16,6 +16,11 @@ echo "    image: djfarrelly/maildev" >> ${DOCKER_COMPOSE_FILE}
 echo "    environment:" >> ${DOCKER_COMPOSE_FILE}
 echo "      VIRTUAL_HOST: mail.localhost" >> ${DOCKER_COMPOSE_FILE}
 
+echo "  dump-server:" >> ${DOCKER_COMPOSE_FILE}
+echo "    image: ghcr.io/shyim/php-dump-server:latest" >> ${DOCKER_COMPOSE_FILE}
+echo "    environment:" >> ${DOCKER_COMPOSE_FILE}
+echo "      VIRTUAL_HOST: debug.localhost" >> ${DOCKER_COMPOSE_FILE}
+
 echo "  proxy:" >> ${DOCKER_COMPOSE_FILE}
 echo "    image: ghcr.io/shyim/shopware-docker/proxy" >> ${DOCKER_COMPOSE_FILE}
 echo "    volumes:" >> ${DOCKER_COMPOSE_FILE}

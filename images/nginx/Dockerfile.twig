@@ -12,7 +12,8 @@ ENV TZ=Europe/Berlin \
     FPM_PM_MAX_SPARE_SERVERS=3 \
     PHP_MAX_UPLOAD_SIZE=128m \
     PHP_MAX_EXECUTION_TIME=300 \
-    PHP_MEMORY_LIMIT=512m
+    PHP_MEMORY_LIMIT=512m \
+    PHP_DUMP_SERVER_URL=http://dump-server:9009
 
 RUN set -x && \
       apk add --no-cache \
@@ -52,11 +53,11 @@ RUN set -x && \
 
 {% if phpVersionNumeric >= 71 and xdebug == false and production == false %}
 RUN cd /opt/ && \
-    wget https://github.com/shyim/var-dumper-server-prefixed/archive/master.zip && \
-    unzip master.zip && \
-    rm master.zip && \
-    mv var-dumper-server-prefixed-master var-dumper-server && \
-    echo "auto_prepend_file = /opt/var-dumper-server/bin/init.php" > /usr/local/etc/php/conf.d/vardumpserver.ini
+    wget https://github.com/shyim/php-dump-client-prefixed/archive/main.zip && \
+    unzip main.zip && \
+    rm main.zip && \
+    mv php-dump-client-prefixed-main php-dump-client-prefixed && \
+    echo "auto_prepend_file = /opt/php-dump-client-prefixed/prepend.php" > /usr/local/etc/php/conf.d/vardumpserver.ini
 {% endif %}
 
 
