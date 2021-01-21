@@ -1,6 +1,7 @@
 FROM {% block image_from %}php:{{ phpVersion }}-cli-alpine{% endblock %}
 
 LABEL org.opencontainers.image.source https://github.com/shyim/shopware-docker
+ENV XDEBUG_MODE=debug
 ENV PS1 '${debian_chroot:+($debian_chroot)}\[\033[01;31m\]\u\[\033[01;33m\]@\[\033[01;36m\]\h \[\033[01;33m\]\w \[\033[01;35m\]\$ \[\033[00m\]'
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/
 COPY --from=composer:1 /usr/bin/composer /usr/bin/composer
@@ -23,7 +24,7 @@ RUN set -x && \
       npm \
       make \
       ssmtp && \
-    install-php-extensions bcmath gd intl mysqli pdo_mysql sockets bz2 gmp soap zip gmp pcntl posix redis pcov{% if phpVersionNumeric >= 74 %} ffi {% endif %} {% if production %} opcache {% endif %} {% if xdebug %} xdebug{% if phpVersionNumeric >= 71 and phpVersionNumeric < 80 %}-2.9.8{% endif %} {% endif %} && \
+    install-php-extensions bcmath gd intl mysqli pdo_mysql sockets bz2 gmp soap zip gmp pcntl posix redis pcov{% if phpVersionNumeric >= 74 %} ffi {% endif %} {% if production %} opcache {% endif %} {% if xdebug %} xdebug{% if phpVersionNumeric >= 71 and xdebug == 2 %}-2.9.8{% endif %} {% endif %} && \
     rm -rf /tmp/* && \
     useradd dev && \
     mkdir /home/dev && \
@@ -31,6 +32,7 @@ RUN set -x && \
     chown -R dev /home/dev /opt/ && \
     npm install -g pnpm && \
     apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/community gnu-libiconv{% if xdebug %} && \
+    {% if xdebug == 2 %}
     echo 'xdebug.remote_enable=1' > /usr/local/etc/php/conf.d/ext-xdebug.ini && \
     echo 'xdebug.remote_autostart=0' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
     echo 'xdebug.remote_connect_back=1' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
@@ -46,6 +48,12 @@ RUN set -x && \
     echo 'xdebug.trace_output_dir="/var/www/html/traces"' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
     echo 'xdebug.trace_output_name="trace.%R.%t"' >> /usr/local/etc/php/conf.d/ext-xdebug.ini && \
     echo 'xdebug.show_mem_delta=1' >> /usr/local/etc/php/conf.d/ext-xdebug.ini
+    {% else %}
+    echo 'xdebug.discover_client_host=true' >> /usr/local/etc/php/conf.d/xdebug.ini && \
+    echo 'xdebug.client_port=9000' >> /usr/local/etc/php/conf.d/xdebug.ini && \
+    echo 'xdebug.log=/tmp/xdebug.log' >> /usr/local/etc/php/conf.d/xdebug.ini && \
+    echo 'xdebug.output_dir="/tmp/xdebug"' >> /usr/local/etc/php/conf.d/xdebug.ini
+    {% endif %}
 {% endif %}
 
 {% block after_install %}{% endblock %}

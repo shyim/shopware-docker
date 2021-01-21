@@ -1,7 +1,7 @@
 FROM {% block image_from %}php:{{ phpVersion }}-fpm-alpine{% endblock %}
 
 LABEL org.opencontainers.image.source https://github.com/shyim/shopware-docker
-COPY --from=ochinchina/supervisord:latest /usr/local/bin/supervisord /usr/bin/supervisord
+COPY --from=ghcr.io/shyim/supervisord /usr/local/bin/supervisord /usr/bin/supervisord
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/
 
 ENV TZ=Europe/Berlin \
@@ -13,7 +13,8 @@ ENV TZ=Europe/Berlin \
     PHP_MAX_UPLOAD_SIZE=128m \
     PHP_MAX_EXECUTION_TIME=300 \
     PHP_MEMORY_LIMIT=512m \
-    PHP_DUMP_SERVER_URL=http://dump-server:9009
+    PHP_DUMP_SERVER_URL=http://dump-server:9009 \
+    XDEBUG_MODE=debug
 
 RUN set -x && \
       apk add --no-cache \
@@ -21,7 +22,7 @@ RUN set -x && \
       shadow \
       socat \
       ssmtp && \
-    install-php-extensions bcmath gd intl mysqli pdo_mysql sockets bz2 gmp soap zip gmp redis {% if phpVersionNumeric >= 74 %} ffi {% endif %} {% if production %} opcache {% endif %} {% if xdebug %} xdebug{% if phpVersionNumeric >= 71 and phpVersionNumeric < 80 %}-2.9.8{% endif %}{% endif %} && \
+    install-php-extensions bcmath gd intl mysqli pdo_mysql sockets bz2 gmp soap zip gmp redis {% if phpVersionNumeric >= 74 %} ffi {% endif %} {% if production %} opcache {% endif %} {% if xdebug %} xdebug{% if phpVersionNumeric >= 71 and xdebug == 2 %}-2.9.8{% endif %}{% endif %} && \
     ln -s /usr/local/bin/php /usr/bin/php && \
     ln -sf /dev/stdout /var/log/nginx/access.log && \
     ln -sf /dev/stderr /var/log/nginx/error.log && \
@@ -34,6 +35,7 @@ RUN set -x && \
     chown -R www-data:www-data /var/www && \
     usermod -u 1000 www-data && \
     apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/community gnu-libiconv{% if xdebug %} && \
+    {% if xdebug == 2 %}
     echo 'xdebug.remote_enable=1' > /usr/local/etc/php/conf.d/xdebug.ini && \
     echo 'xdebug.remote_autostart=0' >> /usr/local/etc/php/conf.d/xdebug.ini && \
     echo 'xdebug.remote_connect_back=1' >> /usr/local/etc/php/conf.d/xdebug.ini && \
@@ -49,6 +51,12 @@ RUN set -x && \
     echo 'xdebug.trace_output_dir="/var/www/html/traces"' >> /usr/local/etc/php/conf.d/xdebug.ini && \
     echo 'xdebug.trace_output_name="trace.%R.%t"' >> /usr/local/etc/php/conf.d/xdebug.ini && \
     echo 'xdebug.show_mem_delta=1' >> /usr/local/etc/php/conf.d/xdebug.ini
+    {% else %}
+    echo 'xdebug.discover_client_host=true' >> /usr/local/etc/php/conf.d/xdebug.ini && \
+    echo 'xdebug.client_port=9000' >> /usr/local/etc/php/conf.d/xdebug.ini && \
+    echo 'xdebug.log=/tmp/xdebug.log' >> /usr/local/etc/php/conf.d/xdebug.ini && \
+    echo 'xdebug.output_dir="/tmp/xdebug"' >> /usr/local/etc/php/conf.d/xdebug.ini
+    {% endif %}
 {% endif %}
 
 {% if phpVersionNumeric >= 71 and xdebug == false and production == false %}

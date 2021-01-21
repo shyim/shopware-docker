@@ -3,14 +3,14 @@ images:
     image: 
       - shyim/shopware-classic-nginx
       - ghcr.io/shyim/shopware-docker/5/nginx
-    buildTags: [ 'xdebug' ]
+    buildTags: [ 'xdebug2' ]
     dockerFile: nginx/Dockerfile
     context: nginx 
     templates:
       nginx/Dockerfile.twig: nginx/Dockerfile
       nginx/10-classic.conf: nginx/rootfs/etc/nginx/sites-enabled/www.conf
     variables:
-      xdebug: true
+      xdebug: 2
     tags:
       php56-xdebug:
         phpVersion: '5.6'
@@ -30,18 +30,30 @@ images:
       php74-xdebug:
         phpVersion: '7.4'
         phpVersionNumeric: 74
+      php74-xdebug3:
+        phpVersion: '7.4'
+        phpVersionNumeric: 74
+        xdebug: 3
+      php80-xdebug:
+        phpVersion: '8.0'
+        phpVersionNumeric: 80
+        xdebug: 3
+      php80-xdebug3:
+        phpVersion: '8.0'
+        phpVersionNumeric: 80
+        xdebug: 3
   -
     image: 
       - shyim/shopware-platform-nginx
       - ghcr.io/shyim/shopware-docker/6/nginx
-    buildTags: [ 'xdebug' ]
+    buildTags: [ 'xdebug2' ]
     dockerFile: nginx/Dockerfile
     context: nginx 
     templates:
       nginx/Dockerfile.twig: nginx/Dockerfile
       nginx/10-platform.conf: nginx/rootfs/etc/nginx/sites-enabled/www.conf
     variables:
-      xdebug: true
+      xdebug: 2
     tags:
       php72-xdebug:
         phpVersion: '7.2'
@@ -52,3 +64,15 @@ images:
       php74-xdebug:
         phpVersion: '7.4'
         phpVersionNumeric: 74
+      php74-xdebug3:
+        phpVersion: '7.4'
+        phpVersionNumeric: 74
+        xdebug: 3
+      php80-xdebug:
+        phpVersion: '8.0'
+        phpVersionNumeric: 80
+        xdebug: 3
+      php80-xdebug3:
+        phpVersion: '8.0'
+        phpVersionNumeric: 80
+        xdebug: 3
