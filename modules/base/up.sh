@@ -66,6 +66,10 @@ if [[ ${ENABLE_BLACKFIRE} == "true" ]]; then
     create_blackfire
 fi
 
+echo "volumes:" >> ${DOCKER_COMPOSE_FILE}
+echo "  nvm_cache:" >> ${DOCKER_COMPOSE_FILE}
+echo "    driver: local" >> ${DOCKER_COMPOSE_FILE}
+
 if [[ ${CACHE_VOLUMES} == "true" ]]; then
     create_caching
 fi
@@ -74,7 +78,7 @@ docker-compose -f ${DOCKER_COMPOSE_FILE} run --rm start_mysql
 docker-compose -f ${DOCKER_COMPOSE_FILE} up -d --remove-orphans
 
 if [[ $WSL_XDEBUG_TUNNEL == "true" ]]; then
-    if [[ -f "$REALDIR/xdebug.sock" ]]; then
+    if [[ -e "$REALDIR/xdebug.sock" ]]; then
         echo "Socat file exists. Skipping starting";
         exit 0
     fi

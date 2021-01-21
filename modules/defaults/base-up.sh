@@ -69,10 +69,13 @@ function create_start_mysql() {
   cat <<EOF >> ${DOCKER_COMPOSE_FILE}
   start_mysql:
     image: busybox:latest
+    volumes:
+      - nvm_cache:/nvm
     entrypoint:
       - sh
     command: >
       -c "
+        chown 1000:1000 /nvm
         while !(nc -z mysql 3306)
         do
           echo -n '.'
@@ -111,6 +114,7 @@ function create_cli () {
         done <<< "$(get_serve_folders)"
         echo "    volumes:" >> ${DOCKER_COMPOSE_FILE}
         echo "      - ${REALDIR}:/opt/swdc/" >> ${DOCKER_COMPOSE_FILE}
+        echo "      - nvm_cache:/nvm" >> ${DOCKER_COMPOSE_FILE}
         if [[ ${Platform} != "Linux" ]]; then
             echo "      - ${CODE_DIRECTORY}:/var/www/html:cached" >> ${DOCKER_COMPOSE_FILE}
 
@@ -236,8 +240,6 @@ function create_blackfire () {
 
 function create_caching () {
     if [[ ${CODE_FOLDER_CONTENT} ]]; then
-        echo "volumes:" >> ${DOCKER_COMPOSE_FILE}
-
         while IFS= read -r NAME; do
             echo "  ${NAME}_var_cache:" >> ${DOCKER_COMPOSE_FILE}
             echo "    driver: local" >> ${DOCKER_COMPOSE_FILE}

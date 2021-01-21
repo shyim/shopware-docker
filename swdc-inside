@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+if [[ -e /nvm/nvm.sh ]]; then
+    source /nvm/nvm.sh
+fi
+
 FILE="$0"
 
 if [[ -L "$0" ]]; then

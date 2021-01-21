@@ -20,8 +20,6 @@ RUN set -x && \
       bash-completion \
       patch \
       mariadb-client \
-      nodejs \
-      npm \
       make \
       ssmtp && \
     install-php-extensions bcmath gd intl mysqli pdo_mysql sockets bz2 gmp soap zip gmp pcntl posix redis pcov{% if phpVersionNumeric >= 74 %} ffi {% endif %} {% if production %} opcache {% endif %} {% if xdebug %} xdebug{% if phpVersionNumeric >= 71 and xdebug == 2 %}-2.9.8{% endif %} {% endif %} && \
@@ -30,7 +28,6 @@ RUN set -x && \
     mkdir /home/dev && \
     mkdir -p /opt/phpstorm-coverage && \
     chown -R dev /home/dev /opt/ && \
-    npm install -g pnpm && \
     apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/community gnu-libiconv{% if xdebug %} && \
     {% if xdebug == 2 %}
     echo 'xdebug.remote_enable=1' > /usr/local/etc/php/conf.d/ext-xdebug.ini && \
@@ -64,8 +61,10 @@ USER dev
 COPY rootfs/ /
 
 RUN composer global require hirak/prestissimo && \
-    echo "alias ll=\"ls -lha\"" >> ~/.bashrc
+    echo "alias ll=\"ls -lha\"" >> ~/.bashrc && \
+    echo "source /nvm/nvm.sh" >> ~/.bashrc
 
 WORKDIR /var/www/html
 
 ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
+ENTRYPOINT [ "/entrypoint.sh" ]
