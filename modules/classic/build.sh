@@ -3,8 +3,30 @@
 checkParameter
 clearCache
 
-mysql -h mysql -u root -p${MYSQL_ROOT_PASSWORD} -e "DROP DATABASE IF EXISTS \`$SHOPWARE_PROJECT\`"
-mysql -h mysql -u root -p${MYSQL_ROOT_PASSWORD} -e "CREATE DATABASE \`$SHOPWARE_PROJECT\`"
+mysqlHost="mysql"
+patchConfig=1
+generateDemoData=1
+
+shift 2
+
+while (( $# )); do
+    case $1 in
+        --mysql-host)
+            shift
+            mysqlHost=$1
+        ;;
+        --without-config-patch)
+            patchConfig=0
+        ;;
+        --without-demo-data)
+            generateDemoData=0
+        ;;
+    esac
+    shift
+done
+
+mysql -h $mysqlHost -u root -p${MYSQL_ROOT_PASSWORD} -e "DROP DATABASE IF EXISTS \`$SHOPWARE_PROJECT\`"
+mysql -h $mysqlHost -u root -p${MYSQL_ROOT_PASSWORD} -e "CREATE DATABASE \`$SHOPWARE_PROJECT\`"
 
 cd /var/www/html/$SHOPWARE_PROJECT
 
@@ -18,22 +40,22 @@ return [
         'username' => 'root',
         'password' => '${MYSQL_ROOT_PASSWORD}',
         'dbname' => '${SHOPWARE_PROJECT}',
-        'host' => 'mysql',
+        'host' => '${mysqlHost}',
         'port' => '3306'
     ]
 ];" > config.php
 
 composer install
 
-mysql -h mysql -u root -p${MYSQL_ROOT_PASSWORD} $SHOPWARE_PROJECT < _sql/install/latest.sql
+mysql -h $mysqlHost -u root -p${MYSQL_ROOT_PASSWORD} $SHOPWARE_PROJECT < _sql/install/latest.sql
 
 if [[ -f build/ApplyDeltas.php ]]; then
-    php build/ApplyDeltas.php --username="root" --password="${MYSQL_ROOT_PASSWORD}" --host="mysql" --dbname="$SHOPWARE_PROJECT" --mode=install
+    php build/ApplyDeltas.php --username="root" --password="${MYSQL_ROOT_PASSWORD}" --host="$mysqlHost" --dbname="$SHOPWARE_PROJECT" --mode=install
 else
     ./bin/console sw:migration:migrate --mode=install
 fi
 
-if [[ ! "$@" == *"--without-demo-data" ]]; then
+if [[ $generateDemoData == 1 ]]; then
     mysql -h mysql -u root -p${MYSQL_ROOT_PASSWORD} $SHOPWARE_PROJECT < _sql/demo/latest.sql
 fi
 
@@ -57,6 +79,6 @@ fi
 
 fixHooks
 
-if [[ ! "$@" == *"--without-config-patch" ]]; then
+if [[ $patchConfig == 1 ]]; then
     php ${DIR}/modules/classic/fix-config.php "$SHOPWARE_FOLDER/config.php"
 fi

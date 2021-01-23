@@ -3,8 +3,30 @@
 checkParameter
 clearCache
 
-mysql -h mysql -u root -proot -e "DROP DATABASE IF EXISTS \`$SHOPWARE_PROJECT\`"
-mysql -h mysql -u root -proot -e "CREATE DATABASE \`$SHOPWARE_PROJECT\`"
+generateDemoData=1
+buildJS=1
+mysqlHost="mysql"
+
+shift 2
+
+while (( $# )); do
+    case $1 in
+        --mysql-host)
+            shift
+            mysqlHost=$1
+        ;;
+        --without-demo-data)
+            buildJS=0
+        ;;
+        --without-building)
+            generateDemoData=0
+        ;;
+    esac
+    shift
+done
+
+mysql -h $mysqlHost -u root -p$MYSQL_ROOT_PASSWORD -e "DROP DATABASE IF EXISTS \`$SHOPWARE_PROJECT\`"
+mysql -h $mysqlHost -u root -p$MYSQL_ROOT_PASSWORD -e "CREATE DATABASE \`$SHOPWARE_PROJECT\`"
 cd "/var/www/html/${SHOPWARE_PROJECT}"
 URL=$(get_url $SHOPWARE_PROJECT)
 SECRET=$(openssl rand -hex 32)
@@ -16,7 +38,7 @@ APP_URL=${URL}
 BLUE_GREEN_DEPLOYMENT=1
 MAILER_URL=\"sendmail://localhost?command=ssmtp -t\"
 INSTANCE_ID=${INSTANCE_ID}
-DATABASE_URL=mysql://root:${MYSQL_ROOT_PASSWORD}@mysql:3306/${SHOPWARE_PROJECT}
+DATABASE_URL=mysql://root:${MYSQL_ROOT_PASSWORD}@${mysqlHost}:3306/${SHOPWARE_PROJECT}
 SHOPWARE_ES_HOSTS=elastic
 SHOPWARE_ES_ENABLED=0
 SHOPWARE_ES_INDEXING_ENABLED=0
@@ -30,7 +52,7 @@ echo "const:
   APP_URL: \"${URL}\"
   DB_USER: root
   DB_PASSWORD: \"${MYSQL_ROOT_PASSWORD}\"
-  DB_HOST: mysql
+  DB_HOST: ${mysqlHost}
   DB_PORT: 3306
   DB_NAME: \"${SHOPWARE_PROJECT}\"
   APP_MAILER_URL: \"smtp://smtp:25\"" > .psh.yaml.override
@@ -44,7 +66,7 @@ PLATFORM_PATH=$(platform_component Core)
 php dev-ops/generate_ssl.php
 echo ''
 
-mysql -h mysql -u root -proot "$SHOPWARE_PROJECT" < $PLATFORM_PATH/schema.sql
+mysql -h $mysqlHost -u root -proot "$SHOPWARE_PROJECT" < $PLATFORM_PATH/schema.sql
 
 if [[ -d $PLATFORM_PATH/Framework/App ]]; then
     bin/console database:migrate --all
@@ -66,12 +88,12 @@ bin/console user:create admin --password=shopware
 bin/console sales-channel:create:storefront --url="$URL"
 
 
-if [[ ! "$@" == *"--without-demo-data"* ]]; then
+if [[ $generateDemoData == 1 ]]; then
     APP_ENV=prod bin/console framework:demodata
     bin/console dal:refresh:index
 fi
 
-if [[ ! "$@" == *"--without-building"* ]]; then
+if [[ $buildJS == 1 ]]; then
     npm clean-install --prefix vendor/shopware/platform/src/Administration/Resources
     npm run --prefix vendor/shopware/platform/src/Administration/Resources lerna -- bootstrap
     npm run --prefix vendor/shopware/platform/src/Administration/Resources/app/administration/ build
