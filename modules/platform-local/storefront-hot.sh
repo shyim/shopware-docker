@@ -7,7 +7,7 @@ export STOREFRONT_PROXY_PORT=80
 export PROJECT_ROOT="/var/www/html/${SHOPWARE_PROJECT}"
 export ESLINT_DISABLE=false
 
-docker-compose -f ${DOCKER_COMPOSE_FILE} exec -w "/var/www/html/${SHOPWARE_PROJECT}" cli php bin/console theme:dump
+compose exec -w "/var/www/html/${SHOPWARE_PROJECT}" cli php bin/console theme:dump
 
 docker run \
     --rm \

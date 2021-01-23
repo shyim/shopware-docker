@@ -2,6 +2,12 @@
 
 SNAP_SUFFIX="$3"
 SNAP_DIR="${CODE_DIRECTORY}/snapshots"
+CONTAINER=$4
+
+if [[ -z $CONTAINER ]]; then
+    CONTAINER="mysql"
+fi
+
 
 if [[ ! -z "$SNAP_SUFFIX" ]]; then
     SNAP_SUFFIX=$(echo "-${SNAP_SUFFIX}")
@@ -13,4 +19,4 @@ fi
 
 checkParameter
 
-docker-compose -f ${DOCKER_COMPOSE_FILE} exec -T mysql mysqldump -uroot -p${MYSQL_ROOT_PASSWORD} ${SHOPWARE_PROJECT} > "${SNAP_DIR}/${SHOPWARE_PROJECT}${SNAP_SUFFIX}.sql"
+compose exec -T $CONTAINER mysqldump -uroot -p${MYSQL_ROOT_PASSWORD} ${SHOPWARE_PROJECT} > "${SNAP_DIR}/${SHOPWARE_PROJECT}${SNAP_SUFFIX}.sql"

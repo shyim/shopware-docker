@@ -74,8 +74,8 @@ if [[ ${CACHE_VOLUMES} == "true" ]]; then
     create_caching
 fi
 
-docker-compose -f ${DOCKER_COMPOSE_FILE} run --rm start_mysql
-docker-compose -f ${DOCKER_COMPOSE_FILE} up -d --remove-orphans
+compose run --rm start_mysql
+compose up -d --remove-orphans
 
 if [[ $WSL_XDEBUG_TUNNEL == "true" ]]; then
     if [[ -e "$REALDIR/xdebug.sock" ]]; then

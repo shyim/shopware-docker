@@ -3,17 +3,12 @@
 echo "=== docker-compose.yml" > debug.txt
 echo "" >> debug.txt
 
-cat docker-compose.yml >> debug.txt
+cat $DOCKER_COMPOSE_FILE >> debug.txt
 
 echo "" >> debug.txt
 echo "" >> debug.txt
 
-echo "=== docker-compose.override.yaml" >> debug.txt
-echo "" >> debug.txt
-
-cat docker-compose.override.yaml >> debug.txt
-
-echo "" >> debug.txt
+cho "" >> debug.txt
 echo "" >> debug.txt
 
 echo "=== .env" >> debug.txt

@@ -2,6 +2,12 @@
 
 SNAP_SUFFIX="$3"
 SNAP_DIR="${CODE_DIRECTORY}/snapshots"
+CONTAINER=$4
+
+if [[ -z $CONTAINER ]]; then
+    CONTAINER="mysql"
+fi
+
 
 if [[ ! -z "$SNAP_SUFFIX" ]]; then
     SNAP_SUFFIX=$(echo "-${SNAP_SUFFIX}")
@@ -17,5 +23,5 @@ if [[ ! -f "$SNAP_DIR/${SHOPWARE_PROJECT}${SNAP_SUFFIX}.sql" ]]; then
   exit 1
 fi
 
-docker-compose -f ${DOCKER_COMPOSE_FILE} exec mysql mysql -uroot -p${MYSQL_ROOT_PASSWORD} -e "CREATE DATABASE IF NOT EXISTS $SHOPWARE_PROJECT"
-docker-compose -f ${DOCKER_COMPOSE_FILE} exec -T mysql mysql -uroot -p${MYSQL_ROOT_PASSWORD} ${SHOPWARE_PROJECT} < "${SNAP_DIR}/${SHOPWARE_PROJECT}${SNAP_SUFFIX}.sql"
+compose exec $CONTAINER mysql -uroot -p${MYSQL_ROOT_PASSWORD} -e "CREATE DATABASE IF NOT EXISTS $SHOPWARE_PROJECT"
+compose exec -T $CONTAINER mysql -uroot -p${MYSQL_ROOT_PASSWORD} ${SHOPWARE_PROJECT} < "${SNAP_DIR}/${SHOPWARE_PROJECT}${SNAP_SUFFIX}.sql"

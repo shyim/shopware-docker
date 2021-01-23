@@ -4,7 +4,7 @@ set -euo pipefail
 SHOPWARE_PROJECT=$2
 shift 2
 
-docker-compose -f "$DOCKER_COMPOSE_FILE" run \
+compose run \
   --rm \
   --no-deps \
   -u "$(id -u):$(id -g)" \

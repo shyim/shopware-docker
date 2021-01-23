@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-docker-compose -f ${DOCKER_COMPOSE_FILE} exec -e COLUMNS="`tput cols`" -e LINES="`tput lines`" -e SHELL=bash -u 0 cli bash
+compose exec -e COLUMNS="`tput cols`" -e LINES="`tput lines`" -e SHELL=bash -u 0 cli bash
