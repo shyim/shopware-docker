@@ -115,7 +115,8 @@ This setup works for Shopware 5 and Shopware 6
 
 ## Can i use it on Windows / Mac?
 
-I dont't develop on Windows or Mac. Try it out by own
+I use it regulary on Windows. See https://shyim.me/blog/shopware-environment-windows for my setup
+I don't have a Mac
 
 ## What are the passwords?
 
