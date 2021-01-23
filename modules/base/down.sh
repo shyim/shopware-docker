@@ -2,4 +2,6 @@
 
 docker-compose -f ${DOCKER_COMPOSE_FILE} down
 
-rm "$REALDIR/xdebug.sock"
+if [[ -e "$REALDIR/xdebug.sock" ]]; then
+    rm "$REALDIR/xdebug.sock"
+fi
