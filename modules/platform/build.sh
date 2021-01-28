@@ -16,14 +16,15 @@ while (( $# )); do
             mysqlHost=$1
         ;;
         --without-demo-data)
-            buildJS=0
+            generateDemoData=0
         ;;
         --without-building)
-            generateDemoData=0
+            buildJS=0
         ;;
     esac
     shift
 done
+
 
 mysql -h $mysqlHost -u root -p$MYSQL_ROOT_PASSWORD -e "DROP DATABASE IF EXISTS \`$SHOPWARE_PROJECT\`"
 mysql -h $mysqlHost -u root -p$MYSQL_ROOT_PASSWORD -e "CREATE DATABASE \`$SHOPWARE_PROJECT\`"
