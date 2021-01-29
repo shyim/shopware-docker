@@ -1,5 +1,5 @@
 project=$2
 
-compose exec mysql mysql -uroot -proot -e "DROP DATABASE IF EXISTS ${project}_test"
-compose exec mysql mysql -uroot -proot -e "CREATE DATABASE ${project}_test"
-compose exec mysql bash -c "mysqldump -uroot -proot ${project} | mysql -uroot -proot ${project}_test"
+echo "DROP DATABASE IF EXISTS ${project}_test" | compose exec -T mysql mysql -uroot -proot 
+echo "CREATE DATABASE ${project}_test" | compose exec -T mysql mysql -uroot -proot
+compose exec -T mysql mysqldump -uroot -proot ${project} | compose exec -T mysql mysql -uroot -proot "${project}_test"
