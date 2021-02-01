@@ -3,11 +3,21 @@
 SNAP_SUFFIX="$3"
 SNAP_DIR="${CODE_DIRECTORY}/snapshots"
 CONTAINER=$4
+ARGS=""
 
 if [[ -z $CONTAINER ]]; then
     CONTAINER="mysql"
 fi
 
+shift 3
+while (( $# )); do
+    case $1 in
+        --force)
+            ARGS="--force"
+        ;;
+    esac
+    shift
+done
 
 if [[ ! -z "$SNAP_SUFFIX" ]]; then
     SNAP_SUFFIX=$(echo "-${SNAP_SUFFIX}")
@@ -23,5 +33,7 @@ if [[ ! -f "$SNAP_DIR/${SHOPWARE_PROJECT}${SNAP_SUFFIX}.sql" ]]; then
   exit 1
 fi
 
-echo "CREATE DATABASE IF NOT EXISTS $SHOPWARE_PROJECT" | compose exec -T $CONTAINER mysql -uroot -p${MYSQL_ROOT_PASSWORD}
-cat "${SNAP_DIR}/${SHOPWARE_PROJECT}${SNAP_SUFFIX}.sql" | compose exec -T $CONTAINER mysql -uroot -p${MYSQL_ROOT_PASSWORD} ${SHOPWARE_PROJECT}
+echo "DROP DATABASE $SHOPWARE_PROJECT" | compose exec -T $CONTAINER mysql -uroot -p${MYSQL_ROOT_PASSWORD}
+echo "CREATE DATABASE $SHOPWARE_PROJECT" | compose exec -T $CONTAINER mysql -uroot -p${MYSQL_ROOT_PASSWORD}
+
+cat "${SNAP_DIR}/${SHOPWARE_PROJECT}${SNAP_SUFFIX}.sql" | compose exec -T $CONTAINER mysql ${ARGS} -uroot -p${MYSQL_ROOT_PASSWORD} ${SHOPWARE_PROJECT}
