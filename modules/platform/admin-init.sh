@@ -3,7 +3,7 @@ checkParameter
 cd "/var/www/html/${SHOPWARE_PROJECT}"
 
 if [[ -e vendor/shopware/platform ]]; then
-    npm install --prefix vendor/shopware/platform/src/Administration/Resources/app/administration/
+    npm --prefix vendor/shopware/platform/src/Administration/Resources/app/administration/ clean-install
 else
-    npm install --prefix vendor/shopware/administration/Resources/app/administration/
+    npm --prefix vendor/shopware/administration/Resources/app/administration/ clean-install
 fi
