@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-cd /var/www/html/$SHOPWARE_PROJECT
-URL=$(get_url $SHOPWARE_PROJECT)
+cd /var/www/html/"$SHOPWARE_PROJECT" || exit
+URL=$(get_url "$SHOPWARE_PROJECT")
 
-php ${DIR}/modules/classic/fix-config.php "$SHOPWARE_FOLDER/config.php" csrf
+php "${DIR}"/modules/classic/fix-config.php "$SHOPWARE_FOLDER/config.php" csrf
 
 ./bin/console dbal:run-sql 'UPDATE s_core_config_elements SET value = "b:0;" WHERE name = "show_cookie_note"'
 
@@ -13,7 +13,7 @@ php ${DIR}/modules/classic/fix-config.php "$SHOPWARE_FOLDER/config.php" csrf
 # Shopware 5.7
 if [[ -f engine/Shopware/Shopware.php ]]; then
 
-echo "default:
+  echo "default:
     extensions:
         SensioLabs\Behat\PageObjectExtension:
             namespaces:
@@ -60,11 +60,11 @@ echo "default:
                 - Shopware\Tests\Mink\SpecialContext
                 - Shopware\Tests\Mink\TransformContext
                 - Shopware\Tests\Mink\SecurityContext
-                - Shopware\Tests\Mink\ExportContext" > tests/Mink/behat.yml
+                - Shopware\Tests\Mink\ExportContext" >tests/Mink/behat.yml
 
 else
 
-echo "default:
+  echo "default:
     extensions:
         SensioLabs\Behat\PageObjectExtension:
             namespaces:
@@ -112,7 +112,7 @@ echo "default:
                 - Shopware\Tests\Mink\SpecialContext
                 - Shopware\Tests\Mink\TransformContext
                 - Shopware\Tests\Mink\SecurityContext
-                - Shopware\Tests\Mink\ExportContext" > tests/Mink/behat.yml
+                - Shopware\Tests\Mink\ExportContext" >tests/Mink/behat.yml
 fi
 
 vendor/bin/behat -vv --config=tests/Mink/behat.yml --format=pretty --out=std --format=junit --out=build/artifacts/mink ${@:3}

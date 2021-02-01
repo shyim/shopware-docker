@@ -2,9 +2,9 @@
 
 checkParameter
 
-cd /var/www/html/${SHOPWARE_PROJECT}
+cd /var/www/html/"${SHOPWARE_PROJECT}" || exit
 
-$0 build $SHOPWARE_PROJECT
+$0 build "$SHOPWARE_PROJECT"
 
 vendor/bin/phpunit tests/Unit/ --config tests/phpunit_unit.xml.dist ${@:3}
 

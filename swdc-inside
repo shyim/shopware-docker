@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 if [[ -e /nvm/nvm.sh ]]; then
-    source /nvm/nvm.sh
+  # shellcheck source=/dev/null
+  source /nvm/nvm.sh
 fi
 
 FILE="$0"
@@ -10,8 +11,9 @@ if [[ -L "$0" ]]; then
   FILE=$(readlink "$0")
 fi
 
-DIR=$(dirname ${FILE})
+DIR=$(dirname "${FILE}")
 
+# shellcheck source=functions.sh
 source "${DIR}/functions.sh"
 
 SHOPWARE_PROJECT="$2"
@@ -19,35 +21,36 @@ SHOPWARE_FOLDER="/var/www/html/$SHOPWARE_PROJECT"
 
 modules=(base)
 
-if [[ ! -z "$SHOPWARE_PROJECT" ]]; then
-    modules=(base classic)
+if [[ -n "$SHOPWARE_PROJECT" ]]; then
+  modules=(base classic)
 
-    if [[ -d "$SHOPWARE_FOLDER/app" ]]; then
-        modules=(base classic-composer classic)
-    fi
+  if [[ -d "$SHOPWARE_FOLDER/app" ]]; then
+    modules=(base classic-composer classic)
+  fi
 
-    if [[ -f "$SHOPWARE_FOLDER/src/Kernel.php" ]]; then
-        modules=(base platform)
-    fi
+  if [[ -f "$SHOPWARE_FOLDER/src/Kernel.php" ]]; then
+    modules=(base platform)
+  fi
 
-    if [[ -f "$SHOPWARE_FOLDER/PLATFORM_COMMIT_SHA" ]]; then
-        modules=(base platform-prod platform)
-    fi
+  if [[ -f "$SHOPWARE_FOLDER/PLATFORM_COMMIT_SHA" ]]; then
+    modules=(base platform-prod platform)
+  fi
 fi
 
 # Need to be in docker folder for docker-compose
-cd ${DIR}
+cd "${DIR}" || exit 1
 
-for module in ${modules[@]}; do
-    for command in ./modules/${module}/*.sh; do
-        NAME=$(basename $command)
-        NAME=${NAME%.*}
+for module in "${modules[@]}"; do
+  for command in "./modules/${module}/"*.sh; do
+    NAME=$(basename "$command")
+    NAME=${NAME%.*}
 
-        if [[ $NAME == $1 ]]; then
-            source $command
-            exit 0
-        fi
-    done
+    if [[ $NAME == "$1" ]]; then
+      # shellcheck source=/dev/null
+      source "$command"
+      exit 0
+    fi
+  done
 done
 
 cat ./modules/base/header.txt

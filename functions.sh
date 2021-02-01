@@ -65,7 +65,7 @@ function get_image()
     fi
 
     if [[ ! -z $val ]]; then
-        echo $val
+        echo "$val"
     else
         IMAGE="ghcr.io/shyim/shopware-docker/5/nginx"
         if [[ -f "$2/public/index.php" ]]; then
@@ -84,7 +84,7 @@ function get_hosts()
     val=${!var}
 
     if [[ ! -z $val ]]; then
-        echo $val
+        echo "$val"
     else
         echo "${folder}.${DEFAULT_DOMAIN}" | tr -d '"'
     fi
@@ -94,7 +94,7 @@ function get_host()
 {
     hosts=$(get_hosts "$1")
     host=$(cut -d ',' -f 1 <<< "${hosts}")
-    echo $host
+    echo "$host"
 }
 
 function get_url()
@@ -131,7 +131,7 @@ function get_cert_name()
     val=${!var}
 
     if [[ ! -z $val ]]; then
-        echo $val
+        echo "$val"
     else
         echo "shared"
     fi
@@ -143,7 +143,7 @@ function get_serve_folders()
     for d in ${CODE_DIRECTORY}/* ; do
         if [[ -d "$d" ]]; then
             if [ -f "$d/public/index.php" ] || [ -f "$d/shopware.php" ]; then
-                echo $(basename $d)
+                echo $(basename "$d")
             fi
         fi
     done
@@ -156,7 +156,7 @@ function compose()
         additionalArgs=" -f ${HOME}/.config/swdc/services.yml"
     fi
 
-    docker-compose -f ${DOCKER_COMPOSE_FILE} $additionalArgs $@
+    docker-compose -f "${DOCKER_COMPOSE_FILE}" "$additionalArgs" $@
 }
 
 function generate_wildcard_certs()
@@ -169,7 +169,7 @@ function generate_wildcard_certs()
 
 function check_env_compability()
 {
-    if [ ${MYSQL_VERSION} == "56" ] || [ ${MYSQL_VERSION} == "57" ] || [ ${MYSQL_VERSION} == "8" ]; then
+    if [ "${MYSQL_VERSION}" == "56" ] || [ "${MYSQL_VERSION}" == "57" ] || [ "${MYSQL_VERSION}" == "8" ]; then
         echo "${red}Please change your \$MYSQL_VERSION variable to ghcr.io/shyim/shopware-docker/mysql:${MYSQL_VERSION}${reset}"
         exit 1
     fi

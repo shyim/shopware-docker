@@ -6,7 +6,7 @@ CONTAINER=$4
 ARGS=""
 
 if [[ -z $CONTAINER ]]; then
-    CONTAINER="mysql"
+  CONTAINER="mysql"
 fi
 
 shift 3
@@ -20,7 +20,7 @@ while (( $# )); do
 done
 
 if [[ ! -z "$SNAP_SUFFIX" ]]; then
-    SNAP_SUFFIX=$(echo "-${SNAP_SUFFIX}")
+  SNAP_SUFFIX=$(echo "-${SNAP_SUFFIX}")
 fi
 
 if [[ ! -d "$SNAP_DIR" ]]; then
