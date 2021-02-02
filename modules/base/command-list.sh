@@ -6,7 +6,7 @@ for module in ./modules/*; do
   if [[ "$(ls -A "${module}")" ]]; then
     echo "${green}Available commands in module: ${moduleBasename}${reset}"
 
-    for command in ${module}/*.sh; do
+    for command in "${module}"/*.sh; do
       name=$(basename "$command")
       name=${name%.*}
       usage=""

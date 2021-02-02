@@ -2,19 +2,20 @@
 
 # Coloring/Styling helpers
 esc=$(printf '\033')
-reset="${esc}[0m"
-blue="${esc}[34m"
-green="${esc}[32m"
-lightGreen="${esc}[92m"
-red="${esc}[31m"
-bold="${esc}[1m"
-warn="${esc}[41m${esc}[97m"
+export esc="${esc}"
+export reset="${esc}[0m"
+export blue="${esc}[34m"
+export green="${esc}[32m"
+export lightGreen="${esc}[92m"
+export red="${esc}[31m"
+export bold="${esc}[1m"
+export warn="${esc}[41m${esc}[97m"
 
-modulesDefault=(base)
-modulesClassic=(base classic)
-modulesClassicComposerProject=(base classic-composer classic)
-modulesPlatform=(base platform)
-modulesLocal=(base local)
+export modulesDefault=(base)
+export modulesClassic=(base classic)
+export modulesClassicComposerProject=(base classic-composer classic)
+export modulesPlatform=(base platform)
+export modulesLocal=(base local)
 
 function fixHooks() {
   rm "${SHOPWARE_FOLDER}/.git/hooks/pre-commit"
@@ -132,7 +133,7 @@ function get_serve_folders() {
   for d in "${CODE_DIRECTORY}"/*; do
     if [[ -d "$d" ]]; then
       if [ -f "$d/public/index.php" ] || [ -f "$d/shopware.php" ]; then
-        echo "$(basename "$d")"
+        basename "$d"
       fi
     fi
   done
@@ -151,7 +152,7 @@ function generate_wildcard_certs() {
   openssl genrsa -out "${HOME}/.config/swdc/ssl/ca.key" 2048
   openssl req -new -x509 -sha256 -days 20000 -key "${HOME}/.config/swdc/ssl/ca.key" -subj "/C=CN/ST=GD/L=SZ/O=SWDC./CN=SWDC CA" -out "${HOME}/.config/swdc/ssl/ca.crt"
   openssl req -newkey rsa:2048 -nodes -keyout "${HOME}/.config/swdc/ssl/shared.key" -subj "/C=CN/ST=GD/L=SZ/O=SWDC, Inc./CN=*.${DEFAULT_DOMAIN}" -out "${HOME}/.config/swdc/ssl/shared.csr"
-  openssl x509 -req -sha256 -extfile <(printf "subjectAltName=DNS:*.${DEFAULT_DOMAIN}") -days 20000 -in "${HOME}/.config/swdc/ssl/shared.csr" -CA "${HOME}/.config/swdc/ssl/ca.crt" -CAkey "${HOME}/.config/swdc/ssl/ca.key" -CAcreateserial -out "${HOME}/.config/swdc/ssl/shared.crt"
+  openssl x509 -req -sha256 -extfile <(echo -n "subjectAltName=DNS:*.${DEFAULT_DOMAIN}") -days 20000 -in "${HOME}/.config/swdc/ssl/shared.csr" -CA "${HOME}/.config/swdc/ssl/ca.crt" -CAkey "${HOME}/.config/swdc/ssl/ca.key" -CAcreateserial -out "${HOME}/.config/swdc/ssl/shared.crt"
 }
 
 function check_env_compability() {
