@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 project=$2
 
 echo "DROP DATABASE IF EXISTS ${project}_test" | compose exec -T mysql mysql -uroot -proot

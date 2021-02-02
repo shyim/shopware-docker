@@ -4,7 +4,7 @@ checkParameter
 clearCache
 
 export PROJECT_ROOT="/var/www/html/$SHOPWARE_PROJECT/"
-cd "${PROJECT_ROOT}" || exit
+cd "${PROJECT_ROOT}" || exit 1
 
 bin/console bundle:dump
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-cd /var/www/html/"$SHOPWARE_PROJECT" || exit
+cd /var/www/html/"$SHOPWARE_PROJECT" || exit 1
 URL=$(get_url "$SHOPWARE_PROJECT")
 
 php "${DIR}"/modules/classic/fix-config.php "$SHOPWARE_FOLDER/config.php" csrf
@@ -27,7 +27,7 @@ if [[ -f engine/Shopware/Shopware.php ]]; then
             javascript_session: 'selenium2'
             browser_name: chrome
             selenium2:
-                wd_host: "http://selenium:4444/wd/hub"
+                wd_host: \"http://selenium:4444/wd/hub\"
                 capabilities:
                     browser: chrome
                     marionette: true
@@ -79,13 +79,13 @@ else
             goutte: ~
             browser_name: chrome
             selenium2:
-                wd_host: "http://selenium:4444/wd/hub"
+                wd_host: \"http://selenium:4444/wd/hub\"
                 capabilities:
                     chrome:
                         switches:
-                            - "--disable-gpu"
-                            - "--headless"
-                            - "--no-sandbox"
+                            - \"--disable-gpu\"
+                            - \"--headless\"
+                            - \"--no-sandbox\"
 
     gherkin:
       filters:
@@ -115,4 +115,4 @@ else
                 - Shopware\Tests\Mink\ExportContext" >tests/Mink/behat.yml
 fi
 
-vendor/bin/behat -vv --config=tests/Mink/behat.yml --format=pretty --out=std --format=junit --out=build/artifacts/mink ${@:3}
+vendor/bin/behat -vv --config=tests/Mink/behat.yml --format=pretty --out=std --format=junit --out=build/artifacts/mink "${@:3}"

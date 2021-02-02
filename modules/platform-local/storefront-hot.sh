@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 SHOPWARE_PROJECT=$2
-export APP_URL=$(get_url "$SHOPWARE_PROJECT")
+APP_URL=$(get_url "$SHOPWARE_PROJECT")
+export APP_URL="${APP_URL}"
 HOST=$(get_host "$SHOPWARE_PROJECT")
 export STOREFRONT_PROXY_PORT=80
 export PROJECT_ROOT="/var/www/html/${SHOPWARE_PROJECT}"

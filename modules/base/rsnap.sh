@@ -19,7 +19,7 @@ while (( $# )); do
     shift
 done
 
-if [[ ! -z "$SNAP_SUFFIX" ]]; then
+if [[ -n "$SNAP_SUFFIX" ]]; then
   SNAP_SUFFIX=$(echo "-${SNAP_SUFFIX}")
 fi
 

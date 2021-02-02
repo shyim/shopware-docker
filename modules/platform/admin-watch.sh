@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 checkParameter
-cd "/var/www/html/${SHOPWARE_PROJECT}" || exit
+cd "/var/www/html/${SHOPWARE_PROJECT}" || exit 1
 
 export USE_SSL_DEFAULT=false
 URL=$(get_url "$SHOPWARE_PROJECT")

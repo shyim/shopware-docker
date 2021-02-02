@@ -6,7 +6,7 @@ clearCache
 PROJECT_ROOT="/var/www/html/$SHOPWARE_PROJECT/"
 URL=$(get_url "$SHOPWARE_PROJECT")
 
-cd "${PROJECT_ROOT}" || exit
+cd "${PROJECT_ROOT}" || exit 1
 
 bin/console theme:dump
 export APP_URL=$URL

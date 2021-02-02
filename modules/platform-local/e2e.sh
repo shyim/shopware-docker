@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 SHOPWARE_PROJECT=$2
 MODULE=$3
 export USE_SSL_DEFAULT=false

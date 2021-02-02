@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 for module in ./modules/*; do
   moduleBasename=$(basename "$module")
 

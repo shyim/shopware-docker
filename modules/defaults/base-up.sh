@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-export Platform=$(uname -s)
+Platform=$(uname -s)
+export Platform="${Platform}"
 
 function create_nginx() {
   while IFS= read -r NAME; do

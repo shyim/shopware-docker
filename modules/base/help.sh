@@ -15,7 +15,7 @@ for module in ./modules/*; do
     NAME=$(basename "$command")
     NAME=${NAME%.*}
 
-    if [[ $NAME == $REQUESTEDCOMMAND ]]; then
+    if [[ $NAME == "${REQUESTEDCOMMAND}" ]]; then
       FOUNDCLI=true
       usageFile=${module}/${NAME}.usage
 

@@ -1,4 +1,6 @@
-cd "/var/www/html/${SHOPWARE_PROJECT}" || exit
+#!/usr/bin/env bash
+
+cd "/var/www/html/${SHOPWARE_PROJECT}" || exit 1
 
 composer install -d dev-ops/analyze
 composer dump-autoload
