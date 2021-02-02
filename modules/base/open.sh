@@ -4,6 +4,8 @@ SHOPWARE_PROJECT=$2
 SHOPWARE_FOLDER=${CODE_DIRECTORY}/${SHOPWARE_PROJECT}
 URL=http://${SHOPWARE_PROJECT}.${DEFAULT_DOMAIN}
 
+export SHOPWARE_FOLDER="${SHOPWARE_FOLDER}"
+
 checkParameter
 
 if which xdg-open >/dev/null; then

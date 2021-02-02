@@ -11,7 +11,7 @@ fi
 FOUNDCLI=false
 
 for module in ./modules/*; do
-  for command in ${module}/*.sh; do
+  for command in "${module}"/*.sh; do
     NAME=$(basename "$command")
     NAME=${NAME%.*}
 

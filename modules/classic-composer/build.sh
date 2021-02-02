@@ -20,16 +20,17 @@ done
 mysql -h "$mysqlHost" -u root -proot -e "CREATE DATABASE IF NOT EXISTS \`$SHOPWARE_PROJECT\`"
 URL=$(get_url "$SHOPWARE_PROJECT")
 cd "/var/www/html/${SHOPWARE_PROJECT}" || exit
-
-echo "SHOPWARE_VERSION_TEXT=\"$SHOPWARE_PROJECT (local docker)\"" >>"$SHOPWARE_FOLDER/.env"
-echo "SHOPWARE_REVISION=\"$(git rev-parse HEAD)\"" >>"$SHOPWARE_FOLDER/.env"
-echo "DATABASE_URL=\"mysql://root:${MYSQL_ROOT_PASSWORD}@$mysqlHost:3306/$SHOPWARE_PROJECT\"" >>"$SHOPWARE_FOLDER/.env"
-echo 'ADMIN_EMAIL="demo@demo.com"' >>"$SHOPWARE_FOLDER/.env"
-echo 'ADMIN_NAME="Don Joe"' >>"$SHOPWARE_FOLDER/.env"
-echo 'ADMIN_USERNAME="demo"' >>"$SHOPWARE_FOLDER/.env"
-echo 'ADMIN_PASSWORD="demo"' >>"$SHOPWARE_FOLDER/.env"
-echo "SHOP_URL=\"$URL\"" >>"$SHOPWARE_FOLDER/.env"
-echo 'IMPORT_DEMODATA=y' >>"$SHOPWARE_FOLDER/.env"
+{
+    echo "SHOPWARE_VERSION_TEXT=\"$SHOPWARE_PROJECT (local docker)\""
+    echo "SHOPWARE_REVISION=\"$(git rev-parse HEAD)\""
+    echo "DATABASE_URL=\"mysql://root:${MYSQL_ROOT_PASSWORD}@$mysqlHost:3306/$SHOPWARE_PROJECT\""
+    echo 'ADMIN_EMAIL="demo@demo.com"'
+    echo 'ADMIN_NAME="Don Joe"'
+    echo 'ADMIN_USERNAME="demo"'
+    echo 'ADMIN_PASSWORD="demo"'
+    echo "SHOP_URL=\"$URL\""
+    echo 'IMPORT_DEMODATA=y'
+} >>"$SHOPWARE_FOLDER/.env"
 
 bash -c "composer install"
 

@@ -7,7 +7,7 @@ for module in ./modules/*; do
     echo "### Module: ${moduleBasename}"
     echo ""
 
-    for command in ${module}/*.sh; do
+    for command in "${module}/"*.sh; do
       name=$(basename "$command")
       name=${name%.*}
       usage=""
@@ -17,7 +17,7 @@ for module in ./modules/*; do
       fi
 
       printf '%-35s' "* \`swdc ${name}\`"
-      printf "$usage\n"
+      echo "${usage}"
     done
     echo ""
   fi

@@ -1,34 +1,40 @@
 #!/usr/bin/env bash
 
+# shellcheck source=/dev/null
 source "${HOME}/.config/swdc/env"
+
+# shellcheck source=../defaults/base-up.sh
 source "${DIR}/modules/defaults/base-up.sh"
 
 CODE_FOLDER_CONTENT="$(ls -A "${CODE_DIRECTORY}")"
+export CODE_FOLDER_CONTENT="${CODE_FOLDER_CONTENT}"
 
 PHP_VERSION=$(echo "${PHP_VERSION}" | sed 's/\.//g')
 export XDEBUG_ENABLE=$2
 
-echo "version: '3.7'" >"${DOCKER_COMPOSE_FILE}"
-echo "services:" >>"${DOCKER_COMPOSE_FILE}"
+{
+  echo "version: '3.7'"
+  echo "services:"
 
-echo "  smtp:" >>"${DOCKER_COMPOSE_FILE}"
-echo "    image: djfarrelly/maildev" >>"${DOCKER_COMPOSE_FILE}"
-echo "    environment:" >>"${DOCKER_COMPOSE_FILE}"
-echo "      VIRTUAL_HOST: mail.localhost" >>"${DOCKER_COMPOSE_FILE}"
+  echo "  smtp:"
+  echo "    image: djfarrelly/maildev"
+  echo "    environment:"
+  echo "      VIRTUAL_HOST: mail.localhost"
 
-echo "  dump-server:" >>"${DOCKER_COMPOSE_FILE}"
-echo "    image: ghcr.io/shyim/php-dump-server:latest" >>"${DOCKER_COMPOSE_FILE}"
-echo "    environment:" >>"${DOCKER_COMPOSE_FILE}"
-echo "      VIRTUAL_HOST: debug.localhost" >>"${DOCKER_COMPOSE_FILE}"
+  echo "  dump-server:"
+  echo "    image: ghcr.io/shyim/php-dump-server:latest"
+  echo "    environment:"
+  echo "      VIRTUAL_HOST: debug.localhost"
 
-echo "  proxy:" >>"${DOCKER_COMPOSE_FILE}"
-echo "    image: ghcr.io/shyim/shopware-docker/proxy" >>"${DOCKER_COMPOSE_FILE}"
-echo "    volumes:" >>"${DOCKER_COMPOSE_FILE}"
-echo "      - /var/run/docker.sock:/tmp/docker.sock:ro" >>"${DOCKER_COMPOSE_FILE}"
-echo "      - ${HOME}/.config/swdc/ssl:/etc/nginx/certs" >>"${DOCKER_COMPOSE_FILE}"
-echo "    ports:" >>"${DOCKER_COMPOSE_FILE}"
-echo "      - ${HTTP_PORT}:80" >>"${DOCKER_COMPOSE_FILE}"
-echo "      - ${HTTPS_PORT}:443" >>"${DOCKER_COMPOSE_FILE}"
+  echo "  proxy:"
+  echo "    image: ghcr.io/shyim/shopware-docker/proxy"
+  echo "    volumes:"
+  echo "      - /var/run/docker.sock:/tmp/docker.sock:ro"
+  echo "      - ${HOME}/.config/swdc/ssl:/etc/nginx/certs"
+  echo "    ports:"
+  echo "      - ${HTTP_PORT}:80"
+  echo "      - ${HTTPS_PORT}:443"
+} > "${DOCKER_COMPOSE_FILE}"
 
 create_nginx
 create_mysql
@@ -66,9 +72,11 @@ if [[ ${ENABLE_BLACKFIRE} == "true" ]]; then
   create_blackfire
 fi
 
-echo "volumes:" >>"${DOCKER_COMPOSE_FILE}"
-echo "  nvm_cache:" >>"${DOCKER_COMPOSE_FILE}"
-echo "    driver: local" >>"${DOCKER_COMPOSE_FILE}"
+{
+  echo "volumes:"
+  echo "  nvm_cache:"
+  echo "    driver: local"
+} >> "${DOCKER_COMPOSE_FILE}"
 
 if [[ ${CACHE_VOLUMES} == "true" ]]; then
   create_caching
