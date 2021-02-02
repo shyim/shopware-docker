@@ -140,12 +140,12 @@ function get_serve_folders() {
 }
 
 function compose() {
-  additionalArgs=""
+  additionalArgs=()
   if [[ -e "${HOME}/.config/swdc/services.yml" ]]; then
-    additionalArgs=" -f ${HOME}/.config/swdc/services.yml"
+    additionalArgs=(-f "${HOME}/.config/swdc/services.yml")
   fi
 
-  docker-compose -f "${DOCKER_COMPOSE_FILE}" "$additionalArgs" "$@"
+  docker-compose -f "${DOCKER_COMPOSE_FILE}" "${additionalArgs[@]}" "$@"
 }
 
 function generate_wildcard_certs() {
