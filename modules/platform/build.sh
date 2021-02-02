@@ -72,13 +72,12 @@ if [[ -d $PLATFORM_PATH/Framework/App ]]; then
   bin/console database:migrate --all
   bin/console database:migrate-destructive --all
 else
-  bin/console database:migrate --all Shopware\\
 
-  if [[ $? == 0 ]]; then
-    bin/console database:migrate-destructive --all Shopware\\
-  else
+  if ! bin/console database:migrate --all Shopware\\; then
     bin/console database:migrate --all
     bin/console database:migrate-destructive --all
+  else
+    bin/console database:migrate-destructive --all Shopware\\
   fi
 fi
 

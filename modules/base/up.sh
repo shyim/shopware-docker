@@ -3,13 +3,13 @@
 # shellcheck source=/dev/null
 source "${HOME}/.config/swdc/env"
 
-# shellcheck source=../defaults/base-up.sh
+# shellcheck source=modules/defaults/base-up.sh
 source "${DIR}/modules/defaults/base-up.sh"
 
 CODE_FOLDER_CONTENT="$(ls -A "${CODE_DIRECTORY}")"
 export CODE_FOLDER_CONTENT="${CODE_FOLDER_CONTENT}"
 
-PHP_VERSION=$(echo "${PHP_VERSION}" | sed 's/\.//g')
+PHP_VERSION="${PHP_VERSION//\./}"
 export XDEBUG_ENABLE=$2
 
 {
@@ -34,7 +34,7 @@ export XDEBUG_ENABLE=$2
   echo "    ports:"
   echo "      - ${HTTP_PORT}:80"
   echo "      - ${HTTPS_PORT}:443"
-} > "${DOCKER_COMPOSE_FILE}"
+} >"${DOCKER_COMPOSE_FILE}"
 
 create_nginx
 create_mysql
@@ -76,7 +76,7 @@ fi
   echo "volumes:"
   echo "  nvm_cache:"
   echo "    driver: local"
-} >> "${DOCKER_COMPOSE_FILE}"
+} >>"${DOCKER_COMPOSE_FILE}"
 
 if [[ ${CACHE_VOLUMES} == "true" ]]; then
   create_caching

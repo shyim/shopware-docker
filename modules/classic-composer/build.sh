@@ -21,15 +21,15 @@ mysql -h "$mysqlHost" -u root -proot -e "CREATE DATABASE IF NOT EXISTS \`$SHOPWA
 URL=$(get_url "$SHOPWARE_PROJECT")
 cd "/var/www/html/${SHOPWARE_PROJECT}" || exit
 {
-    echo "SHOPWARE_VERSION_TEXT=\"$SHOPWARE_PROJECT (local docker)\""
-    echo "SHOPWARE_REVISION=\"$(git rev-parse HEAD)\""
-    echo "DATABASE_URL=\"mysql://root:${MYSQL_ROOT_PASSWORD}@$mysqlHost:3306/$SHOPWARE_PROJECT\""
-    echo 'ADMIN_EMAIL="demo@demo.com"'
-    echo 'ADMIN_NAME="Don Joe"'
-    echo 'ADMIN_USERNAME="demo"'
-    echo 'ADMIN_PASSWORD="demo"'
-    echo "SHOP_URL=\"$URL\""
-    echo 'IMPORT_DEMODATA=y'
+  echo "SHOPWARE_VERSION_TEXT=\"$SHOPWARE_PROJECT (local docker)\""
+  echo "SHOPWARE_REVISION=\"$(git rev-parse HEAD)\""
+  echo "DATABASE_URL=\"mysql://root:${MYSQL_ROOT_PASSWORD}@$mysqlHost:3306/$SHOPWARE_PROJECT\""
+  echo 'ADMIN_EMAIL="demo@demo.com"'
+  echo 'ADMIN_NAME="Don Joe"'
+  echo 'ADMIN_USERNAME="demo"'
+  echo 'ADMIN_PASSWORD="demo"'
+  echo "SHOP_URL=\"$URL\""
+  echo 'IMPORT_DEMODATA=y'
 } >>"$SHOPWARE_FOLDER/.env"
 
 bash -c "composer install"

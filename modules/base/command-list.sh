@@ -4,7 +4,7 @@ for module in ./modules/*; do
   moduleBasename=$(basename "$module")
 
   if [[ "$(ls -A "${module}")" ]]; then
-    echo "${green}Available commands in module: ${moduleBasename}${reset}"
+    echo "${green:-}Available commands in module: ${moduleBasename}${reset:-}"
 
     for command in "${module}"/*.sh; do
       name=$(basename "$command")
@@ -15,8 +15,8 @@ for module in ./modules/*; do
         usage=$(trim_whitespace "$(cat "${module}/${name}.help")")
       fi
 
-      printf '%-32s' "${lightGreen}    ${name}"
-      echo " ${usage}${reset}"
+      printf '%-32s' "${lightGreen:-}    ${name}"
+      echo " ${usage}${reset:-}"
     done
     echo ""
   fi

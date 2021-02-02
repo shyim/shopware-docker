@@ -24,6 +24,6 @@
   echo ""
 
   docker-compose logs mysql
-} > debug.txt
+} >debug.txt
 
 echo "Generated a debug.txt file. Please post it on Github"
