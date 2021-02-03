@@ -137,10 +137,13 @@ function create_cli () {
 
 function create_es () {
     echo "  elastic:" >> ${DOCKER_COMPOSE_FILE}
-    echo "    image: blacktop/elasticsearch:${ELASTICSEARCH_VERSION}" >> ${DOCKER_COMPOSE_FILE}
+    echo "    image: ${ELASTICSEARCH_VERSION}" >> ${DOCKER_COMPOSE_FILE}
     echo "    environment:" >> ${DOCKER_COMPOSE_FILE}
     echo "      VIRTUAL_HOST: es.localhost" >> ${DOCKER_COMPOSE_FILE}
     echo "      VIRTUAL_PORT: 9200" >> ${DOCKER_COMPOSE_FILE}
+    echo "      discovery.type: single-node" >> ${DOCKER_COMPOSE_FILE}
+    echo "      opendistro_security.ssl.http.enabled: 'false'" >> ${DOCKER_COMPOSE_FILE}
+    echo "      opendistro_security.disabled: 'true'" >> ${DOCKER_COMPOSE_FILE}
 
     echo "  cerebro:" >> ${DOCKER_COMPOSE_FILE}
     echo "    image: lmenezes/cerebro" >> ${DOCKER_COMPOSE_FILE}
