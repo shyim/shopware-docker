@@ -3,9 +3,9 @@
 CONTAINER=$2
 
 if [[ -z $CONTAINER ]]; then
-    CONTAINER="mysql"
+  CONTAINER="mysql"
 else
-    shift
+  shift
 fi
 
-compose exec -e COLUMNS="`tput cols`" -e LINES="`tput lines`" -e SHELL=bash -u 0 ${CONTAINER} mysql -uroot -p${MYSQL_ROOT_PASSWORD} "${@:2}"
+compose exec -e COLUMNS="$(tput cols)" -e LINES="$(tput lines)" -e SHELL=bash -u 0 ${CONTAINER} mysql -uroot -p"${MYSQL_ROOT_PASSWORD}" "${@:2}"

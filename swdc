@@ -1,47 +1,54 @@
 #!/usr/bin/env bash
 
 export COMPOSE_PROJECT_NAME="shopware-docker"
-export DOCKER_COMPOSE_FILE="/tmp/swdc-docker-compose.yml";
+export DOCKER_COMPOSE_FILE="/tmp/swdc-docker-compose.yml"
 
 FILE="$0"
 
 if [[ -L "$0" ]]; then
-  FILE="$(readlink ${0})"
+  FILE="$(readlink "${0}")"
 fi
 
-DIR="$(dirname ${FILE})"
+DIR="$(dirname "${FILE}")"
+REALDIR="$(realpath "${DIR}")"
+CONFIG_DIR=${XDG_CONFIG_HOME:-${HOME}/.config}
 export DIR="${DIR}"
-export REALDIR=$(realpath ${DIR})
+export REALDIR="${REALDIR}"
+
+# shellcheck source=functions.sh
 source "${DIR}/functions.sh"
 
-if [[ ! -d "${HOME}/.config/swdc" ]]; then
-  mkdir -p "${HOME}/.config/swdc"
+if [[ ! -d "${CONFIG_DIR}/swdc" ]]; then
+  mkdir -p "${CONFIG_DIR}/swdc"
 fi
 
 if [[ -f "${HOME}/.swdc_env" ]]; then
-  mv "${HOME}/.swdc_env" "${HOME}/.config/swdc/env"
+  mv "${HOME}/.swdc_env" "${CONFIG_DIR}/swdc/env"
 fi
 
-if [[ ! -f "${HOME}/.config/swdc/env"  ]]; then
-  cp "${DIR}/.env.dist" "${HOME}/.config/swdc/env"
+if [[ ! -f "${CONFIG_DIR}/swdc/env" ]]; then
+  cp "${DIR}/.env.dist" "${CONFIG_DIR}/swdc/env"
 fi
 
+# shellcheck source=.env.dist
 source "${DIR}/.env.dist"
-source "${HOME}/.config/swdc/env"
+# shellcheck source=.env.dist
+source "${CONFIG_DIR}/swdc/env"
+# shellcheck source=docker.env
 source "${DIR}/docker.env"
 
-if [[ ! -d "${HOME}/.config/swdc/ssl" ]]; then
-  mkdir -p "${HOME}/.config/swdc/ssl"
+if [[ ! -d "${CONFIG_DIR}/swdc/ssl" ]]; then
+  mkdir -p "${CONFIG_DIR}/swdc/ssl"
   generate_wildcard_certs
 fi
 
 check_env_compability
 
 SHOPWARE_PROJECT="$2"
-SHOPWARE_FOLDER="${CODE_DIRECTORY}/$SHOPWARE_PROJECT"
+export SHOPWARE_FOLDER="${CODE_DIRECTORY}/${SHOPWARE_PROJECT}"
 
 # Need to be in docker folder for docker-compose
-cd "${DIR}"
+cd "${DIR}" || exit 1
 
 modules=(base)
 
@@ -49,14 +56,15 @@ if [[ -f "${CODE_DIRECTORY}/${2}/src/Kernel.php" ]]; then
   modules=(base platform-local)
 fi
 
-if [[ "${1}" == "" ]];
-then
+if [[ "${1}" == "" ]]; then
   source modules/base/command-list.sh
-  exit "1"
+  exit 1
 fi
 
-for module in ${modules[@]}; do
+for module in "${modules[@]}"; do
+  # shellcheck source=/dev/null
   if [[ -f "./modules/${module}/${1}.sh" ]]; then
+    # shellcheck source=/dev/null
     source "./modules/${module}/${1}.sh"
     exit 0
   fi

@@ -14,12 +14,12 @@ jobs:
   generate-jobs:
     name: Generate Jobs
     runs-on: ubuntu-20.04
-    if: "!contains(github.event.head_commit.message, '[ci skip]')"
+    if: "!contains(github.event.head_commit.message, '[build skip]')"
     outputs:
       strategy: ${{ steps.generate-jobs.outputs.strategy }}
     steps:
     - uses: actions/checkout@v2
-    
+
     - name: Setup Node.js environment
       uses: actions/setup-node@v1.4.4
       with:
@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-    
+
       - name: Setup Node.js environment
         uses: actions/setup-node@v1.4.4
         with:

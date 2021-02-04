@@ -7,20 +7,20 @@ mysqlHost="mysql"
 
 shift 2
 
-while (( $# )); do
-    case $1 in
-        --mysql-host)
-            shift
-            mysqlHost=$1
-        ;;
-    esac
+while (($#)); do
+  case $1 in
+  --mysql-host)
     shift
+    mysqlHost=$1
+    ;;
+  esac
+  shift
 done
 
-mysql -h $mysqlHost -u root -p$MYSQL_ROOT_PASSWORD -e "DROP DATABASE IF EXISTS \`$SHOPWARE_PROJECT\`"
-mysql -h $mysqlHost -u root -p$MYSQL_ROOT_PASSWORD -e "CREATE DATABASE \`$SHOPWARE_PROJECT\`"
-cd "/var/www/html/${SHOPWARE_PROJECT}"
-URL=$(get_url $SHOPWARE_PROJECT)
+mysql -h "$mysqlHost" -u root -p"$MYSQL_ROOT_PASSWORD" -e "DROP DATABASE IF EXISTS \`$SHOPWARE_PROJECT\`"
+mysql -h "$mysqlHost" -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE DATABASE \`$SHOPWARE_PROJECT\`"
+cd "/var/www/html/${SHOPWARE_PROJECT}" || exit 1
+URL=$(get_url "$SHOPWARE_PROJECT")
 SECRET=$(openssl rand -hex 32)
 INSTANCE_ID=$(openssl rand -hex 32)
 
@@ -37,7 +37,7 @@ SHOPWARE_ES_INDEXING_ENABLED=0
 SHOPWARE_ES_INDEX_PREFIX=test_
 COMPOSER_HOME=/tmp/composer-tmp-${SECRET}
 SHOPWARE_HTTP_CACHE_ENABLED=0
-SHOPWARE_HTTP_DEFAULT_TTL=7200" > .env
+SHOPWARE_HTTP_DEFAULT_TTL=7200" >.env
 
 echo "const:
   APP_ENV: dev
@@ -47,8 +47,7 @@ echo "const:
   DB_HOST: ${mysqlHost}
   DB_PORT: 3306
   DB_NAME: \"${SHOPWARE_PROJECT}\"
-  APP_MAILER_URL: \"smtp://smtp:25\"" > .psh.yaml.override
-
+  APP_MAILER_URL: \"smtp://smtp:25\"" >.psh.yaml.override
 
 export PROJECT_ROOT=$SHOPWARE_FOLDER
 
@@ -59,23 +58,22 @@ echo ''
 SNAP_DIR="/var/www/html/snapshots"
 
 if [[ ! -d "$SNAP_DIR" ]]; then
-	mkdir "$SNAP_DIR"
+  mkdir "$SNAP_DIR"
 fi
 
 if [[ ! -f "${SNAP_DIR}/_sw6_demo_images.zip" ]]; then
-    wget -O ${SNAP_DIR}/_sw6_demo_images.zip https://cdn.shyim.de/sw6_demo_images.zip
+  wget -O ${SNAP_DIR}/_sw6_demo_images.zip https://cdn.shyim.de/sw6_demo_images.zip
 fi
 
 if [[ ! -f "${SNAP_DIR}/_sw6_demo_images.sql" ]]; then
-    wget -O ${SNAP_DIR}/_sw6_demo_images.sql https://cdn.shyim.de/sw6_demo_images.sql
+  wget -O ${SNAP_DIR}/_sw6_demo_images.sql https://cdn.shyim.de/sw6_demo_images.sql
 fi
 
+mysql -h "$mysqlHost" -u root -proot "$SHOPWARE_PROJECT" <${SNAP_DIR}/_sw6_demo_images.sql
+unzip -o ${SNAP_DIR}/_sw6_demo_images.zip -d "${SHOPWARE_FOLDER}"/
 
-mysql -h $mysqlHost -u root -proot "$SHOPWARE_PROJECT" < ${SNAP_DIR}/_sw6_demo_images.sql
-unzip -o ${SNAP_DIR}/_sw6_demo_images.zip -d ${SHOPWARE_FOLDER}/
-
-mysql -h $mysqlHost -uroot -proot "$SHOPWARE_PROJECT" -e "UPDATE sales_channel_domain SET url = \"${URL}/en\" WHERE id = 0xB420C81E6B324DD89C316BDDC25E8BF2"
-mysql -h $mysqlHost -uroot -proot "$SHOPWARE_PROJECT" -e "UPDATE sales_channel_domain SET url = \"${URL}\" WHERE id = 0xC823787968154569B8F8F160F35BA1F6"
+mysql -h "$mysqlHost" -uroot -proot "$SHOPWARE_PROJECT" -e "UPDATE sales_channel_domain SET url = \"${URL}/en\" WHERE id = 0xB420C81E6B324DD89C316BDDC25E8BF2"
+mysql -h "$mysqlHost" -uroot -proot "$SHOPWARE_PROJECT" -e "UPDATE sales_channel_domain SET url = \"${URL}\" WHERE id = 0xC823787968154569B8F8F160F35BA1F6"
 
 bin/console database:migrate --all
 bin/console database:migrate-destructive --all

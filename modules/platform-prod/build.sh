@@ -7,20 +7,20 @@ mysqlHost="mysql"
 
 shift 2
 
-while (( $# )); do
-    case $1 in
-        --mysql-host)
-            shift
-            mysqlHost=$1
-        ;;
-    esac
+while (($#)); do
+  case $1 in
+  --mysql-host)
     shift
+    mysqlHost=$1
+    ;;
+  esac
+  shift
 done
 
-mysql -h $mysqlHost -u root -proot -e "DROP DATABASE IF EXISTS \`$SHOPWARE_PROJECT\`"
-mysql -h $mysqlHost -u root -proot -e "CREATE DATABASE \`$SHOPWARE_PROJECT\`"
-cd "/var/www/html/${SHOPWARE_PROJECT}"
-URL=$(get_url $SHOPWARE_PROJECT)
+mysql -h "$mysqlHost" -u root -proot -e "DROP DATABASE IF EXISTS \`$SHOPWARE_PROJECT\`"
+mysql -h "$mysqlHost" -u root -proot -e "CREATE DATABASE \`$SHOPWARE_PROJECT\`"
+cd "/var/www/html/${SHOPWARE_PROJECT}" || exit
+URL=$(get_url "$SHOPWARE_PROJECT")
 SECRET=$(openssl rand -hex 32)
 INSTANCE_ID=$(openssl rand -hex 32)
 
@@ -37,7 +37,7 @@ SHOPWARE_ES_INDEXING_ENABLED=0
 SHOPWARE_ES_INDEX_PREFIX=test_
 COMPOSER_HOME=/tmp/composer-tmp-${SECRET}
 SHOPWARE_HTTP_CACHE_ENABLED=0
-SHOPWARE_HTTP_DEFAULT_TTL=7200" > .env
+SHOPWARE_HTTP_DEFAULT_TTL=7200" >.env
 
 export PROJECT_ROOT=$SHOPWARE_FOLDER
 

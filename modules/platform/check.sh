@@ -1,14 +1,16 @@
-cd "/var/www/html/${SHOPWARE_PROJECT}"
+#!/usr/bin/env bash
+
+cd "/var/www/html/${SHOPWARE_PROJECT}" || exit 1
 
 composer install -d dev-ops/analyze
 composer dump-autoload
 
 php dev-ops/analyze/generate-composer.php
 
-if [[ -f  platform/easy-coding-standard.php ]]; then
-    php dev-ops/analyze/vendor/bin/ecs check --fix platform/src --config platform/easy-coding-standard.php
-else 
-    php dev-ops/analyze/vendor/bin/ecs check --fix platform/src --config platform/easy-coding-standard.yml
+if [[ -f platform/easy-coding-standard.php ]]; then
+  php dev-ops/analyze/vendor/bin/ecs check --fix platform/src --config platform/easy-coding-standard.php
+else
+  php dev-ops/analyze/vendor/bin/ecs check --fix platform/src --config platform/easy-coding-standard.yml
 fi
 
 php dev-ops/analyze/phpstan-config-generator.php

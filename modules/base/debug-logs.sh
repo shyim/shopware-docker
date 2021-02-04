@@ -1,27 +1,29 @@
 #!/usr/bin/env bash
 
-echo "=== docker-compose.yml" > debug.txt
-echo "" >> debug.txt
+{
+  echo "=== docker-compose.yml"
+  echo ""
 
-cat $DOCKER_COMPOSE_FILE >> debug.txt
+  cat "$DOCKER_COMPOSE_FILE"
 
-echo "" >> debug.txt
-echo "" >> debug.txt
+  echo ""
+  echo ""
 
-cho "" >> debug.txt
-echo "" >> debug.txt
+  cho ""
+  echo ""
 
-echo "=== .env" >> debug.txt
-echo "" >> debug.txt
+  echo "=== .env"
+  echo ""
 
-cat "${HOME}/.config/swdc/env" >> debug.txt
+  cat "${HOME}/.config/swdc/env"
 
-echo "" >> debug.txt
-echo "" >> debug.txt
+  echo ""
+  echo ""
 
-echo "=== mysql logs" >> debug.txt
-echo "" >> debug.txt
+  echo "=== mysql logs"
+  echo ""
 
-docker-compose logs mysql >> debug.txt
+  docker-compose logs mysql
+} >debug.txt
 
 echo "Generated a debug.txt file. Please post it on Github"

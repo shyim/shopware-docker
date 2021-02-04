@@ -1,5 +1,7 @@
-cd "/var/www/html/${SHOPWARE_PROJECT}"
+#!/usr/bin/env bash
 
-while true; do 
-    php bin/console messenger:consume --memory-limit=1G -vv
+cd "/var/www/html/${SHOPWARE_PROJECT}" || exit 1
+
+while true; do
+  php bin/console messenger:consume --memory-limit=1G -vv
 done
