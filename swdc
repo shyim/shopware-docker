@@ -26,7 +26,7 @@ if [[ -f "${HOME}/.swdc_env" ]]; then
   mv "${HOME}/.swdc_env" "${CONFIG_DIR}/swdc/env"
 fi
 
-if [[ ! -f "${HOME}/swdc/env" ]]; then
+if [[ ! -f "${CONFIG_DIR}/swdc/env" ]]; then
   cp "${DIR}/.env.dist" "${CONFIG_DIR}/swdc/env"
 fi
 
