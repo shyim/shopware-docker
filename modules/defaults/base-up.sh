@@ -169,21 +169,28 @@ function create_cli() {
 function create_es() {
   {
     echo "  elastic:"
-    echo "    image: ${ELASTICSEARCH_VERSION}"
+    echo "    image: ${ELASTICSEARCH_IMAGE}"
     echo "    environment:"
     echo "      VIRTUAL_HOST: es.localhost"
     echo "      VIRTUAL_PORT: 9200"
     echo "      discovery.type: single-node"
-    echo "      opendistro_security.ssl.http.enabled: 'false'"
-    echo "      opendistro_security.disabled: 'true'"
 
-    echo "  cerebro:"
-    echo "    image: lmenezes/cerebro"
-    echo "    expose:"
-    echo "     - '9000'"
+    if [[ "${ELASTICSEARCH_IMAGE}" == *"amazon" ]]; then
+      echo "      opendistro_security.ssl.http.enabled: 'false'"
+    fi
+
+    echo "  kibana:"
+    echo "    image: ${KIBANA_IMAGE}"
+    echo "    links:"
+    echo "      - elastic:elasticsearch"
     echo "    environment:"
-    echo "      VIRTUAL_HOST: cerebro.localhost"
-    echo "      VIRTUAL_PORT: 9000"
+    echo "      VIRTUAL_HOST: kibana.localhost"
+    echo "      VIRTUAL_PORT: 5601"
+
+    if [[ "${ELASTICSEARCH_IMAGE}" == *"amazon" ]]; then
+      echo "      ELASTICSEARCH_URL: http://elastic:9200"
+      echo "      ELASTICSEARCH_HOSTS: http://elastic:9200"
+    fi
   } >>"${DOCKER_COMPOSE_FILE}"
 }
 

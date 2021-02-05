@@ -160,6 +160,11 @@ function check_env_compability() {
     echo "${red}Please change your \$MYSQL_VERSION variable to ghcr.io/shyim/shopware-docker/mysql:${MYSQL_VERSION}${reset}"
     exit 1
   fi
+
+  if [ -n "${ELASTICSEARCH_VERSION}" ]; then
+    echo "${red}ELASTICSEARCH_VERSION is removed. Please replace it with ELASTICSEARCH_IMAGE=blacktop/elasticsearch:${ELASTICSEARCH_VERSION} in your $HOME/.config/swdc/env file${reset}"
+    exit 1
+  fi
 }
 
 function platform_component() {
