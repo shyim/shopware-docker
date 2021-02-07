@@ -9,7 +9,7 @@
   echo ""
   echo ""
 
-  cho ""
+  echo ""
   echo ""
 
   echo "=== .env"
