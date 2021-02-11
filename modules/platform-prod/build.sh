@@ -41,7 +41,7 @@ SHOPWARE_HTTP_DEFAULT_TTL=7200" >.env
 
 export PROJECT_ROOT=$SHOPWARE_FOLDER
 
-composer install
+composer_dynamic install
 
 bin/console system:install --create-database --basic-setup --force
 bin/console system:generate-jwt-secret

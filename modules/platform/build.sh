@@ -59,7 +59,7 @@ echo "const:
 
 export PROJECT_ROOT=$SHOPWARE_FOLDER
 
-composer install -o
+composer_dynamic install -o
 
 PLATFORM_PATH=$(platform_component Core)
 
