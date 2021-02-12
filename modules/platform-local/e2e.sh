@@ -15,7 +15,7 @@ E2E_DIR="vendor/shopware/platform/src/${MODULE}/Resources/app/${MODULE,}/test/e2
 E2E_PATH="/var/www/html/${SHOPWARE_PROJECT}/${E2E_DIR}"
 
 if [[ ! -d "${E2E_DIR}/node_modules" ]]; then
-  compose exec cli bash npm install --prefix ${E2E_PATH}
+  compose exec cli bash npm install --prefix "${E2E_PATH}"
 fi
 
 xhost +si:localuser:root
