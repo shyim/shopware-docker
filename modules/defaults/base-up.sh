@@ -264,7 +264,7 @@ function create_selenium() {
 function create_cypress() {
   {
     echo "  cypress:"
-    echo "    image: cypress/included:3.8.1"
+    echo "    image: cypress/included:5.6.0"
     echo "    shm_size: 2g"
     echo "    environment:"
     echo "      - DISPLAY"

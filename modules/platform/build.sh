@@ -42,10 +42,14 @@ DATABASE_URL=mysql://root:${MYSQL_ROOT_PASSWORD}@${mysqlHost}:3306/${SHOPWARE_PR
 SHOPWARE_ES_HOSTS=elastic
 SHOPWARE_ES_ENABLED=0
 SHOPWARE_ES_INDEXING_ENABLED=0
-SHOPWARE_ES_INDEX_PREFIX=test_
+SHOPWARE_ES_INDEX_PREFIX=${SHOPWARE_PROJECT}
 COMPOSER_HOME=/tmp/composer-tmp-${SECRET}
 SHOPWARE_HTTP_CACHE_ENABLED=0
-SHOPWARE_HTTP_DEFAULT_TTL=7200" >.env
+SHOPWARE_HTTP_DEFAULT_TTL=7200" > .env
+
+if [[ -e build/feature.env ]]; then
+  cat build/feature.env >> .env
+fi
 
 echo "const:
   APP_ENV: dev
@@ -82,6 +86,7 @@ else
 fi
 
 bin/console bundle:dump
+bin/console feature:dump || true
 bin/console scheduled-task:register
 bin/console user:create admin --password=shopware
 bin/console sales-channel:create:storefront --url="$URL"
