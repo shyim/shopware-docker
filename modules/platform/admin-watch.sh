@@ -8,6 +8,7 @@ URL=$(get_url "$SHOPWARE_PROJECT")
 export PROJECT_ROOT=$SHOPWARE_FOLDER
 
 bin/console bundle:dump
+bin/console feature:dump || true
 
 export PORT=8181
 export HOST=0.0.0.0
