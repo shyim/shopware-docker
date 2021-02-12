@@ -10,7 +10,7 @@ HOST=$(echo "$URL" | sed s/'http[s]\?:\/\/'//)
 WATCHER_URL="admin-${SHOPWARE_PROJECT}.${DEFAULT_DOMAIN}"
 
 if [[ -e "${LOCAL_WEBPACK_CONFIG}" ]]; then
-    disabledHostCheck=$(cat ${LOCAL_WEBPACK_CONFIG} | grep disableHostCheck)
+    disabledHostCheck=$(cat "${LOCAL_WEBPACK_CONFIG}" | grep disableHostCheck)
     
     if [[ -n "$disabledHostCheck" ]]; then
         docker exec -t -w "/var/www/html/${SHOPWARE_PROJECT}/" shopware-docker_cli_1 ./bin/console bundle:dump
