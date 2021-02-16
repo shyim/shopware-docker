@@ -171,7 +171,7 @@ function create_es() {
     echo "  elastic:"
     echo "    image: ${ELASTICSEARCH_IMAGE}"
     echo "    environment:"
-    echo "      VIRTUAL_HOST: es.localhost"
+    echo "      VIRTUAL_HOST: es.${DEFAULT_SERVICES_DOMAIN}"
     echo "      VIRTUAL_PORT: 9200"
     echo "      discovery.type: single-node"
 
@@ -184,7 +184,7 @@ function create_es() {
     echo "    links:"
     echo "      - elastic:elasticsearch"
     echo "    environment:"
-    echo "      VIRTUAL_HOST: kibana.localhost"
+    echo "      VIRTUAL_HOST: kibana.${DEFAULT_SERVICES_DOMAIN}"
     echo "      VIRTUAL_PORT: 5601"
 
     if [[ "${ELASTICSEARCH_IMAGE}" == *"amazon" ]]; then
@@ -210,7 +210,7 @@ function create_minio() {
     echo "    ports:"
     echo "      - 9000:9000"
     echo "    environment:"
-    echo "      VIRTUAL_HOST: s3.localhost"
+    echo "      VIRTUAL_HOST: s3.${DEFAULT_SERVICES_DOMAIN}"
     echo "      VIRTUAL_PORT: 9000"
   } >>"${DOCKER_COMPOSE_FILE}"
 }
@@ -224,7 +224,7 @@ function create_database_tool() {
       echo "      - ${REALDIR}/docker.env"
       echo "      - ${REALDIR}/phpmyadmin.env"
       echo "    environment:"
-      echo "      VIRTUAL_HOST: db.localhost"
+      echo "      VIRTUAL_HOST: db.${DEFAULT_SERVICES_DOMAIN}"
     } >>"${DOCKER_COMPOSE_FILE}"
   else
     {
@@ -234,7 +234,7 @@ function create_database_tool() {
       echo "      - ${REALDIR}/docker.env"
       echo "      - ${REALDIR}/adminer.env"
       echo "    environment:"
-      echo "      VIRTUAL_HOST: db.localhost"
+      echo "      VIRTUAL_HOST: db.${DEFAULT_SERVICES_DOMAIN}"
       echo "      VIRTUAL_PORT: 8080"
     } >>"${DOCKER_COMPOSE_FILE}"
   fi

@@ -19,12 +19,12 @@ export XDEBUG_ENABLE=$2
   echo "  smtp:"
   echo "    image: djfarrelly/maildev"
   echo "    environment:"
-  echo "      VIRTUAL_HOST: mail.localhost"
+  echo "      VIRTUAL_HOST: mail.${DEFAULT_SERVICES_DOMAIN}"
 
   echo "  dump-server:"
   echo "    image: ghcr.io/shyim/php-dump-server:latest"
   echo "    environment:"
-  echo "      VIRTUAL_HOST: debug.localhost"
+  echo "      VIRTUAL_HOST: debug.${DEFAULT_SERVICES_DOMAIN}"
 
   echo "  proxy:"
   echo "    image: ghcr.io/shyim/shopware-docker/proxy"
