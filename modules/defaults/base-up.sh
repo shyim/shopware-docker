@@ -75,7 +75,7 @@ function create_mysql() {
   else
     {
       echo "    volumes:"
-      echo "      - ${REALDIR}/mysql-data:/var/lib/mysql:delegated"
+      echo "      - ${MYSQL_DATA_DIR:-$REALDIR}/mysql-data:/var/lib/mysql:delegated"
     } >>"${DOCKER_COMPOSE_FILE}"
   fi
 
