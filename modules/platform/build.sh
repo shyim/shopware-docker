@@ -65,14 +65,16 @@ export PROJECT_ROOT=$SHOPWARE_FOLDER
 
 composer_dynamic install -o
 
-PLATFORM_PATH=$(platform_component Core)
+CORE_PATH=$(platform_component Core)
+ADMINISTRATION_PATH=$(platform_component Administration)
+STOREFRONT_PATH=$(platform_component Storefront)
 
 php dev-ops/generate_ssl.php
 echo ''
 
-mysql -h "$mysqlHost" -u root -proot "$SHOPWARE_PROJECT" <"$PLATFORM_PATH"/schema.sql
+mysql -h "$mysqlHost" -u root -proot "$SHOPWARE_PROJECT" <"$CORE_PATH"/schema.sql
 
-if [[ -d $PLATFORM_PATH/Framework/App ]]; then
+if [[ -d $CORE_PATH/Framework/App ]]; then
   bin/console database:migrate --all
   bin/console database:migrate-destructive --all
 else
@@ -97,13 +99,18 @@ if [[ $generateDemoData == 1 ]]; then
 fi
 
 if [[ $buildJS == 1 ]]; then
-  npm clean-install --prefix vendor/shopware/platform/src/Administration/Resources
-  npm run --prefix vendor/shopware/platform/src/Administration/Resources lerna -- bootstrap
-  npm run --prefix vendor/shopware/platform/src/Administration/Resources/app/administration/ build
+  if [[ -e "$ADMINISTRATION_PATH/Resources/lerna.json" ]]; then
+    npm clean-install --prefix "$ADMINISTRATION_PATH/Resources"
+    npm run --prefix "$ADMINISTRATION_PATH/Resources" lerna -- bootstrap
+  else
+    npm clean-install --prefix "$ADMINISTRATION_PATH/Resources/app/administration/"
+  fi
 
-  npm --prefix vendor/shopware/platform/src/Storefront/Resources/app/storefront/ clean-install
-  node vendor/shopware/platform/src/Storefront/Resources/app/storefront/copy-to-vendor.js
-  npm --prefix vendor/shopware/platform/src/Storefront/Resources/app/storefront/ run production
+  npm run --prefix "$ADMINISTRATION_PATH/Resources/app/administration/" build
+
+  npm --prefix "$STOREFRONT_PATH/Resources/app/storefront/" clean-install
+  node "$STOREFRONT_PATH/Resources/app/storefront/copy-to-vendor.js"
+  npm --prefix "$STOREFRONT_PATH/Resources/app/storefront/" run production
 
   php bin/console assets:install
 fi

@@ -4,8 +4,11 @@ checkParameter
 
 cd "/var/www/html/${SHOPWARE_PROJECT}" || exit 1
 
-if [[ -e vendor/shopware/platform ]]; then
-  npm --prefix vendor/shopware/platform/src/Administration/Resources/app/administration/ clean-install
+ADMINISTRATION_PATH=$(platform_component Administration)
+
+if [[ -e "$ADMINISTRATION_PATH/Resources/lerna.json" ]]; then
+  npm clean-install --prefix "$ADMINISTRATION_PATH/Resources"
+  npm run --prefix "$ADMINISTRATION_PATH/Resources" lerna -- bootstrap
 else
-  npm --prefix vendor/shopware/administration/Resources/app/administration/ clean-install
+  npm clean-install --prefix "$ADMINISTRATION_PATH/Resources/app/administration/"
 fi
