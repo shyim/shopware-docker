@@ -313,7 +313,7 @@ function create_varnish() {
     echo "  varnish:"
     echo "    image: varnish"
     echo "    environment:"
-    echo "      VIRTUAL_HOST: '*.sw.shop'"
+    echo "      VIRTUAL_HOST: '*.${DEFAULT_DOMAIN}'"
     echo "      CERT_NAME: shared"
     echo "      HTTPS_METHOD: noredirect"
     echo "    volumes:"
