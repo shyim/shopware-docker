@@ -28,6 +28,7 @@ RUN set -x && \
     mkdir /home/dev && \
     mkdir -p /opt/phpstorm-coverage && \
     chown -R dev /home/dev /opt/ && \
+    apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing flamegraph && \
     apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/v3.13/community gnu-libiconv{% if xdebug %} && \
     {% if xdebug == 2 %}
     echo 'xdebug.remote_enable=1' > /usr/local/etc/php/conf.d/ext-xdebug.ini && \
