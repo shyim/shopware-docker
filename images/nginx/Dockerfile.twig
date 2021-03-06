@@ -14,7 +14,8 @@ ENV TZ=Europe/Berlin \
     PHP_MAX_EXECUTION_TIME=300 \
     PHP_MEMORY_LIMIT=512m \
     PHP_DUMP_SERVER_URL=http://dump-server:9009 \
-    XDEBUG_MODE=debug
+    XDEBUG_MODE=debug \
+    APP_DOCUMENT_ROOT=/var/www/html
 
 RUN set -x && \
       apk add --no-cache \
@@ -88,5 +89,6 @@ ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
 
 COPY rootfs/ /
 EXPOSE 80
+STOPSIGNAL SIGKILL
 
 ENTRYPOINT ["/entrypoint.sh"]

@@ -24,9 +24,13 @@ function create_nginx() {
       echo "      ${i}: 127.0.0.1" >>"${DOCKER_COMPOSE_FILE}"
     done
 
+    {
+      echo "    environment:"
+      echo "      APP_DOCUMENT_ROOT: /var/www/html/${NAME}"
+    } >>"${DOCKER_COMPOSE_FILE}"
+
     if [[ ${ENABLE_VARNISH} == "false" ]]; then
       {
-        echo "    environment:"
         echo "      VIRTUAL_HOST: ${hosts}"
         echo "      CERT_NAME: ${certName}"
         echo "      HTTPS_METHOD: noredirect"
@@ -37,20 +41,20 @@ function create_nginx() {
       echo "      - ${REALDIR}:/opt/swdc/"
     } >>"${DOCKER_COMPOSE_FILE}"
     if [[ ${Platform} != "Linux" ]]; then
-      echo "      - ${d}:/var/www/html:cached" >>"${DOCKER_COMPOSE_FILE}"
+      echo "      - ${CODE_DIRECTORY}:/var/www/html:cached" >>"${DOCKER_COMPOSE_FILE}"
       if [[ ${CACHE_VOLUMES} == "true" ]]; then
         {
-          echo "      - ${NAME}_web_cache:/var/www/html/web/cache:delegated"
-          echo "      - ${NAME}_var_cache:/var/www/html/var/cache:delegated"
+          echo "      - ${NAME}_web_cache:/var/www/html/${NAME}/web/cache:delegated"
+          echo "      - ${NAME}_var_cache:/var/www/html/${NAME}/var/cache:delegated"
         } >>"${DOCKER_COMPOSE_FILE}"
       else
         {
-          echo "      - ${CODE_DIRECTORY}/${NAME}/var/cache:/var/www/html/var/cache:delegated"
-          echo "      - ${CODE_DIRECTORY}/${NAME}/web/cache:/var/www/html/web/cache:delegated"
+          echo "      - ${CODE_DIRECTORY}/${NAME}/var/cache:/var/www/html/${NAME}/var/cache:delegated"
+          echo "      - ${CODE_DIRECTORY}/${NAME}/web/cache:/var/www/html/${NAME}/web/cache:delegated"
         } >>"${DOCKER_COMPOSE_FILE}"
       fi
     else
-      echo "      - ${d}:/var/www/html" >>"${DOCKER_COMPOSE_FILE}"
+      echo "      - ${CODE_DIRECTORY}:/var/www/html" >>"${DOCKER_COMPOSE_FILE}"
     fi
   done <<<"$(get_serve_folders)"
 }

@@ -18,4 +18,6 @@ if [ "$WSL_XDEBUG_TUNNEL" = "true" ]; then
   } >>/etc/supervisord.conf
 fi
 
+sed -i "s;__DOCUMENT_ROOT__;${APP_DOCUMENT_ROOT};" /etc/nginx/sites-enabled/www.conf
+
 /usr/bin/supervisord -c /etc/supervisord.conf
