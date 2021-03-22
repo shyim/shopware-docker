@@ -14,5 +14,5 @@ else
   npm --prefix vendor/shopware/storefront/Resources/app/storefront/ run production
 fi
 
-bin/console theme:compile
 bin/console assets:install
+bin/console theme:compile

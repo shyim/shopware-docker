@@ -6,6 +6,7 @@ shift 2
 
 compose run \
   --rm \
+  -T \
   --no-deps \
   -u "$(id -u):$(id -g)" \
   --entrypoint="bin/console" \
