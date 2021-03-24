@@ -56,7 +56,7 @@ else
 fi
 
 if [[ $generateDemoData == 1 ]]; then
-  mysql -h mysql -u root -p"${MYSQL_ROOT_PASSWORD}" "$SHOPWARE_PROJECT" <_sql/demo/latest.sql
+  mysql -h "$mysqlHost" -u root -p"${MYSQL_ROOT_PASSWORD}" "$SHOPWARE_PROJECT" <_sql/demo/latest.sql
 fi
 
 clearCache
@@ -66,10 +66,10 @@ php ./bin/console sw:generate:attributes
 PROTO="$(echo "$URL" | grep :// | sed -e's,^\(.*://\).*,\1,g')"
 
 HOST=$(echo "$URL" | awk -F[/:] '{print $4}')
-mysql -h mysql -u root -p"${MYSQL_ROOT_PASSWORD}" "$SHOPWARE_PROJECT" -e "UPDATE s_core_shops SET host = '$HOST', base_path = '' WHERE main_id IS NULL"
+mysql -h "$mysqlHost" -u root -p"${MYSQL_ROOT_PASSWORD}" "$SHOPWARE_PROJECT" -e "UPDATE s_core_shops SET host = '$HOST', base_path = '' WHERE main_id IS NULL"
 
 if [[ $PROTO == 'https://' ]]; then
-  mysql -h mysql -u root -p"${MYSQL_ROOT_PASSWORD}" "$SHOPWARE_PROJECT" -e "UPDATE s_core_shops SET secure = 1 WHERE main_id IS NULL"
+  mysql -h "$mysqlHost" -u root -p"${MYSQL_ROOT_PASSWORD}" "$SHOPWARE_PROJECT" -e "UPDATE s_core_shops SET secure = 1 WHERE main_id IS NULL"
 fi
 
 ./bin/console sw:snippets:to:db --include-plugins
