@@ -27,12 +27,12 @@ else
     docker run \
       --rm \
       -it \
-      --env-file=${REALDIR}/docker.env \
-      --env-file=${REALDIR}/.env.dist \
+      --env-file="${REALDIR}/docker.env" \
+      --env-file="${REALDIR}/.env.dist" \
       --env=file=~/.config/swdc/env \
       --network shopware-docker_default \
       -v shopware-docker_nvm_cache:/nvm \
       -v "$CODE_DIRECTORY:/var/www/html/" \
-      ghcr.io/shyim/shopware-docker/cli:php$PHP_VERSION "$@"
+      "ghcr.io/shyim/shopware-docker/cli:php$PHP_VERSION" "$@"
   fi
 fi
