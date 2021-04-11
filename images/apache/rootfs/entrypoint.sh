@@ -20,4 +20,4 @@ fi
 
 sed -i "s;__DOCUMENT_ROOT__;${APP_DOCUMENT_ROOT};g" /etc/apache2/conf.d/vhost.conf
 
-/usr/bin/supervisord -c /etc/supervisord.conf
+exec /usr/bin/supervisord -c /etc/supervisord.conf
