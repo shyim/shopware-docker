@@ -21,7 +21,7 @@ if [[ -e "${LOCAL_WEBPACK_CONFIG}" ]]; then
             --rm \
             --name "${SHOPWARE_PROJECT}_admin_watch" \
             --network shopware-docker_default \
-            --link "shopware-docker_app_${SHOPWARE_PROJECT}:${HOST}" \
+            --link "app_${SHOPWARE_PROJECT}:${HOST}" \
             -v "$LOCAL_PROJECT_ROOT:/var/www/html" \
             -e PORT=80 \
             -e HOST="0.0.0.0" \
