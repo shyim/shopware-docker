@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 
 cd /var/www/html/"$SHOPWARE_PROJECT" || exit 1
+export USE_SSL_DEFAULT=false
 URL=$(get_url "$SHOPWARE_PROJECT")
 
 php "${DIR}"/modules/classic/fix-config.php "$SHOPWARE_FOLDER/config.php" csrf
 
 ./bin/console dbal:run-sql 'UPDATE s_core_config_elements SET value = "b:0;" WHERE name = "show_cookie_note"'
+./bin/console dbal:run-sql 'UPDATE s_core_shops SET secure = 0'
 
 ./bin/console sw:rebuild:seo:index
 ./bin/console sw:cache:clear
@@ -23,6 +25,9 @@ if [[ -f engine/Shopware/Shopware.php ]]; then
         Behat\MinkExtension:
             ## defined in buildscript
             base_url: '$URL'
+            show_cmd: 'echo \"Scenario failed! Saved current page to %s\"'
+            show_tmp_dir: 'build/artifacts/mink'
+            show_auto: true
             default_session: 'selenium2'
             javascript_session: 'selenium2'
             browser_name: chrome
