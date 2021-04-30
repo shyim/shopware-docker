@@ -245,13 +245,18 @@ function create_database_tool() {
 }
 
 function create_selenium() {
-  {
-    echo "  selenium:"
-    echo "    image: selenium/standalone-chrome:84.0"
-    echo "    shm_size: 2g"
-    echo "    environment:"
-    echo "      DBUS_SESSION_BUS_ADDRESS: /dev/null"
-  } >>"${DOCKER_COMPOSE_FILE}"
+  cat <<EOF | tee -a "${DOCKER_COMPOSE_FILE}" > /dev/null
+  selenium:
+    image: selenium/standalone-chrome:84.0
+    shm_size: 2g
+    environment:
+      DBUS_SESSION_BUS_ADDRESS: /dev/null
+      SCREEN_WIDTH: 1920
+      SCREEN_HEIGHT: 1080
+      SCREEN_DPI: 72
+    ports:
+      - 5900:5900
+EOF
 
   if [[ ${CODE_FOLDER_CONTENT} ]]; then
     echo "    links:" >>"${DOCKER_COMPOSE_FILE}"
