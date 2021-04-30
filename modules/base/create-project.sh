@@ -3,7 +3,7 @@
 installName=$2
 
 if [[ -z $installName ]]; then
-  echo "Please enter a project name"
+  echo "Please enter a project name. (swdc create-project <name>)"
   exit 1
 fi
 
@@ -22,9 +22,15 @@ if ! command -v jq &>/dev/null; then
   exit
 fi
 
+if ! command -v wget &>/dev/null; then
+  echo "wget is needed to use this command (apt install wget)"
+  exit
+fi
+
 dist=$(dialog --clear --backtitle "Shopware Installation" --title "Choose Distribution" --menu "Choose one of the following options:" 15 80 4 \
   development "Development Template (recommended for extension development)" \
-  production "Production Template (recommended for projects)" 2>&1 >/dev/tty)
+  production "Production Template (recommended for projects)" \
+  zip "Zip Distribution" 2>&1 >/dev/tty)
 
 clear
 
@@ -77,9 +83,17 @@ EOF
 fi
 
 if [[ $dist == 'production' ]]; then
-  tags=$(curl https://api.github.com/repos/shopware/platform/tags -s | jq .[].name -r)
+  GITHUB_RESPONSE=$(curl https://api.github.com/repos/shopware/platform/tags -s)
 
-  version=$(dialog --clear --backtitle "Shopware Installation" --title "Choose Version" --menu "Choose one of the following options:" 15 40 4 "$tags" 2>&1 >/dev/tty)
+  NAMES=$(echo "$GITHUB_RESPONSE" | jq .[].name -r)
+  VALUES=""
+
+  for i in $NAMES; do
+    VALUES="$VALUES $i $i"
+  done
+
+  # shellcheck disable=SC2086
+  version=$(dialog --clear --backtitle "Shopware Installation" --title "Choose Version" --menu "Choose one of the following options:" 15 40 4 $VALUES 2>&1 >/dev/tty)
 
   dialog --clear --backtitle "Shopware Installation" --title "Installing" --gauge "Installation..." 10 75 < <(
 
@@ -116,3 +130,59 @@ EOF
 
   echo "Shopware 6 Installation is installed and accessible at: ${installName}.${DEFAULT_DOMAIN}"
 fi
+
+if [[ $dist == 'zip' ]]; then
+  tags=$(curl https://update-api.shopware.com/v1/releases/install?major=6 -s | jq .[].version -r)
+
+  VALUES=""
+
+  for i in $tags; do
+    VALUES="$VALUES $i $i"
+  done
+
+  # shellcheck disable=SC2086
+  version=$(dialog --clear --backtitle "Shopware Installation" --title "Choose Version" --menu "Choose one of the following options:" 15 40 4 $VALUES 2>&1 >/dev/tty)
+
+  installUrl=$(curl https://update-api.shopware.com/v1/releases/install?major=6 -s | jq -r ".[] | select(.version == \"$version\") | .uri")
+
+  dialog --clear --backtitle "Shopware Installation" --title "Installing" --gauge "Installation..." 10 75 < <(
+
+    cat <<EOF
+XXX
+0
+Downloading and unpacking Zip
+XXX
+EOF
+
+    mkdir "$CODE_DIRECTORY/$installName"
+    wget "$installUrl" -q -O "$CODE_DIRECTORY/$installName/install.zip"
+    cd "$CODE_DIRECTORY/$installName" || exit 0
+
+    unzip -qq -o install.zip
+    rm install.zip
+
+    cat <<EOF
+XXX
+20
+Installing Shopware 6
+XXX
+EOF
+
+    "$REALDIR/swdc" build "$installName" &>/dev/null
+
+    cat <<EOF
+XXX
+90
+Configuring Nginx
+XXX
+EOF
+
+    "$REALDIR/swdc" up &>/dev/null
+    exit 0
+  )
+
+  clear
+
+  echo "Shopware 6 Installation is installed and accessible at: ${installName}.${DEFAULT_DOMAIN}"
+fi
+
