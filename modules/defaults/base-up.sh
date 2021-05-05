@@ -273,26 +273,13 @@ EOF
 
 function create_cypress() {
   {
-    echo "  cypress:"
-    echo "    image: cypress/included:5.6.0"
-    echo "    shm_size: 2g"
-    echo "    environment:"
-    echo "      - DISPLAY"
+    echo "  cypress-backup-proxy:"
+    echo "    image: ghcr.io/shyim/shopware-docker/cypress-backup-proxy:latest"
+    echo "    env_file:"
+    echo "      - ${REALDIR}/docker.env"
     echo "    volumes:"
-    echo "      - ${CODE_DIRECTORY}:/var/www/html"
-    echo "      - /tmp/.X11-unix:/tmp/.X11-unix"
+    echo "      - /var/run/docker.sock:/var/run/docker.sock"
   } >>"${DOCKER_COMPOSE_FILE}"
-
-  if [[ ${CODE_FOLDER_CONTENT} ]]; then
-    echo "    links:" >>"${DOCKER_COMPOSE_FILE}"
-
-    while IFS= read -r NAME; do
-      hosts=$(get_hosts "$NAME")
-      for i in ${hosts//,/ }; do
-        echo "      - app_${NAME}:${i}" >>"${DOCKER_COMPOSE_FILE}"
-      done
-    done <<<"$(get_serve_folders)"
-  fi
 }
 
 function create_blackfire() {

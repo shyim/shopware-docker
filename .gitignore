@@ -1,5 +1,5 @@
 /mysql-data
-/.idea
+.idea
 /images/**/Dockerfile
 /images/custom
 /images/mysql/**
