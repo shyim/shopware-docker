@@ -143,7 +143,7 @@ function get_document_root() {
       ROOT="/var/www/html/${folder}/public"
     fi
 
-    echo $ROOT
+    echo "$ROOT"
   fi
 }
 
