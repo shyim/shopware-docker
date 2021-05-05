@@ -11,6 +11,7 @@ images:
       nginx/10-classic.conf: nginx/rootfs/etc/nginx/sites-enabled/www.conf
     variables:
       production: true
+      APP_DOCUMENT_ROOT: '/var/www/html'
     tags:
       php73:
         phpVersion: '7.3'
@@ -33,6 +34,7 @@ images:
       nginx/10-platform.conf: nginx/rootfs/etc/nginx/sites-enabled/www.conf
     variables:
       production: true
+      APP_DOCUMENT_ROOT: '/var/www/html/public'
     tags:
       php73:
         phpVersion: '7.3'

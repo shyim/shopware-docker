@@ -15,7 +15,7 @@ ENV TZ=Europe/Berlin \
     PHP_MEMORY_LIMIT=512m \
     PHP_DUMP_SERVER_URL=http://dump-server:9009 \
     XDEBUG_MODE=debug \
-    APP_DOCUMENT_ROOT=/var/www/html
+    APP_DOCUMENT_ROOT={{ APP_DOCUMENT_ROOT }}
 
 RUN set -x && \
       apk add --no-cache \

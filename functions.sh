@@ -129,6 +129,24 @@ function get_cert_name() {
   fi
 }
 
+function get_document_root() {
+  folder=$1
+  var="VHOST_${folder^^}_DOCUMENT_ROOT"
+  var="${var//-/_}"
+  val=${!var}
+
+  if [[ -n $val ]]; then
+    echo "$val"
+  else
+    ROOT="/var/www/html/${folder}"
+    if [[ -f "$2/public/index.php" ]]; then
+      ROOT="/var/www/html/${folder}/public"
+    fi
+
+    echo $ROOT
+  fi
+}
+
 function get_serve_folders() {
   for d in "${CODE_DIRECTORY}"/*; do
     if [[ -d "$d" ]]; then

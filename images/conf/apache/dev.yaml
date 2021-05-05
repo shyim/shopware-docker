@@ -6,6 +6,8 @@ images:
     buildTags: [ 'apache' ]
     dockerFile: apache/Dockerfile
     context: apache
+    variables:
+      APP_DOCUMENT_ROOT: '/var/www/html'
     templates:
       apache/Dockerfile.twig: apache/Dockerfile
       apache/classic-vhost.conf: apache/rootfs/etc/apache2/conf.d/vhost.conf
@@ -35,6 +37,8 @@ images:
     buildTags: [ 'apache' ]
     dockerFile: apache/Dockerfile
     context: apache
+    variables:
+      APP_DOCUMENT_ROOT: '/var/www/html/public'
     templates:
       apache/Dockerfile.twig: apache/Dockerfile
       apache/platform-vhost.conf: apache/rootfs/etc/apache2/conf.d/vhost.conf

@@ -11,6 +11,7 @@ images:
       nginx/10-classic.conf: nginx/rootfs/etc/nginx/sites-enabled/www.conf
     variables:
       xdebug: 2
+      APP_DOCUMENT_ROOT: '/var/www/html'
     tags:
       php56-xdebug:
         phpVersion: '5.6'
@@ -54,6 +55,7 @@ images:
       nginx/10-platform.conf: nginx/rootfs/etc/nginx/sites-enabled/www.conf
     variables:
       xdebug: 2
+      APP_DOCUMENT_ROOT: '/var/www/html/public'
     tags:
       php72-xdebug:
         phpVersion: '7.2'

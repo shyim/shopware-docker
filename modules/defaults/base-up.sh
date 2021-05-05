@@ -9,6 +9,7 @@ function create_nginx() {
 
     hosts=$(get_hosts "$NAME")
     certName=$(get_cert_name "$NAME")
+    documentRoot=$(get_document_root "$NAME" "$d")
     echo "  app_${NAME}:" >>"${DOCKER_COMPOSE_FILE}"
 
     IMAGE=$(get_image "$NAME" "$d")
@@ -26,7 +27,7 @@ function create_nginx() {
 
     {
       echo "    environment:"
-      echo "      APP_DOCUMENT_ROOT: /var/www/html/${NAME}"
+      echo "      APP_DOCUMENT_ROOT: ${documentRoot}"
     } >>"${DOCKER_COMPOSE_FILE}"
 
     if [[ ${ENABLE_VARNISH} == "false" ]]; then

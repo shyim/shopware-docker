@@ -5,7 +5,9 @@ images:
       - ghcr.io/shyim/shopware-docker/5/nginx
     buildTags: [ 'nginx' ]
     dockerFile: nginx/Dockerfile
-    context: nginx 
+    context: nginx
+    variables:
+      APP_DOCUMENT_ROOT: '/var/www/html'
     templates:
       nginx/Dockerfile.twig: nginx/Dockerfile
       nginx/10-classic.conf: nginx/rootfs/etc/nginx/sites-enabled/www.conf
@@ -37,7 +39,9 @@ images:
       - ghcr.io/shyim/shopware-docker/6/nginx
     buildTags: [ 'nginx' ]
     dockerFile: nginx/Dockerfile
-    context: nginx 
+    context: nginx
+    variables:
+      APP_DOCUMENT_ROOT: '/var/www/html/public'
     templates:
       nginx/Dockerfile.twig: nginx/Dockerfile
       nginx/10-platform.conf: nginx/rootfs/etc/nginx/sites-enabled/www.conf
