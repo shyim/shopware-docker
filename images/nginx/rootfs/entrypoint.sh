@@ -20,7 +20,7 @@ fi
 
 sed -i "s;__DOCUMENT_ROOT__;${APP_DOCUMENT_ROOT};" /etc/nginx/sites-enabled/www.conf
 
-if [ "$ENABLE_CYPRESS" == "false" ]; then
+if [ "$ENABLE_CYPRESS" = "false" ]; then
   rm /etc/nginx/sites-enabled/cypress.conf
 fi
 
