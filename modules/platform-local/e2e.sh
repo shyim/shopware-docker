@@ -15,7 +15,13 @@ E2E_DIR="vendor/shopware/platform/src/${MODULE}/Resources/app/${MODULE,}/test/e2
 E2E_PATH="/var/www/html/${SHOPWARE_PROJECT}/${E2E_DIR}"
 
 if [[ ! -d "${E2E_DIR}/node_modules" ]]; then
-  compose exec cli bash npm install --prefix "${E2E_PATH}"
+  docker run \
+    --rm \
+    -it \
+    -v "${CODE_DIRECTORY}:/var/www/html" \
+    -u 1000 \
+    node:12-alpine \
+    npm install --prefix "${E2E_PATH}"
 fi
 
 xhost +si:localuser:root
@@ -23,7 +29,6 @@ HOST=$(echo "$URL" | sed s/'http[s]\?:\/\/'//)
 CURLHOST="Host: ${HOST}"
 
 compose exec cli curl -H "${CURLHOST}" http://cypress-backup-proxy:8080/backup
-
 
 docker run \
       --rm \
