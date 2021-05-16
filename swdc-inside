@@ -28,6 +28,10 @@ if [[ -n "$SHOPWARE_PROJECT" ]]; then
     modules=(base classic-composer classic)
   fi
 
+  if [[ -f "$SHOPWARE_FOLDER/recovery/install/data/sql/install.sql" ]]; then
+    modules=(base classic-zip classic)
+  fi
+
   if [[ -f "$SHOPWARE_FOLDER/src/Kernel.php" ]]; then
     modules=(base platform)
   fi
