@@ -31,12 +31,19 @@ cd "/var/www/html/${SHOPWARE_PROJECT}" || exit 1
 URL=$(get_url "$SHOPWARE_PROJECT")
 SECRET=$(openssl rand -hex 32)
 INSTANCE_ID=$(openssl rand -hex 32)
+MAILER_URL="sendmail://localhost?command=ssmtp -t"
+
+composer_dynamic install -o
+
+if [[ ! -e "vendor/swiftmailer/" ]]; then
+  MAILER_URL="native://default"
+fi
 
 echo "APP_ENV=dev
 APP_SECRET=${SECRET}
 APP_URL=${URL}
 BLUE_GREEN_DEPLOYMENT=1
-MAILER_URL=\"sendmail://localhost?command=ssmtp -t\"
+MAILER_URL=\"${MAILER_URL}\"
 INSTANCE_ID=${INSTANCE_ID}
 DATABASE_URL=mysql://root:${MYSQL_ROOT_PASSWORD}@${mysqlHost}:3306/${SHOPWARE_PROJECT}
 SHOPWARE_ES_HOSTS=elastic
@@ -59,11 +66,9 @@ echo "const:
   DB_HOST: ${mysqlHost}
   DB_PORT: 3306
   DB_NAME: \"${SHOPWARE_PROJECT}\"
-  APP_MAILER_URL: \"smtp://smtp:25\"" >.psh.yaml.override
+  APP_MAILER_URL: \"${MAILER_URL}\"" >.psh.yaml.override
 
 export PROJECT_ROOT=$SHOPWARE_FOLDER
-
-composer_dynamic install -o
 
 CORE_PATH=$(platform_component Core)
 ADMINISTRATION_PATH=$(platform_component Administration)
