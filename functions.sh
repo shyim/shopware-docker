@@ -204,6 +204,6 @@ function platform_component() {
   if [[ -e vendor/shopware/platform ]]; then
     echo "vendor/shopware/platform/src/${NAME}/"
   else
-    echo "vendor/shopware/${NAME,,}"
+    echo "vendor/shopware/${NAME,,}/"
   fi
 }
