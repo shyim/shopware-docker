@@ -7,6 +7,8 @@ COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr
 COPY --from=composer:1 /usr/bin/composer /usr/bin/composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer2
 
+ENV PHP_DUMP_SERVER_URL=http://dump-server:9009
+
 RUN set -x && \
       apk add --no-cache \
       nginx \
