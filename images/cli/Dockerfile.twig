@@ -54,6 +54,15 @@ RUN set -x && \
     {% endif %}
 {% endif %}
 
+{% if phpVersionNumeric >= 71 and xdebug == false %}
+RUN cd /opt/ && \
+    wget https://github.com/shyim/php-dump-client-prefixed/archive/main.zip && \
+    unzip main.zip && \
+    rm main.zip && \
+    mv php-dump-client-prefixed-main php-dump-client-prefixed && \
+    echo "auto_prepend_file = /opt/php-dump-client-prefixed/prepend.php" > /usr/local/etc/php/conf.d/vardumpserver.ini
+{% endif %}
+
 {% block after_install %}{% endblock %}
 
 ENV HOME /home/dev
