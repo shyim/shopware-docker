@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+COMPOSER_HOME=/home/dev/.composer2 /usr/local/bin/php /usr/bin/composer-native-2 "$@"

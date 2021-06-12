@@ -4,8 +4,8 @@ LABEL org.opencontainers.image.source https://github.com/shyim/shopware-docker
 ENV XDEBUG_MODE=debug
 ENV PS1 '${debian_chroot:+($debian_chroot)}\[\033[01;31m\]\u\[\033[01;33m\]@\[\033[01;36m\]\h \[\033[01;33m\]\w \[\033[01;35m\]\$ \[\033[00m\]'
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/
-COPY --from=composer:1 /usr/bin/composer /usr/bin/composer
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer2
+COPY --from=composer:1 /usr/bin/composer /usr/bin/composer-native-1
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer-native-2
 
 ENV PHP_DUMP_SERVER_URL=http://dump-server:9009
 
@@ -72,7 +72,8 @@ USER dev
 
 COPY rootfs/ /
 
-RUN composer global require hirak/prestissimo && \
+RUN COMPOSER_HOME=/home/dev/.composer1 composer-native-1 global require hirak/prestissimo && \
+    COMPOSER_HOME=/home/dev/.composer2 composer-native-2 global require repman-io/composer-plugin && \
     echo "alias ll=\"ls -lha\"" >> ~/.bashrc && \
     echo "source /nvm/nvm.sh" >> ~/.bashrc
 
