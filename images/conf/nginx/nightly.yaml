@@ -1,0 +1,29 @@
+images:
+  -
+    image: 
+      - shyim/shopware-classic-nginx
+      - ghcr.io/shyim/shopware-docker/5/nginx
+    buildTags: [ 'nginx', 'nightly' ]
+    dockerFile: nginx/Dockerfile
+    context: nginx 
+    templates:
+      nginx/Dockerfile.nightly.twig: nginx/Dockerfile
+      nginx/10-classic.conf: nginx/rootfs/etc/nginx/sites-enabled/www.conf
+    tags:
+      php81:
+        phpVersion: '8.1.0'
+        phpVersionNumeric: 81
+  -
+    image: 
+      - shyim/shopware-platform-nginx
+      - ghcr.io/shyim/shopware-docker/6/nginx
+    buildTags: [ 'nginx', 'nightly' ]
+    dockerFile: nginx/Dockerfile
+    context: nginx 
+    templates:
+      nginx/Dockerfile.nightly.twig: nginx/Dockerfile
+      nginx/10-platform.conf: nginx/rootfs/etc/nginx/sites-enabled/www.conf
+    tags:
+      php81:
+        phpVersion: '8.1.0'
+        phpVersionNumeric: 81
