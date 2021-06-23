@@ -6,7 +6,7 @@ cd "/var/www/html/${SHOPWARE_PROJECT}" || exit 1
 
 CORE_PATH=$(platform_component Core)
 
-composer_dynamic update
+composer update
 
 if [[ -d $CORE_PATH/Framework/App ]]; then
   bin/console database:migrate --all

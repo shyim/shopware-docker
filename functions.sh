@@ -166,19 +166,6 @@ function compose() {
   docker-compose -f "${DOCKER_COMPOSE_FILE}" "${additionalArgs[@]}" "$@"
 }
 
-function composer_dynamic() {
-  if [[ -e composer.json ]]; then
-    composer2_required=$(grep 'composer-runtime-api' composer.json  | grep 2)
-    if [[ -z $composer2_required ]]; then
-      composer "$@"
-    else
-      composer2 "$@"
-    fi
-  else
-    composer "$@"
-  fi
-}
-
 function generate_wildcard_certs() {
   openssl genrsa -out "${HOME}/.config/swdc/ssl/ca.key" 2048
   openssl req -new -x509 -sha256 -days 20000 -key "${HOME}/.config/swdc/ssl/ca.key" -subj "/C=CN/ST=GD/L=SZ/O=SWDC./CN=SWDC CA" -out "${HOME}/.config/swdc/ssl/ca.crt"

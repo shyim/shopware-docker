@@ -2,8 +2,8 @@
 
 cd "/var/www/html/${SHOPWARE_PROJECT}" || exit 1
 
-composer_dynamic install -d dev-ops/analyze
-composer_dynamic dump-autoload
+composer install -d dev-ops/analyze
+composer dump-autoload
 
 php dev-ops/analyze/generate-composer.php
 

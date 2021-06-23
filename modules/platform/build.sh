@@ -33,7 +33,7 @@ SECRET=$(openssl rand -hex 32)
 INSTANCE_ID=$(openssl rand -hex 32)
 MAILER_URL="sendmail://localhost?command=ssmtp -t"
 
-composer_dynamic install -o
+composer install -o
 
 if [[ ! -e "vendor/swiftmailer/" ]]; then
   MAILER_URL="native://default"
