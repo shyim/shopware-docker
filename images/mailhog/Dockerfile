@@ -1,4 +1,4 @@
-FROM golang:1.15 as build-env
+FROM golang:1.16 as build-env
 
 WORKDIR /go/src/app
 RUN git clone --depth 1 https://github.com/mailhog/MailHog.git .
