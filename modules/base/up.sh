@@ -17,9 +17,10 @@ export XDEBUG_ENABLE=$2
   echo "services:"
 
   echo "  smtp:"
-  echo "    image: djfarrelly/maildev"
+  echo "    image: mailhog/mailhog"
   echo "    environment:"
   echo "      VIRTUAL_HOST: mail.${DEFAULT_SERVICES_DOMAIN}"
+  echo "      VIRTUAL_PORT: 8025"
 
   echo "  dump-server:"
   echo "    image: ghcr.io/shyim/php-dump-server:latest"
