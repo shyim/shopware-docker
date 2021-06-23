@@ -2,6 +2,7 @@ FROM php:{{ phpVersion }}-fpm-alpine
 
 LABEL org.opencontainers.image.source https://github.com/shyim/shopware-docker
 COPY --from=ghcr.io/shyim/supervisord /usr/local/bin/supervisord /usr/bin/supervisord
+COPY --from=ghcr.io/shyim/shopware-docker/sendmail /sendmail /usr/bin/sendmail
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/
 
 ENV TZ=Europe/Berlin \
@@ -15,7 +16,8 @@ ENV TZ=Europe/Berlin \
     PHP_MEMORY_LIMIT=512m \
     PHP_DUMP_SERVER_URL=http://dump-server:9009 \
     XDEBUG_MODE=debug \
-    APP_DOCUMENT_ROOT={{ APP_DOCUMENT_ROOT }}
+    APP_DOCUMENT_ROOT={{ APP_DOCUMENT_ROOT }} \
+    SMTP_ADDRESS=smtp:1025
 
 RUN set -x && \
       apk add --no-cache \
@@ -23,8 +25,7 @@ RUN set -x && \
       apache2-ctl \
       apache2-proxy \
       shadow \
-      socat \
-      ssmtp && \
+      socat && \
     install-php-extensions bcmath gd intl mysqli pdo_mysql sockets bz2 gmp soap zip gmp redis imagick {% if phpVersionNumeric >= 74 %} ffi excimer {% endif %} {% if production %} opcache {% endif %} {% if xdebug %} xdebug{% if phpVersionNumeric >= 71 and xdebug == 2 %}-2.9.8{% endif %}{% endif %} && \
     ln -s /usr/local/bin/php /usr/bin/php && \
     rm -rf /tmp/* && \

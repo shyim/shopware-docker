@@ -1,9 +1,11 @@
 FROM {% block image_from %}php:{{ phpVersion }}-cli-alpine{% endblock %}
 
 LABEL org.opencontainers.image.source https://github.com/shyim/shopware-docker
-ENV XDEBUG_MODE=debug
+ENV XDEBUG_MODE=debug \
+    SMTP_ADDRESS=smtp:1025
 ENV PS1 '${debian_chroot:+($debian_chroot)}\[\033[01;31m\]\u\[\033[01;33m\]@\[\033[01;36m\]\h \[\033[01;33m\]\w \[\033[01;35m\]\$ \[\033[00m\]'
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/
+COPY --from=ghcr.io/shyim/shopware-docker/sendmail /sendmail /usr/bin/sendmail
 COPY --from=composer:1 /usr/bin/composer /usr/bin/composer-native-1
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer-native-2
 
@@ -22,8 +24,7 @@ RUN set -x && \
       bash-completion \
       patch \
       mariadb-client \
-      make \
-      ssmtp && \
+      make && \
     install-php-extensions bcmath gd intl mysqli pdo_mysql sockets bz2 gmp soap zip gmp pcntl posix redis pcov imagick{% if phpVersionNumeric >= 74 %} ffi excimer {% endif %} {% if production %} opcache {% endif %} {% if xdebug %} xdebug{% if phpVersionNumeric >= 71 and xdebug == 2 %}-2.9.8{% endif %} {% endif %} && \
     rm -rf /tmp/* && \
     useradd dev && \
