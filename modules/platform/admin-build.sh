@@ -11,7 +11,7 @@ bin/console feature:dump || true
 
 PLATFORM_PATH=$(platform_component Administration)
 
-if [[ ! -f "${PLATFORM_PATH}/Resources/app/administration/" ]]; then
+if [[ ! -d "${PLATFORM_PATH}/Resources/app/administration/" ]]; then
   echo "Build failed:"
   echo "=> Run swdc admin-init ${SHOPWARE_PROJECT} first."
   exit 1
