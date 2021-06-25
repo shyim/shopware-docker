@@ -24,11 +24,21 @@ URL=$(get_url "$SHOPWARE_PROJECT")
 SECRET=$(openssl rand -hex 32)
 INSTANCE_ID=$(openssl rand -hex 32)
 
+composer install
+
+MAILER_URL="smtp://smtp:1025?encryption=&auth_mode="
+
+composer install -o
+
+if [[ ! -e "vendor/swiftmailer/" ]]; then
+  MAILER_URL="smtp://smtp:1025"
+fi
+
 echo "APP_ENV=dev
 APP_SECRET=${SECRET}
 APP_URL=${URL}
 BLUE_GREEN_DEPLOYMENT=1
-MAILER_URL=\"sendmail://localhost?command=sendmail -t\"
+MAILER_URL=\"${MAILER_URL}\"
 INSTANCE_ID=${INSTANCE_ID}
 DATABASE_URL=mysql://root:${MYSQL_ROOT_PASSWORD}@${mysqlHost}:3306/${SHOPWARE_PROJECT}
 SHOPWARE_ES_HOSTS=elastic
@@ -40,8 +50,6 @@ SHOPWARE_HTTP_CACHE_ENABLED=0
 SHOPWARE_HTTP_DEFAULT_TTL=7200" >.env
 
 export PROJECT_ROOT=$SHOPWARE_FOLDER
-
-composer install
 
 bin/console system:install --create-database --basic-setup --force
 

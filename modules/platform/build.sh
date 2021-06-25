@@ -31,12 +31,12 @@ cd "/var/www/html/${SHOPWARE_PROJECT}" || exit 1
 URL=$(get_url "$SHOPWARE_PROJECT")
 SECRET=$(openssl rand -hex 32)
 INSTANCE_ID=$(openssl rand -hex 32)
-MAILER_URL="sendmail://localhost?command=ssmtp -t"
+MAILER_URL="smtp://smtp:1025?encryption=&auth_mode="
 
 composer install -o
 
 if [[ ! -e "vendor/swiftmailer/" ]]; then
-  MAILER_URL="native://default"
+  MAILER_URL="smtp://smtp:1025"
 fi
 
 echo "APP_ENV=dev
@@ -100,7 +100,7 @@ bin/console sales-channel:create:storefront --url="$URL"
 
 if [[ $generateDemoData == 1 ]]; then
   APP_ENV=prod bin/console framework:demodata
-  bin/console dal:refresh:index
+  APP_ENV=prod bin/console dal:refresh:index
 fi
 
 if [[ $buildJS == 1 ]]; then
