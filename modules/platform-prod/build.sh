@@ -28,8 +28,6 @@ composer install
 
 MAILER_URL="smtp://smtp:1025?encryption=&auth_mode="
 
-composer install -o
-
 if [[ ! -e "vendor/swiftmailer/" ]]; then
   MAILER_URL="smtp://smtp:1025"
 fi
