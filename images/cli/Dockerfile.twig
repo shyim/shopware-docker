@@ -25,7 +25,7 @@ RUN set -x && \
       patch \
       mariadb-client \
       make && \
-    install-php-extensions bcmath gd intl mysqli pdo_mysql sockets bz2 gmp soap zip gmp pcntl posix redis pcov imagick{% if phpVersionNumeric >= 74 %} ffi excimer {% endif %} {% if production %} opcache {% endif %} {% if xdebug %} xdebug{% if phpVersionNumeric >= 71 and xdebug == 2 %}-2.9.8{% endif %} {% endif %} && \
+    install-php-extensions bcmath gd intl mysqli pdo_mysql sockets bz2 gmp soap zip gmp pcntl posix redis pcov imagick xsl{% if phpVersionNumeric >= 74 %} ffi excimer {% endif %} {% if production %} opcache {% endif %} {% if xdebug %} xdebug{% if phpVersionNumeric >= 71 and xdebug == 2 %}-2.9.8{% endif %} {% endif %} && \
     rm -rf /tmp/* && \
     useradd dev && \
     mkdir /home/dev && \
