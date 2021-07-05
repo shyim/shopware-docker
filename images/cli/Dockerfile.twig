@@ -1,4 +1,4 @@
-FROM {% block image_from %}php:{{ phpVersion }}-cli-alpine{% if phpVersionNumeric >= 74 %}3.13{% endif %}{% endblock %}
+FROM {% block image_from %}php:{{ phpVersion }}-cli-alpine{% if phpVersionNumeric >= 73 %}3.13{% endif %}{% endblock %}
 
 LABEL org.opencontainers.image.source https://github.com/shyim/shopware-docker
 ENV XDEBUG_MODE=debug \
