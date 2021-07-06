@@ -2,6 +2,7 @@
 
 if [[ -e /nvm/.fnm ]]; then
   # shellcheck source=/dev/null
+  # shellcheck disable=SC2046
   eval $(fnm --fnm-dir=/nvm/.fnm env --shell=bash)
 fi
 
