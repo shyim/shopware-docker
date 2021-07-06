@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-if [[ -e /nvm/nvm.sh ]]; then
+if [[ -e /nvm/.fnm ]]; then
   # shellcheck source=/dev/null
-  source /nvm/nvm.sh
+  eval $(fnm --fnm-dir=/nvm/.fnm env --shell=bash)
 fi
 
 FILE="$0"

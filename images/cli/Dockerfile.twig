@@ -31,6 +31,10 @@ RUN set -x && \
     mkdir /home/dev && \
     mkdir -p /opt/phpstorm-coverage && \
     chown -R dev /home/dev /opt/ && \
+    cd /tmp && \
+    wget https://github.com/shyim/fnm-alpine/releases/download/1.0.0/fnm && \
+    mv fnm /usr/local/bin && \
+    chmod +x /usr/local/bin/fnm && \
     apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing flamegraph && \
     apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/v3.13/community gnu-libiconv{% if xdebug %} && \
     {% if xdebug == 2 %}
@@ -76,7 +80,7 @@ COPY rootfs/ /
 RUN COMPOSER_HOME=/home/dev/.composer1 composer-native-1 global require hirak/prestissimo && \
     COMPOSER_HOME=/home/dev/.composer2 composer-native-2 global require repman-io/composer-plugin && \
     echo "alias ll=\"ls -lha\"" >> ~/.bashrc && \
-    echo "source /nvm/nvm.sh" >> ~/.bashrc
+    echo 'eval $(fnm --fnm-dir=/nvm/.fnm env --shell=bash)' >> ~/.bashrc
 
 WORKDIR /var/www/html
 

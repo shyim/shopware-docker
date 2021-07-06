@@ -1,10 +1,14 @@
 #!/usr/bin/env bash
 
-if [[ ! -e /nvm/versions/ ]]; then
-  git clone --depth=1 https://github.com/shyim/nvm-alpine.git /nvm
+if [[ -e /nvm/versions/ ]]; then
+  rm -rf /nvm/*
+  rm -rf /nvm/.cache
+fi
 
-  # shellcheck source=/dev/null
-  source /nvm/nvm.sh
-  nvm install v12.20.1
-  nvm use v12.20.1
+if [[ ! -e /nvm/fmn/ ]]; then
+  fnm --fnm-dir=/nvm/.fnm install 12
+  eval $(fnm --fnm-dir=/nvm/.fnm env --shell=bash)
+  fnm use 12
+else
+  eval $(fnm --fnm-dir=/nvm/.fnm env --shell=bash)
 fi
