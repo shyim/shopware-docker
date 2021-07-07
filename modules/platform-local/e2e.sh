@@ -34,7 +34,7 @@ usedCypressVersion=$(docker run \
     node:12-alpine \
     node "${E2E_PATH}/node_modules/.bin/cypress" --version | grep 'version: ' | head -1 | cut -d':' -f2)
 
-usedCypressVersion=$(trim_whitespace $usedCypressVersion)
+usedCypressVersion=$(trim_whitespace "$usedCypressVersion")
 
 xhost +si:localuser:root
 HOST=$(echo "$URL" | sed s/'http[s]\?:\/\/'//)
@@ -55,5 +55,5 @@ docker run \
       -u 1000 \
       --shm-size=2G \
       --entrypoint=cypress \
-      cypress/included:$usedCypressVersion \
+      "cypress/included:$usedCypressVersion" \
       open --project . --config baseUrl="$URL"
