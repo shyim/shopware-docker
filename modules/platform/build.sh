@@ -58,6 +58,9 @@ if [[ -e build/feature.env ]]; then
   cat build/feature.env >> .env
 fi
 
+# PSH is only used in the dev template
+if [[ -e dev-ops/generate_ssl.php ]]; then
+
 echo "const:
   APP_ENV: dev
   APP_URL: \"${URL}\"
@@ -67,14 +70,24 @@ echo "const:
   DB_PORT: 3306
   DB_NAME: \"${SHOPWARE_PROJECT}\"
   APP_MAILER_URL: \"${MAILER_URL}\"" >.psh.yaml.override
+fi
 
 export PROJECT_ROOT=$SHOPWARE_FOLDER
+
+if [[ ! -e custom/plugins ]]; then mkdir -p custom/plugins; fi
+if [[ ! -e custom/apps ]]; then mkdir -p custom/apps; fi
+if [[ ! -e config/jwt ]]; then mkdir -p config/jwt; fi
 
 CORE_PATH=$(platform_component Core)
 ADMINISTRATION_PATH=$(platform_component Administration)
 STOREFRONT_PATH=$(platform_component Storefront)
 
-php dev-ops/generate_ssl.php
+if [[ -e dev-ops/generate_ssl.php ]]; then
+  php dev-ops/generate_ssl.php
+else
+  php bin/console system:generate-jwt
+fi
+
 echo ''
 
 mysql -h "$mysqlHost" -u root -proot "$SHOPWARE_PROJECT" <"$CORE_PATH"/schema.sql

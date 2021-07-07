@@ -52,7 +52,7 @@ cd "${DIR}" || exit 1
 
 modules=(base)
 
-if [[ -f "${CODE_DIRECTORY}/${2}/src/Kernel.php" ]]; then
+if [[ -f "${CODE_DIRECTORY}/${2}/src/Kernel.php" || -f "${CODE_DIRECTORY}/${2}/src/Core/composer.json" ]]; then
   modules=(base platform-local)
 fi
 

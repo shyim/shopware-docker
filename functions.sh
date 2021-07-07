@@ -188,7 +188,9 @@ function check_env_compability() {
 function platform_component() {
   NAME=$1
 
-  if [[ -e vendor/shopware/platform ]]; then
+  if [[ -e src/Core/composer.json ]]; then
+    echo "src/${NAME}/"
+  elif [[ -e vendor/shopware/platform ]]; then
     echo "vendor/shopware/platform/src/${NAME}/"
   else
     echo "vendor/shopware/${NAME,,}/"

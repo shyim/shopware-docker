@@ -33,7 +33,7 @@ if [[ -n "$SHOPWARE_PROJECT" ]]; then
     modules=(base classic-zip classic)
   fi
 
-  if [[ -f "$SHOPWARE_FOLDER/src/Kernel.php" ]]; then
+  if [[ -f "$SHOPWARE_FOLDER/src/Kernel.php" || -f "$SHOPWARE_FOLDER/src/Core/composer.json" ]]; then
     modules=(base platform)
   fi
 
