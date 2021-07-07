@@ -11,7 +11,9 @@ fi
 
 cd "${CODE_DIRECTORY}/${SHOPWARE_PROJECT}" || exit
 
-E2E_DIR="vendor/shopware/platform/src/${MODULE}/Resources/app/${MODULE,}/test/e2e"
+E2E_DIR=$(platform_component $MODULE)
+
+E2E_DIR="$E2E_DIR/Resources/app/${MODULE,}/test/e2e"
 E2E_PATH="/var/www/html/${SHOPWARE_PROJECT}/${E2E_DIR}"
 
 if [[ ! -d "${E2E_DIR}/node_modules" ]]; then
@@ -23,6 +25,16 @@ if [[ ! -d "${E2E_DIR}/node_modules" ]]; then
     node:12-alpine \
     npm install --prefix "${E2E_PATH}"
 fi
+
+usedCypressVersion=$(docker run \
+    --rm \
+    -it \
+    -v "${CODE_DIRECTORY}:/var/www/html" \
+    -u 1000 \
+    node:12-alpine \
+    node "${E2E_PATH}/node_modules/.bin/cypress" --version | grep 'version: ' | head -1 | cut -d':' -f2)
+
+usedCypressVersion=$(trim_whitespace $usedCypressVersion)
 
 xhost +si:localuser:root
 HOST=$(echo "$URL" | sed s/'http[s]\?:\/\/'//)
@@ -43,5 +55,5 @@ docker run \
       -u 1000 \
       --shm-size=2G \
       --entrypoint=cypress \
-      cypress/included:5.6.0 \
+      cypress/included:$usedCypressVersion \
       open --project . --config baseUrl="$URL"
