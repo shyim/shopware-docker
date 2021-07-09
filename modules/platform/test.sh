@@ -4,6 +4,8 @@ checkParameter
 clearCache
 cd "/var/www/html/${SHOPWARE_PROJECT}" || exit 1
 
+export PROJECT_ROOT=$SHOPWARE_FOLDER
+
 composer dump-autoload
 
 if [[ $3 == "--with-coverage" ]]; then
