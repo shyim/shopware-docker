@@ -13,15 +13,6 @@ images:
       xdebug: 2
       APP_DOCUMENT_ROOT: '/var/www/html'
     tags:
-      php56-xdebug:
-        phpVersion: '5.6'
-        phpVersionNumeric: 56
-      php70-xdebug:
-        phpVersion: '7.0'
-        phpVersionNumeric: 70
-      php71-xdebug:
-        phpVersion: '7.1'
-        phpVersionNumeric: 71
       php72-xdebug:
         phpVersion: '7.2'
         phpVersionNumeric: 72
