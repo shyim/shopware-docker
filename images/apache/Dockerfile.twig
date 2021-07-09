@@ -59,8 +59,7 @@ RUN set -x && \
 
 {% if phpVersionNumeric >= 71 and xdebug == false and production == false %}
 RUN cd /opt/ && \
-    {% if phpVersionNumeric >= 73 %}apk add --no-cache libressl3.3-libtls && \{% endif %}
-    wget https://github.com/shyim/php-dump-client-prefixed/archive/main.zip && \
+    {% if phpVersionNumeric >= 73 %}apk add --no-cache libressl3.3-libtls && {% endif %} wget https://github.com/shyim/php-dump-client-prefixed/archive/main.zip && \
     unzip main.zip && \
     rm main.zip && \
     mv php-dump-client-prefixed-main php-dump-client-prefixed && \
