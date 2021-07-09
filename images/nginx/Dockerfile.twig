@@ -3,6 +3,7 @@ FROM {% block image_from %}php:{{ phpVersion }}-fpm-alpine{% endblock %}
 LABEL org.opencontainers.image.source https://github.com/shyim/shopware-docker
 COPY --from=ghcr.io/shyim/supervisord /usr/local/bin/supervisord /usr/bin/supervisord
 COPY --from=ghcr.io/shyim/shopware-docker/sendmail /sendmail /usr/bin/sendmail
+COPY --from=ghcr.io/shyim/alpine-iconv /usr/lib/preloadable_libiconv.so /usr/lib/preloadable_libiconv.so
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/
 
 ENV TZ=Europe/Berlin \
@@ -23,6 +24,7 @@ RUN set -x && \
       apk add --no-cache \
       nginx \
       shadow \
+      gnu-libiconv \
       socat && \
     install-php-extensions bcmath gd intl mysqli pdo_mysql sockets bz2 gmp soap zip gmp redis {% if phpVersionNumeric < 81 %}imagick {% endif%} {% if phpVersionNumeric >= 74 %} ffi excimer {% endif %} {% if production %} opcache {% endif %} {% if xdebug %} xdebug{% if phpVersionNumeric >= 71 and xdebug == 2 %}-2.9.8{% endif %}{% endif %} && \
     ln -s /usr/local/bin/php /usr/bin/php && \
@@ -35,8 +37,7 @@ RUN set -x && \
     chmod 777 -R /var/tmp/nginx/ && \
     rm -rf /tmp/* && \
     chown -R www-data:www-data /var/www && \
-    usermod -u 1000 www-data && \
-    apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/v3.13/community gnu-libiconv{% if xdebug %} && \
+    usermod -u 1000 www-data {% if xdebug %} && \
     {% if xdebug == 2 %}
     echo 'xdebug.remote_enable=1' > /usr/local/etc/php/conf.d/xdebug.ini && \
     echo 'xdebug.remote_autostart=0' >> /usr/local/etc/php/conf.d/xdebug.ini && \
@@ -63,6 +64,7 @@ RUN set -x && \
 
 {% if phpVersionNumeric >= 71 and xdebug == false and production == false %}
 RUN cd /opt/ && \
+    apk add --no-cache libressl3.3-libtls && \
     wget https://github.com/shyim/php-dump-client-prefixed/archive/main.zip && \
     unzip main.zip && \
     rm main.zip && \
@@ -85,8 +87,6 @@ RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
     && mv /tmp/blackfire/blackfire /usr/bin/blackfire \
     && rm -Rf /tmp/blackfire
 {% endif %}
-
-ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
 
 COPY rootfs/ /
 EXPOSE 80

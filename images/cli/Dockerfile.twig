@@ -6,6 +6,7 @@ ENV XDEBUG_MODE=debug \
 ENV PS1 '${debian_chroot:+($debian_chroot)}\[\033[01;31m\]\u\[\033[01;33m\]@\[\033[01;36m\]\h \[\033[01;33m\]\w \[\033[01;35m\]\$ \[\033[00m\]'
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/
 COPY --from=ghcr.io/shyim/shopware-docker/sendmail /sendmail /usr/bin/sendmail
+COPY --from=ghcr.io/shyim/alpine-iconv /usr/lib/preloadable_libiconv.so /usr/lib/preloadable_libiconv.so
 COPY --from=composer:1 /usr/bin/composer /usr/bin/composer-native-1
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer-native-2
 
@@ -24,6 +25,7 @@ RUN set -x && \
       bash-completion \
       patch \
       mariadb-client \
+      gnu-libiconv \
       make && \
     install-php-extensions bcmath gd intl mysqli pdo_mysql sockets bz2 gmp soap zip gmp pcntl posix redis pcov imagick xsl{% if phpVersionNumeric >= 74 %} ffi excimer {% endif %} {% if production %} opcache {% endif %} {% if xdebug %} xdebug{% if phpVersionNumeric >= 71 and xdebug == 2 %}-2.9.8{% endif %} {% endif %} && \
     rm -rf /tmp/* && \
@@ -63,6 +65,7 @@ RUN set -x && \
 
 {% if phpVersionNumeric >= 71 and xdebug == false %}
 RUN cd /opt/ && \
+    apk add --no-cache libressl3.3-libtls && \
     wget https://github.com/shyim/php-dump-client-prefixed/archive/main.zip && \
     unzip main.zip && \
     rm main.zip && \
@@ -84,6 +87,6 @@ RUN COMPOSER_HOME=/home/dev/.composer1 composer-native-1 global require hirak/pr
 
 WORKDIR /var/www/html
 
-ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
+ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so
 ENTRYPOINT [ "/entrypoint.sh" ]
 STOPSIGNAL SIGKILL

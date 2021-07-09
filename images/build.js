@@ -74,7 +74,11 @@ const run = async() => {
 
                 // Build that image
                 for (let imageName of image.image) {
-                    await exec('docker', ['buildx', 'build', '--platform', image.platforms.join(','), '--output', 'type=image,push=true', '--tag', `${imageName}:${tagName}`, '--file', image.dockerFile, image.context]);
+                    try {
+                        await exec('docker', ['buildx', 'build', '--platform', image.platforms.join(','), '--output', 'type=image,push=true', '--tag', `${imageName}:${tagName}`, '--file', image.dockerFile, image.context]);
+                    } catch (e) {
+                        process.exit(1);
+                    }
                 }
 
                 // Cleanup rendered files
