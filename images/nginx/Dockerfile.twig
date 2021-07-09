@@ -88,6 +88,8 @@ RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
     && rm -Rf /tmp/blackfire
 {% endif %}
 
+ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so
+
 COPY rootfs/ /
 EXPOSE 80
 STOPSIGNAL SIGKILL
