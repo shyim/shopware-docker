@@ -6,13 +6,11 @@ clearCache
 export PROJECT_ROOT="/var/www/html/$SHOPWARE_PROJECT/"
 cd "${PROJECT_ROOT}" || exit 1
 
+PLATFORM_PATH=$(platform_component Storefront)
+
 bin/console bundle:dump
 
-if [[ -e vendor/shopware/platform ]]; then
-  npm --prefix vendor/shopware/platform/src/Storefront/Resources/app/storefront/ run production
-else
-  npm --prefix vendor/shopware/storefront/Resources/app/storefront/ run production
-fi
+npm --prefix "${PLATFORM_PATH}/Resources/app/storefront/" run production
 
 bin/console assets:install
 bin/console theme:compile

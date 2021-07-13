@@ -17,12 +17,6 @@ E2E_DIR="$E2E_DIR/Resources/app/${MODULE,}/test/e2e"
 E2E_PATH="/var/www/html/${SHOPWARE_PROJECT}/${E2E_DIR}"
 
 if [[ ! -d "${E2E_DIR}/node_modules" ]]; then
-  docker run \
-    --rm \
-    -it \
-    -v "${CODE_DIRECTORY}:/var/www/html" \
-    -u 1000 \
-    node:12-alpine \
     npm install --prefix "${E2E_PATH}"
 fi
 

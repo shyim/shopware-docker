@@ -2,6 +2,14 @@
 
 cd "/var/www/html/${SHOPWARE_PROJECT}" || exit 1
 
+if grep -q static-analyze composer.json; then
+  composer update
+  composer run ecs-fix
+  composer run static-analyze
+
+  exit 0
+fi
+
 if grep -q static-analyze platform/composer.json; then
   cd platform || exit 1
   composer update
