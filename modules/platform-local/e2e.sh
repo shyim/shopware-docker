@@ -46,6 +46,8 @@ docker run \
       -v /tmp/.X11-unix:/tmp/.X11-unix \
       -w "${E2E_PATH}" \
       -e DISPLAY \
+      -e TZ=UTC \
+      -e "CYPRESS_shopwareRoot=/var/www/html/${SHOPWARE_PROJECT}" \
       -u 1000 \
       --shm-size=2G \
       --entrypoint=cypress \

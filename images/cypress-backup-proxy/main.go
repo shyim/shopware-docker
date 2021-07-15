@@ -43,11 +43,13 @@ func restoreHandler(w http.ResponseWriter, r *http.Request)  {
 	}
 
 	for _, c := range containers {
+		log.Printf("Performing restoring for %s\n", host)
+
 		execConfig := types.ExecConfig{
 			AttachStderr: true,
 			AttachStdin:  true,
 			AttachStdout: true,
-			Cmd: []string{"bash", "-c", fmt.Sprintf("mysql -uroot -p%s %s < /tmp/%s.sql", os.Getenv("MYSQL_ROOT_PASSWORD"), host, host)},
+			Cmd: []string{"bash", "-c", fmt.Sprintf("mysql -uroot -p%s < /tmp/%s.sql", os.Getenv("MYSQL_ROOT_PASSWORD"), host)},
 			Tty:          true,
 			Detach:       false,
 		}
@@ -55,6 +57,7 @@ func restoreHandler(w http.ResponseWriter, r *http.Request)  {
 		create, err := dClient.ContainerExecCreate(ctx, c.ID, execConfig)
 		if err != nil {
 			w.WriteHeader(500)
+			log.Println(err)
 			fmt.Fprintln(w, err)
 			return
 		}
@@ -67,6 +70,7 @@ func restoreHandler(w http.ResponseWriter, r *http.Request)  {
 		containerResponse, err := dClient.ContainerExecAttach(ctx, create.ID, execAttachConfig)
 		if err != nil {
 			w.WriteHeader(500)
+			log.Println(err)
 			fmt.Fprintln(w, err)
 			return
 		}
@@ -74,7 +78,9 @@ func restoreHandler(w http.ResponseWriter, r *http.Request)  {
 		defer containerResponse.Close()
 
 		data, _ := ioutil.ReadAll(containerResponse.Reader)
-		fmt.Println(string(data))
+		log.Printf("Output: %s\n", string(data))
+
+		log.Printf("Completed restoring for %s\n", host)
 	}
 
 	fmt.Fprint(w, "success")
@@ -96,11 +102,13 @@ func backupHandler(w http.ResponseWriter, r *http.Request)  {
 	}
 
 	for _, c := range containers {
+		log.Printf("Performing backup for %s\n", host)
+
 		execConfig := types.ExecConfig{
 			AttachStderr: true,
 			AttachStdin:  true,
 			AttachStdout: true,
-			Cmd: []string{"bash", "-c", fmt.Sprintf("mysqldump -uroot -p%s %s > /tmp/%s.sql", os.Getenv("MYSQL_ROOT_PASSWORD"), host, host)},
+			Cmd: []string{"bash", "-c", fmt.Sprintf("mysqldump --add-drop-database -uroot -p%s --databases %s > /tmp/%s.sql", os.Getenv("MYSQL_ROOT_PASSWORD"), host, host)},
 			Tty:          true,
 			Detach:       false,
 		}
@@ -127,7 +135,7 @@ func backupHandler(w http.ResponseWriter, r *http.Request)  {
 		defer containerResponse.Close()
 
 		data, _ := ioutil.ReadAll(containerResponse.Reader)
-		fmt.Println(string(data))
+		log.Println(string(data))
 	}
 
 	fmt.Fprint(w, "success")
