@@ -13,11 +13,11 @@ cd "${CODE_DIRECTORY}/${SHOPWARE_PROJECT}" || exit
 
 E2E_DIR=$(platform_component $MODULE)
 
-E2E_DIR="$E2E_DIR/Resources/app/${MODULE,}/test/e2e"
+E2E_DIR="${E2E_DIR}Resources/app/${MODULE,}/test/e2e"
 E2E_PATH="/var/www/html/${SHOPWARE_PROJECT}/${E2E_DIR}"
 
-if [[ ! -d "${E2E_DIR}/node_modules" ]]; then
-    npm install --prefix "${E2E_PATH}"
+if [[ ! -f "${E2E_DIR}/node_modules" ]]; then
+    npm install --prefix "${E2E_DIR}"
 fi
 
 usedCypressVersion=$(docker run \
