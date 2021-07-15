@@ -20,8 +20,6 @@ if [[ ! -d "${E2E_DIR}/node_modules" ]]; then
     npm install --prefix "${E2E_DIR}"
 fi
 
-exit 0
-
 usedCypressVersion=$(docker run \
     --rm \
     -it \
