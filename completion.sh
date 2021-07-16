@@ -53,6 +53,10 @@ function __list_swdc_commands {
 
         # shellcheck disable=SC2207
         COMPREPLY=($(compgen -W '--mysql-host --without-demo-data --without-building' -- "${COMP_WORDS[3]}"))
+    elif [[ "$prev_arg" == "check" ]]; then
+
+        # shellcheck disable=SC2207
+        COMPREPLY=($(compgen -W 'ecs static-analyse' -- "${COMP_WORDS[3]}"))
     fi
 
     return 0;
