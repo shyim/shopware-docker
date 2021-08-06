@@ -150,7 +150,7 @@ function get_document_root() {
 function get_serve_folders() {
   for d in "${CODE_DIRECTORY}"/*; do
     if [[ -d "$d" ]]; then
-      if [ -f "$d/public/index.php" ] || [ -f "$d/shopware.php" ]; then
+      if [ -f "$d/public/index.php" ] || [ -f "$d/shopware.php" ] || [ -f "$d/.swdc/service.yml" ]; then
         basename "$d"
       fi
     fi

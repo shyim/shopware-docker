@@ -84,7 +84,7 @@ if [[ ${CACHE_VOLUMES} == "true" ]]; then
 fi
 
 compose run --rm start_mysql
-compose up -d --remove-orphans
+compose up -d --remove-orphans "${@:2}"
 
 if [[ $WSL_XDEBUG_TUNNEL == "true" ]]; then
   if [[ -e "$REALDIR/xdebug.sock" ]]; then
