@@ -6,7 +6,6 @@ PLATFORM_PATH=$(platform_component Administration)
 LOCAL_WEBPACK_CONFIG="${LOCAL_PROJECT_ROOT}/${PLATFORM_PATH}Resources/app/administration/webpack.config.js"
 export USE_SSL_DEFAULT=false
 URL=$(get_url "$SHOPWARE_PROJECT")
-HOST=$(echo "$URL" | sed s/'http[s]\?:\/\/'//)
 WATCHER_URL="admin-${SHOPWARE_PROJECT}.${DEFAULT_DOMAIN}"
 
 if [[ -e "${LOCAL_WEBPACK_CONFIG}" ]]; then
