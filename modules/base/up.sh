@@ -17,7 +17,7 @@ export XDEBUG_ENABLE=$2
   echo "services:"
 
   echo "  smtp:"
-  echo "    image: mailhog/mailhog"
+  echo "    image: ghcr.io/shyim/shopware-docker/mailhog"
   echo "    environment:"
   echo "      VIRTUAL_HOST: mail.${DEFAULT_SERVICES_DOMAIN}"
   echo "      VIRTUAL_PORT: 8025"

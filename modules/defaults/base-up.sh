@@ -4,60 +4,65 @@ Platform=$(uname -s)
 export Platform="${Platform}"
 
 function create_nginx() {
-  while IFS= read -r NAME; do
-    d="${CODE_DIRECTORY}/${NAME}"
+  if [[ ${CODE_FOLDER_CONTENT} ]]; then
 
-    hosts=$(get_hosts "$NAME")
-    certName=$(get_cert_name "$NAME")
-    documentRoot=$(get_document_root "$NAME" "$d")
-    echo "  app_${NAME}:" >>"${DOCKER_COMPOSE_FILE}"
+    while IFS= read -r NAME; do
+      d="${CODE_DIRECTORY}/${NAME}"
 
-    IMAGE=$(get_image "$NAME" "$d")
-    {
-      echo "    image: ${IMAGE}"
-      echo "    env_file:"
-      echo "      - ${REALDIR}/docker.env"
-      echo "      - ~/.config/swdc/env"
-      echo "    extra_hosts:"
-    } >>"${DOCKER_COMPOSE_FILE}"
+      hosts=$(get_hosts "$NAME")
+      certName=$(get_cert_name "$NAME")
+      documentRoot=$(get_document_root "$NAME" "$d")
+      echo "  app_${NAME}:" >>"${DOCKER_COMPOSE_FILE}"
 
-    for i in ${hosts//,/ }; do
-      echo "      ${i}: 127.0.0.1" >>"${DOCKER_COMPOSE_FILE}"
-    done
-
-    {
-      echo "    environment:"
-      echo "      APP_DOCUMENT_ROOT: ${documentRoot}"
-    } >>"${DOCKER_COMPOSE_FILE}"
-
-    if [[ ${ENABLE_VARNISH} == "false" ]]; then
+      IMAGE=$(get_image "$NAME" "$d")
       {
-        echo "      VIRTUAL_HOST: ${hosts}"
-        echo "      CERT_NAME: ${certName}"
-        echo "      HTTPS_METHOD: noredirect"
+        echo "    image: ${IMAGE}"
+        echo "    env_file:"
+        echo "      - ${REALDIR}/docker.env"
+        echo "      - ~/.config/swdc/env"
+        echo "    networks:"
+        echo "      default:"
+        echo "        aliases:"
       } >>"${DOCKER_COMPOSE_FILE}"
-    fi
-    {
-      echo "    volumes:"
-      echo "      - ${REALDIR}:/opt/swdc/"
-    } >>"${DOCKER_COMPOSE_FILE}"
-    if [[ ${Platform} != "Linux" ]]; then
-      echo "      - ${CODE_DIRECTORY}:/var/www/html:cached" >>"${DOCKER_COMPOSE_FILE}"
-      if [[ ${CACHE_VOLUMES} == "true" ]]; then
+
+      for i in ${hosts//,/ }; do
+        echo "          - ${i}" >>"${DOCKER_COMPOSE_FILE}"
+      done
+
+      {
+        echo "    environment:"
+        echo "      APP_DOCUMENT_ROOT: ${documentRoot}"
+      } >>"${DOCKER_COMPOSE_FILE}"
+
+      if [[ ${ENABLE_VARNISH} == "false" ]]; then
         {
-          echo "      - ${NAME}_web_cache:/var/www/html/${NAME}/web/cache:delegated"
-          echo "      - ${NAME}_var_cache:/var/www/html/${NAME}/var/cache:delegated"
-        } >>"${DOCKER_COMPOSE_FILE}"
-      else
-        {
-          echo "      - ${CODE_DIRECTORY}/${NAME}/var/cache:/var/www/html/${NAME}/var/cache:delegated"
-          echo "      - ${CODE_DIRECTORY}/${NAME}/web/cache:/var/www/html/${NAME}/web/cache:delegated"
+          echo "      VIRTUAL_HOST: ${hosts}"
+          echo "      CERT_NAME: ${certName}"
+          echo "      HTTPS_METHOD: noredirect"
         } >>"${DOCKER_COMPOSE_FILE}"
       fi
-    else
-      echo "      - ${CODE_DIRECTORY}:/var/www/html" >>"${DOCKER_COMPOSE_FILE}"
-    fi
-  done <<<"$(get_serve_folders)"
+      {
+        echo "    volumes:"
+        echo "      - ${REALDIR}:/opt/swdc/"
+      } >>"${DOCKER_COMPOSE_FILE}"
+      if [[ ${Platform} != "Linux" ]]; then
+        echo "      - ${CODE_DIRECTORY}:/var/www/html:cached" >>"${DOCKER_COMPOSE_FILE}"
+        if [[ ${CACHE_VOLUMES} == "true" ]]; then
+          {
+            echo "      - ${NAME}_web_cache:/var/www/html/${NAME}/web/cache:delegated"
+            echo "      - ${NAME}_var_cache:/var/www/html/${NAME}/var/cache:delegated"
+          } >>"${DOCKER_COMPOSE_FILE}"
+        else
+          {
+            echo "      - ${CODE_DIRECTORY}/${NAME}/var/cache:/var/www/html/${NAME}/var/cache:delegated"
+            echo "      - ${CODE_DIRECTORY}/${NAME}/web/cache:/var/www/html/${NAME}/web/cache:delegated"
+          } >>"${DOCKER_COMPOSE_FILE}"
+        fi
+      else
+        echo "      - ${CODE_DIRECTORY}:/var/www/html" >>"${DOCKER_COMPOSE_FILE}"
+      fi
+    done <<<"$(get_serve_folders)"
+  fi
 }
 
 function create_mysql() {
@@ -126,21 +131,13 @@ function create_cli() {
     echo "      - 8005:8005"
     echo "      - 9998:9998"
     echo "      - 9999:9999"
+    echo "    volumes:"
+    echo "      - ${REALDIR}:/opt/swdc/"
+    echo "      - nvm_cache:/nvm"
   } >>"${DOCKER_COMPOSE_FILE}"
-  if [[ ${CODE_FOLDER_CONTENT} ]]; then
-    echo "    links:" >>"${DOCKER_COMPOSE_FILE}"
-    while IFS= read -r NAME; do
-      hosts=$(get_hosts "$NAME")
-      for i in ${hosts//,/ }; do
-        echo "      - app_${NAME}:${i}" >>"${DOCKER_COMPOSE_FILE}"
-      done
-    done <<<"$(get_serve_folders)"
 
-    {
-      echo "    volumes:"
-      echo "      - ${REALDIR}:/opt/swdc/"
-      echo "      - nvm_cache:/nvm"
-    } >>"${DOCKER_COMPOSE_FILE}"
+  # Add volume stuff to service
+  if [[ ${CODE_FOLDER_CONTENT} ]]; then
     if [[ ${Platform} != "Linux" ]]; then
       echo "      - ${CODE_DIRECTORY}:/var/www/html:cached" >>"${DOCKER_COMPOSE_FILE}"
 

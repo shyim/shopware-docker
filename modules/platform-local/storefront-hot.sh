@@ -20,7 +20,6 @@ docker run \
   -e PROJECT_ROOT \
   -e ESLINT_DISABLE \
   -e VIRTUAL_HOST="hot.${HOST}" \
-  --link "app_${SHOPWARE_PROJECT}:${HOST}" \
   -p 80 \
   -p 9999:9999 \
   --entrypoint=npm \

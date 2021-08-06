@@ -41,7 +41,6 @@ docker run \
       -it \
       --name "${SHOPWARE_PROJECT}_cypress" \
       --network shopware-docker_default \
-      --link "app_${SHOPWARE_PROJECT}:${HOST}" \
       -v "${CODE_DIRECTORY}/${SHOPWARE_PROJECT}:/var/www/html/${SHOPWARE_PROJECT}" \
       -v /tmp/.X11-unix:/tmp/.X11-unix \
       -w "${E2E_PATH}" \
