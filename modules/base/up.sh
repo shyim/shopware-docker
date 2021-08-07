@@ -12,6 +12,10 @@ export CODE_FOLDER_CONTENT="${CODE_FOLDER_CONTENT}"
 PHP_VERSION="${PHP_VERSION//\./}"
 export XDEBUG_ENABLE=$2
 
+if [[ -n $XDEBUG_ENABLE ]]; then
+  shift
+fi
+
 {
   echo "version: '3.7'"
   echo "services:"
