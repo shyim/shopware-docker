@@ -19,6 +19,7 @@ source "${DIR}/functions.sh"
 
 SHOPWARE_PROJECT="$2"
 SHOPWARE_FOLDER="/var/www/html/$SHOPWARE_PROJECT"
+export SWDC_IN_DOCKER=1
 
 modules=(base)
 

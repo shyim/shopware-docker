@@ -9,6 +9,9 @@ mysqlHost="mysql"
 
 shift 2
 
+hook=$(fire_hook build-pre-configure "$@")
+eval $hook
+
 while (($#)); do
   case $1 in
   --mysql-host)
@@ -25,6 +28,9 @@ while (($#)); do
   shift
 done
 
+hook=$(fire_hook build-pre-setup "$@")
+eval $hook
+
 mysql -h "$mysqlHost" -u root -p"$MYSQL_ROOT_PASSWORD" -e "DROP DATABASE IF EXISTS \`$SHOPWARE_PROJECT\`"
 mysql -h "$mysqlHost" -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE DATABASE \`$SHOPWARE_PROJECT\`"
 cd "/var/www/html/${SHOPWARE_PROJECT}" || exit 1
@@ -33,7 +39,13 @@ SECRET=$(openssl rand -hex 32)
 INSTANCE_ID=$(openssl rand -hex 32)
 MAILER_URL="smtp://smtp:1025?encryption=&auth_mode="
 
+hook=$(fire_hook build-pre-composer-install "$@")
+eval $hook
+
 composer install -o
+
+hook=$(fire_hook build-post-composer-install "$@")
+eval $hook
 
 if [[ ! -e "vendor/swiftmailer/" ]]; then
   MAILER_URL="smtp://smtp:1025"
@@ -106,6 +118,9 @@ else
   fi
 fi
 
+hook=$(fire_hook build-post-database-migrate "$@")
+eval $hook
+
 bin/console bundle:dump
 bin/console feature:dump || true
 bin/console scheduled-task:register
@@ -136,3 +151,6 @@ fi
 
 bin/console theme:refresh
 bin/console theme:change Storefront --all
+
+hook=$(fire_hook build-post-install "$@")
+eval $hook

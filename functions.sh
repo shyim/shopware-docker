@@ -196,3 +196,19 @@ function platform_component() {
     echo "vendor/shopware/${NAME,,}/"
   fi
 }
+
+function fire_hook() {
+  EVENT=$1
+  shift
+
+  HOOKS_DIR="~/.config/swdc/hooks"
+
+  if [[ -n $SWDC_IN_DOCKER ]]; then
+    HOOKS_DIR="/swdc-cfg/hooks"
+  fi
+
+  if [[ -e "$HOOKS_DIR/$EVENT.sh" ]]; then
+    # shellcheck disable=SC2145
+    echo ". $HOOKS_DIR/$EVENT.sh $@"
+  fi
+}
