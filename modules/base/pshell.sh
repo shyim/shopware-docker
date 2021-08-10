@@ -1,9 +1,15 @@
 #!/usr/bin/env bash
 
+checkParameter
+
+shift
+
+PROJECT_NAME=$1
+
 shift
 
 if [[ -z "$1" ]]; then
-  compose exec -e COLUMNS -e LINES -e SHELL=bash cli bash
+  compose exec -w "/var/www/html/$PROJECT_NAME" -e COLUMNS -e LINES -e SHELL=bash cli bash
 else
   PHP_VERSION=default
 
@@ -22,11 +28,12 @@ else
   done
 
   if [[ $PHP_VERSION == 'default' ]]; then
-    compose exec -e COLUMNS -e LINES -e SHELL=bash cli "$@"
+    compose exec -w "/var/www/html/$PROJECT_NAME" -e COLUMNS -e LINES -e SHELL=bash cli "$@"
   else
     docker run \
       --rm \
       -it \
+      -w "/var/www/html/$PROJECT_NAME" \
       --env-file="${REALDIR}/docker.env" \
       --env-file="${REALDIR}/.env.dist" \
       --env=file=~/.config/swdc/env \

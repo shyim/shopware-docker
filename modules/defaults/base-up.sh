@@ -138,6 +138,7 @@ function create_cli() {
     echo "    volumes:"
     echo "      - ${REALDIR}:/opt/swdc/"
     echo "      - nvm_cache:/nvm"
+    echo "      - ~/.config/swdc/:/swdc-cfg"
   } >>"${DOCKER_COMPOSE_FILE}"
 
   # Add volume stuff to service

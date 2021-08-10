@@ -2,4 +2,8 @@
 
 bash /usr/local/bin/setup_nvm
 
-exec bash
+if [ -z "$1" ]; then
+    exec bash
+else
+    exec "$@"
+fi
