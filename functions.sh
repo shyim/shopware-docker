@@ -201,7 +201,7 @@ function fire_hook() {
   EVENT=$1
   shift
 
-  HOOKS_DIR="~/.config/swdc/hooks"
+  HOOKS_DIR="$HOME/.config/swdc/hooks"
 
   if [[ -n $SWDC_IN_DOCKER ]]; then
     HOOKS_DIR="/swdc-cfg/hooks"
