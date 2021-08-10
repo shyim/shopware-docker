@@ -30,6 +30,7 @@ fi
 dist=$(dialog --clear --backtitle "Shopware Installation" --title "Choose Distribution" --menu "Choose one of the following options:" 15 80 4 \
   development "Shopware 6 - Development Template (recommended for extension development)" \
   production "Shopware 6 - Production Template (recommended for projects)" \
+  platform "Shopware 6 - Platform Repository (recommended for contribution)" \
   sw6Zip "Shopware 6 - Zip Distribution" \
   sw5Zip "Shopware 5 - Zip Distribution" 2>&1 >/dev/tty)
 
@@ -106,6 +107,43 @@ XXX
 EOF
 
     git clone -q https://github.com/shopware/production.git -b"$version" --depth=1 "$CODE_DIRECTORY/$installName" &>/dev/null
+
+    cat <<EOF
+XXX
+20
+Installing Shopware 6
+XXX
+EOF
+
+    "$REALDIR/swdc" build "$installName" &>/dev/null
+
+    cat <<EOF
+XXX
+90
+Configuring Nginx
+XXX
+EOF
+
+    "$REALDIR/swdc" up &>/dev/null
+    exit 0
+  )
+
+  clear
+
+  echo "Shopware 6 Installation is installed and accessible at: ${installName}.${DEFAULT_DOMAIN}"
+fi
+
+if [[ $dist == 'platform' ]]; then
+  dialog --clear --backtitle "Shopware Installation" --title "Installing" --gauge "Installation..." 10 75 < <(
+
+    cat <<EOF
+XXX
+0
+Cloning platform repository
+XXX
+EOF
+
+    git clone -q https://github.com/shopware/platform.git "$CODE_DIRECTORY/$installName" &>/dev/null
 
     cat <<EOF
 XXX
