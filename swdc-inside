@@ -47,16 +47,19 @@ fi
 cd "${DIR}" || exit 1
 
 for module in "${modules[@]}"; do
-  for command in "./modules/${module}/"*.sh; do
-    NAME=$(basename "$command")
-    NAME=${NAME%.*}
+  # shellcheck source=/dev/null
+  if [[ -f "./modules/${module}/${1}.sh" ]]; then
+    # shellcheck source=/dev/null
+    source "./modules/${module}/${1}.sh"
+    exit 0
+  fi
 
-    if [[ $NAME == "$1" ]]; then
-      # shellcheck source=/dev/null
-      source "$command"
-      exit 0
-    fi
-  done
+  # shellcheck source=/dev/null
+  if [[ -f "/swdc-cfg/modules/${module}/${1}.sh" ]]; then
+    # shellcheck source=/dev/null
+    source "/swdc-cfg/modules/${module}/${1}.sh"
+    exit 0
+  fi
 done
 
 cat ./modules/base/header.txt

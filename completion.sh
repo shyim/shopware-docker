@@ -10,6 +10,11 @@ source "${CONFIG_DIR}/swdc/env"
 # shellcheck disable=SC2086
 AVAILABLE_CMDS=$(find $DIR/modules/* -maxdepth 1 -mindepth 1 -iname "*.sh")
 
+if [[ -e "$HOME/.config/swdc/modules/" ]]; then
+    # shellcheck disable=SC2086
+    AVAILABLE_CMDS=$(find $DIR/modules/* $HOME/.config/swdc/modules/* -maxdepth 1 -mindepth 1 -iname "*.sh")
+fi
+
 function __list_swdc_commands {
     prev_arg="${COMP_WORDS[COMP_CWORD-2]}";
     build_arg=$prev_arg

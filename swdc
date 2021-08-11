@@ -68,6 +68,13 @@ for module in "${modules[@]}"; do
     source "./modules/${module}/${1}.sh"
     exit 0
   fi
+
+  # shellcheck source=/dev/null
+  if [[ -f "$HOME/.config/swdc/modules/${module}/${1}.sh" ]]; then
+    # shellcheck source=/dev/null
+    source "$HOME/.config/swdc/modules/${module}/${1}.sh"
+    exit 0
+  fi
 done
 
 compose exec cli bash /opt/swdc/swdc-inside "$@"
