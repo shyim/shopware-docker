@@ -9,3 +9,4 @@
 /.env
 /nginx/rootfs/etc/nginx/sites-enabled/www.conf
 /ssl/*
+/local-modules
