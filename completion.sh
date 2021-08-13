@@ -12,6 +12,11 @@ AVAILABLE_CMDS=$(find $DIR/modules/* -maxdepth 1 -mindepth 1 -iname "*.sh")
 
 function __list_swdc_commands {
     prev_arg="${COMP_WORDS[COMP_CWORD-2]}";
+    build_arg=$prev_arg
+
+    if [[ -n "${COMP_WORDS[1]}" ]]; then
+        build_arg=${COMP_WORDS[1]}
+    fi
 
     if [[ "$3" == "swdc" ]]; then
         local cmds
@@ -23,7 +28,7 @@ function __list_swdc_commands {
         done
 
         # shellcheck disable=SC2207
-        COMPREPLY=($(compgen -W "$cmds" "${COMP_WORDS[1]}"))
+        COMPREPLY=($(compgen -W "$cmds" "${COMP_WORDS[COMP_CWORD]}"))
     elif [[ "$AVAILABLE_CMDS" == *"$3"* ]]; then
         local cmds
 
@@ -35,8 +40,8 @@ function __list_swdc_commands {
         done
 
         # shellcheck disable=SC2207
-        COMPREPLY=($(compgen -W "$cmds" "${COMP_WORDS[2]}"))
-    elif [[ "$prev_arg" == "snap" || "$prev_arg" == "rsnap" ]]; then
+        COMPREPLY=($(compgen -W "$cmds" "${COMP_WORDS[COMP_CWORD]}"))
+    elif [[ "$build_arg" == "snap" || "$build_arg" == "rsnap" ]]; then
         local cmds
 
         # shellcheck disable=SC2044
@@ -48,15 +53,15 @@ function __list_swdc_commands {
         done
 
         # shellcheck disable=SC2207
-        COMPREPLY=($(compgen -W "$cmds" "${COMP_WORDS[3]}"))
-    elif [[ "$prev_arg" == "build" ]]; then
+        COMPREPLY=($(compgen -W "$cmds" "${COMP_WORDS[COMP_CWORD]}"))
+    elif [[ "$build_arg" == "build" ]]; then
 
         # shellcheck disable=SC2207
-        COMPREPLY=($(compgen -W '--mysql-host --without-demo-data --without-building' -- "${COMP_WORDS[3]}"))
-    elif [[ "$prev_arg" == "check" ]]; then
+        COMPREPLY=($(compgen -W '--mysql-host --without-demo-data --without-building' -- "${COMP_WORDS[COMP_CWORD]}"))
+    elif [[ "$build_arg" == "check" ]]; then
 
         # shellcheck disable=SC2207
-        COMPREPLY=($(compgen -W 'ecs static-analyse' -- "${COMP_WORDS[3]}"))
+        COMPREPLY=($(compgen -W 'ecs static-analyse phpstan psalm' -- "${COMP_WORDS[COMP_CWORD]}"))
     fi
 
     return 0;
