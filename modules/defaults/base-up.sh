@@ -86,11 +86,18 @@ function create_mysql() {
       echo "    tmpfs:"
       echo "      - /var/lib/mysql"
     } >>"${DOCKER_COMPOSE_FILE}"
-  else
-    {
-      echo "    volumes:"
-      echo "      - ${MYSQL_DATA_DIR:-$REALDIR}/mysql-data:/var/lib/mysql:delegated"
-    } >>"${DOCKER_COMPOSE_FILE}"
+  fi
+
+  if [[ ${PERSISTENT_DATABASE} == "true" || -e "$HOME/.config/swdc/mysql.conf" ]]; then
+    echo "    volumes:" >> "${DOCKER_COMPOSE_FILE}"
+  fi
+
+  if [[ ${PERSISTENT_DATABASE} == "true" ]]; then
+    echo "      - ${MYSQL_DATA_DIR:-$REALDIR}/mysql-data:/var/lib/mysql:delegated" >> "${DOCKER_COMPOSE_FILE}"
+  fi
+
+  if [[ -e "$HOME/.config/swdc/mysql.conf" ]]; then
+    echo "      - $HOME/.config/swdc/mysql.conf:/etc/mysql/conf.d/zz-override.cnf" >> "${DOCKER_COMPOSE_FILE}"
   fi
 
   if [[ ${MYSQL_VERSION} == "shyim/shopware-mysql:8" || ${MYSQL_VERSION} == "ghcr.io/shyim/shopware-docker/mysql:8" || ${MYSQL_VERSION} == "mysql:8"* ]]; then
