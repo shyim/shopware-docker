@@ -30,7 +30,7 @@ else
   done
 
   if [[ $PHP_VERSION == 'default' ]]; then
-    compose exec -w "/var/www/html/$PROJECT_NAME" -e COLUMNS -e LINES -e SHELL=bash cli "$@"
+    compose exec -T -w "/var/www/html/$PROJECT_NAME" -e COLUMNS -e LINES -e SHELL=bash cli "$@"
   else
     docker run \
       --rm \

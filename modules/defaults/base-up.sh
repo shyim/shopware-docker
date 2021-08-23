@@ -291,10 +291,11 @@ function create_cypress() {
 function create_blackfire() {
   {
     echo "  blackfire:"
-    echo "    image: blackfire/blackfire"
+    echo "    image: blackfire/blackfire:2"
     echo "    environment:"
     echo "      BLACKFIRE_SERVER_ID: ${BLACKFIRE_SERVER_ID}"
     echo "      BLACKFIRE_SERVER_TOKEN: ${BLACKFIRE_SERVER_TOKEN}"
+    echo "      BLACKFIRE_DISABLE_LEGACY_PORT: 1"
   } >>"${DOCKER_COMPOSE_FILE}"
 }
 
