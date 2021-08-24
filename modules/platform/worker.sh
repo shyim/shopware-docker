@@ -24,9 +24,9 @@ function cancel_trap()
 trap cancel_trap SIGINT
 
 for i in $(seq 1 ${WORKER_AMOUNT}); do
-  bash -c 'while true; do php bin/console messenger:consume --memory-limit=1G; done'  > /dev/null 2>&1 & echo $! > "${TRAP_PIDS}.$i"
+  bash -c "while true; do php bin/console messenger:consume --memory-limit=1G -vvv; done"  > var/log/worker-$i.log 2>&1 & echo $! > "${TRAP_PIDS}.$i"
 done
 
-echo "Started ${WORKER_AMOUNT} Worker in Background. Press STRG+C to cancel them"
+echo "Started ${WORKER_AMOUNT} Worker in Background. Press STRG+C to cancel them. Use swdc worker-logs to see logs"
 
 wait

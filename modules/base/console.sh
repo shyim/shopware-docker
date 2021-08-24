@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+checkParameter
+
 SHOPWARE_PROJECT=$2
 shift 2
 
