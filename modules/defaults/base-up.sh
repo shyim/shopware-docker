@@ -190,6 +190,10 @@ function create_es() {
       echo "      opendistro_security.ssl.http.enabled: 'false'"
     fi
 
+    if [[ "${ELASTICSEARCH_IMAGE}" == *"opensearchproject"* ]]; then
+      echo "      plugins.security.disabled: 'true'"
+    fi
+
     echo "  kibana:"
     echo "    image: ${KIBANA_IMAGE}"
     echo "    links:"
@@ -201,6 +205,12 @@ function create_es() {
     if [[ "${ELASTICSEARCH_IMAGE}" == *"amazon" ]]; then
       echo "      ELASTICSEARCH_URL: http://elastic:9200"
       echo "      ELASTICSEARCH_HOSTS: http://elastic:9200"
+    fi
+
+    if [[ "${ELASTICSEARCH_IMAGE}" == *"opensearchproject"* ]]; then
+      echo "      ELASTICSEARCH_URL: http://elastic:9200"
+      echo "      OPENSEARCH_HOSTS: '[\"http://elastic:9200\"]'"
+      echo "      plugins.security.disabled: 'true'"
     fi
   } >>"${DOCKER_COMPOSE_FILE}"
 }
