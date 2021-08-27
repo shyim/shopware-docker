@@ -111,11 +111,13 @@ function create_start_mysql() {
     image: busybox:latest
     volumes:
       - nvm_cache:/nvm
+      - tool_cache:/tmp/swdc-tool-cache
     entrypoint:
       - sh
     command: >
       -c "
         chown 1000:1000 /nvm
+        chown 1000:1000 /tmp/swdc-tool-cache
         while !(nc -z mysql 3306)
         do
           echo -n '.'
@@ -145,6 +147,7 @@ function create_cli() {
     echo "    volumes:"
     echo "      - ${REALDIR}:/opt/swdc/"
     echo "      - nvm_cache:/nvm"
+    echo "      - tool_cache:/tmp/swdc-tool-cache"
     echo "      - ~/.config/swdc/:/swdc-cfg"
   } >>"${DOCKER_COMPOSE_FILE}"
 

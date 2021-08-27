@@ -2,6 +2,17 @@
 
 cd "/var/www/html/${SHOPWARE_PROJECT}" || exit 1
 
+export SHOPWARE_TOOL_CACHE_ECS="/tmp/swdc-tool-cache/ecs-${SHOPWARE_PROJECT}/"
+
+if [[ -e phpstan.neon.dist ]]; then
+echo "includes:
+    - phpstan.neon.dist
+
+parameters:
+    tmpDir: /tmp/swdc-tool-cache/phpstan-${SHOPWARE_PROJECT}/
+" > phpstan.neon
+fi
+
 shift 2
 
 RUN_ECS=1

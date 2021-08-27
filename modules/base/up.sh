@@ -81,6 +81,8 @@ fi
   echo "volumes:"
   echo "  nvm_cache:"
   echo "    driver: local"
+  echo "  tool_cache:"
+  echo "    driver: local"
 } >>"${DOCKER_COMPOSE_FILE}"
 
 if [[ ${CACHE_VOLUMES} == "true" ]]; then

@@ -32,6 +32,7 @@ else
       --env=file=~/.config/swdc/env \
       --network shopware-docker_default \
       -v shopware-docker_nvm_cache:/nvm \
+      -v shopware-docker_tool_cache:/tmp/swdc-tool-cache \
       -v "$CODE_DIRECTORY:/var/www/html/" \
       -v "/.config/swdc/:/swdc-cfg" \
       "ghcr.io/shyim/shopware-docker/cli:php$PHP_VERSION" "$@"
