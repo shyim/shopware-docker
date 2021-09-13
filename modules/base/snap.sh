@@ -18,4 +18,4 @@ fi
 
 checkParameter
 
-compose exec -T $CONTAINER mysqldump -uroot -p"${MYSQL_ROOT_PASSWORD}" "${SHOPWARE_PROJECT}" >"${SNAP_DIR}/${SHOPWARE_PROJECT}${SNAP_SUFFIX}.sql"
+compose exec -T $CONTAINER mysqldump -uroot -p"${MYSQL_ROOT_PASSWORD}" --hex-blob "${SHOPWARE_PROJECT}" >"${SNAP_DIR}/${SHOPWARE_PROJECT}${SNAP_SUFFIX}.sql"
