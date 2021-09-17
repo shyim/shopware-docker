@@ -21,6 +21,9 @@ images:
       php80:
         phpVersion: '8.0'
         phpVersionNumeric: 80
+      php81:
+        phpVersion: '8.1.0RC1'
+        phpVersionNumeric: 81
   -
     image: 
       - shyim/shopware-cli
@@ -54,15 +57,3 @@ images:
         phpVersion: '8.0'
         phpVersionNumeric: 80
         xdebug: 3
-  -
-    image: 
-      - ghcr.io/shyim/shopware-docker/cli
-    buildTags: [ 'cli-nightly' ]
-    dockerFile: cli/Dockerfile
-    context: cli 
-    templates:
-      cli/Dockerfile.nightly.twig: cli/Dockerfile
-    tags:
-      php81:
-        phpVersion: '8.1.0'
-        phpVersionNumeric: 81
