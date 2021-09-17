@@ -230,12 +230,13 @@ function create_minio() {
     echo "  minio:"
     echo "    image: minio/minio"
     echo "    env_file: ${REALDIR}/docker.env"
-    echo "    command: server /data"
+    echo "    command: server /data --console-address=':9015'"
     echo "    ports:"
-    echo "      - 9000:9000"
+    echo "      - 9010:9000"
+    echo "      - 9015:9015"
     echo "    environment:"
     echo "      VIRTUAL_HOST: s3.${DEFAULT_SERVICES_DOMAIN}"
-    echo "      VIRTUAL_PORT: 9000"
+    echo "      VIRTUAL_PORT: 9015"
   } >>"${DOCKER_COMPOSE_FILE}"
 }
 

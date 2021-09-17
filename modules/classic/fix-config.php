@@ -82,7 +82,7 @@ if (isset($_SERVER['argv'][2])) {
 				'adapters' => [
 					's3' => [
 						'type' => 's3',
-						'mediaUrl' => 'http://localhost:9000/shopware',
+						'mediaUrl' => 'http://localhost:9010/shopware',
 						'bucket' => 'shopware',
 						'use_path_style_endpoint' => true,
 						'endpoint' => 'http://minio:9000',
