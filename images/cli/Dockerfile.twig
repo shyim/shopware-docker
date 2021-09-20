@@ -28,7 +28,7 @@ RUN set -x && \
       gnu-libiconv \
       jq \
       make && \
-    install-php-extensions bcmath gd intl mysqli pdo_mysql sockets bz2 gmp soap zip gmp pcntl posix redis pcov imagick xsl calendar{% if phpVersionNumeric >= 74 %} ffi excimer {% endif %} {% if production %} opcache {% endif %} {% if xdebug %} xdebug{% if phpVersionNumeric >= 71 and xdebug == 2 %}-2.9.8{% endif %} {% endif %} && \
+    install-php-extensions bcmath gd intl mysqli pdo_mysql sockets bz2 gmp soap zip gmp pcntl posix redis pcov imagick xsl calendar{% if phpVersionNumeric >= 74 %} ffi {% endif %} {% if production %} opcache {% endif %} {% if xdebug %} xdebug{% if phpVersionNumeric >= 71 and xdebug == 2 %}-2.9.8{% endif %} {% endif %} && \
     rm -rf /tmp/* && \
     useradd dev && \
     mkdir /home/dev && \
@@ -38,7 +38,6 @@ RUN set -x && \
     wget https://github.com/shyim/fnm-alpine/releases/download/1.0.0/fnm && \
     mv fnm /usr/local/bin && \
     chmod +x /usr/local/bin/fnm && \
-    apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing flamegraph && \
     apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/v3.13/community gnu-libiconv{% if xdebug %} && \
     {% if xdebug == 2 %}
     echo 'xdebug.remote_enable=1' > /usr/local/etc/php/conf.d/ext-xdebug.ini && \
