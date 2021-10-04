@@ -25,7 +25,7 @@ images:
         phpVersion: '8.0'
         phpVersionNumeric: 80
       php81:
-        phpVersion: '8.1.0RC2'
+        phpVersion: '8.1.0RC3'
         phpVersionNumeric: 81
   -
     image: 
