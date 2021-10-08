@@ -148,10 +148,13 @@ function get_document_root() {
 }
 
 function get_serve_folders() {
+  ignorefile="${CODE_DIRECTORY}/.swdcignore"
   for d in "${CODE_DIRECTORY}"/*; do
     if [[ -d "$d" ]]; then
       if [ -f "$d/public/index.php" ] || [ -f "$d/shopware.php" ] || [ -f "$d/.swdc/service.yml" ]; then
-        basename "$d"
+        if [[ ! -f "$ignorefile"  ]] || $(basename "$d" | grep -qvf "$ignorefile"); then
+          basename "$d"
+        fi
       fi
     fi
   done
