@@ -1,6 +1,9 @@
 name: Linting
 on:
   push:
+    branches: 
+      master
+  pull_request:
 
 jobs:
   lint:
