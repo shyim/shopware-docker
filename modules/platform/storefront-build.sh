@@ -3,7 +3,7 @@
 checkParameter
 clearCache
 
-export PROJECT_ROOT="/var/www/html/$SHOPWARE_PROJECT/"
+export PROJECT_ROOT="/var/www/html/$SHOPWARE_PROJECT"
 cd "${PROJECT_ROOT}" || exit 1
 
 PLATFORM_PATH=$(platform_component Storefront)
