@@ -22,7 +22,7 @@ images:
         phpVersion: '8.0'
         phpVersionNumeric: 80
       php81:
-        phpVersion: '8.1.0RC3'
+        phpVersion: '8.1'
         phpVersionNumeric: 81
   -
     image: 
@@ -58,6 +58,6 @@ images:
         phpVersionNumeric: 80
         xdebug: 3
       php81-xdebug:
-        phpVersion: '8.1.0RC2'
+        phpVersion: '8.1'
         phpVersionNumeric: 81
         xdebug: 3
