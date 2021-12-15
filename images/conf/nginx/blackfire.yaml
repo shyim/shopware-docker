@@ -25,6 +25,9 @@ images:
       php80-blackfire:
         phpVersion: '8.0'
         phpVersionNumeric: 80
+      php81-blackfire:
+        phpVersion: '8.1'
+        phpVersionNumeric: 81
   -
     image: 
       - shyim/shopware-platform-nginx
@@ -51,3 +54,6 @@ images:
       php80-blackfire:
         phpVersion: '8.0'
         phpVersionNumeric: 80
+      php81-blackfire:
+        phpVersion: '8.1'
+        phpVersionNumeric: 81
