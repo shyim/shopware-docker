@@ -1,6 +1,0 @@
-variables:
-  production: false
-  xdebug: false
-  blackfire: false
-includes:
-  - conf/**/*.yaml

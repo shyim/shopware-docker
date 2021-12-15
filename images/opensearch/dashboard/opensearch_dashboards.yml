@@ -1,4 +1,0 @@
----
-server.name: opensearch-dashboards
-server.host: "0"
-opensearch.hosts: http://localhost:9200
