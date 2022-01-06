@@ -32,7 +32,7 @@ php -r "file_put_contents(\"${B2B_COMPOSER}\", json_encode(json_decode(file_get_
 
 B2B_VERSION=$(php "${B2B_ROOT}/dev-ops/package/version.php")
 
-echo $(jq --arg v "$B2B_VERSION" '.version = $v | .autoload["psr-4"]["SwagB2bPlatform\\"] = "components/SwagB2bPlatform"' "$B2B_COMPOSER") > "$B2B_COMPOSER"
+jq --arg v "$B2B_VERSION" '.version = $v | .autoload["psr-4"]["SwagB2bPlatform\\"] = "components/SwagB2bPlatform"' "$B2B_COMPOSER" > "$B2B_COMPOSER"
 
 npm clean-install --prefix "${B2B_ROOT}/components/SwagB2bPlatform/Resources/app/storefront/"
 
