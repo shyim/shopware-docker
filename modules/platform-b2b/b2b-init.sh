@@ -21,10 +21,10 @@ PLATFORM_COMPOSER="${PROJECT_ROOT}/composer.json"
 
 if [[ "$(jq 'has("repositories")' "$PLATFORM_COMPOSER")" == "true" ]]; then
   if [[ "$(jq '.repositories | any(.url != "custom/b2b")' "$PLATFORM_COMPOSER")" == "true" ]]; then
-    echo $(jq '.repositories[.repositories | length] |= . + {"type":"path", "url": "custom/b2b"}' "$PLATFORM_COMPOSER") > "$PLATFORM_COMPOSER"
+    jq '.repositories[.repositories | length] |= . + {"type":"path", "url": "custom/b2b"}' "$PLATFORM_COMPOSER" > "$PLATFORM_COMPOSER"
   fi
 else
-  echo $(jq '.repositories = [{"type":"path", "url": "custom/b2b"}]' "$PLATFORM_COMPOSER") > "$PLATFORM_COMPOSER"
+  jq '.repositories = [{"type":"path", "url": "custom/b2b"}]' "$PLATFORM_COMPOSER" > "$PLATFORM_COMPOSER"
 fi
 
 php -r "file_put_contents(\"${PLATFORM_COMPOSER}\", json_encode(json_decode(file_get_contents(\"${PLATFORM_COMPOSER}\"), true), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));"
