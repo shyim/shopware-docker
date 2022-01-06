@@ -21,18 +21,18 @@ PLATFORM_COMPOSER="${PROJECT_ROOT}/composer.json"
 
 if [[ "$(jq 'has("repositories")' "$PLATFORM_COMPOSER")" == "true" ]]; then
   if [[ "$(jq '.repositories | any(.url != "custom/b2b")' "$PLATFORM_COMPOSER")" == "true" ]]; then
-    jq '.repositories[.repositories | length] |= . + {"type":"path", "url": "custom/b2b"}' "$PLATFORM_COMPOSER" > "$PLATFORM_COMPOSER"
+    JSON=$(jq --indent 4 '.repositories[.repositories | length] |= . + {"type":"path", "url": "custom/b2b"}' "$PLATFORM_COMPOSER")
+    echo "$JSON" > "$PLATFORM_COMPOSER"
   fi
 else
-  jq '.repositories = [{"type":"path", "url": "custom/b2b"}]' "$PLATFORM_COMPOSER" > "$PLATFORM_COMPOSER"
+  JSON=$(jq --indent 4 '.repositories = [{"type":"path", "url": "custom/b2b"}]' "$PLATFORM_COMPOSER")
+  echo "$JSON" > "$PLATFORM_COMPOSER"
 fi
-
-php -r "file_put_contents(\"${PLATFORM_COMPOSER}\", json_encode(json_decode(file_get_contents(\"${PLATFORM_COMPOSER}\"), true), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));"
-php -r "file_put_contents(\"${B2B_COMPOSER}\", json_encode(json_decode(file_get_contents(\"${B2B_COMPOSER}\"), true), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));"
 
 B2B_VERSION=$(php "${B2B_ROOT}/dev-ops/package/version.php")
 
-jq --arg v "$B2B_VERSION" '.version = $v | .autoload["psr-4"]["SwagB2bPlatform\\"] = "components/SwagB2bPlatform"' "$B2B_COMPOSER" > "$B2B_COMPOSER"
+JSON=$(jq --indent 4 --arg v "$B2B_VERSION" '.version = $v | .autoload["psr-4"]["SwagB2bPlatform\\"] = "components/SwagB2bPlatform"' "$B2B_COMPOSER")
+echo "$JSON" > "$B2B_COMPOSER"
 
 npm clean-install --prefix "${B2B_ROOT}/components/SwagB2bPlatform/Resources/app/storefront/"
 
