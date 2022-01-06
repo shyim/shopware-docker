@@ -36,6 +36,10 @@ if [[ -n "$SHOPWARE_PROJECT" ]]; then
 
   if [[ -f "$SHOPWARE_FOLDER/src/Kernel.php" || -f "$SHOPWARE_FOLDER/src/Core/composer.json" ]]; then
     modules=(base platform)
+
+    if [[ -d "$SHOPWARE_FOLDER/custom/b2b" ]]; then
+      modules=(base platform platform-b2b)
+    fi
   fi
 
   if [[ -f "$SHOPWARE_FOLDER/PLATFORM_COMMIT_SHA" ]]; then
