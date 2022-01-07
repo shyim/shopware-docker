@@ -176,18 +176,6 @@ function generate_wildcard_certs() {
   openssl x509 -req -sha256 -extfile <(echo -n "subjectAltName=DNS:*.${DEFAULT_DOMAIN}") -days 20000 -in "${HOME}/.config/swdc/ssl/shared.csr" -CA "${HOME}/.config/swdc/ssl/ca.crt" -CAkey "${HOME}/.config/swdc/ssl/ca.key" -CAcreateserial -out "${HOME}/.config/swdc/ssl/shared.crt"
 }
 
-function check_env_compability() {
-  if [ "${MYSQL_VERSION}" == "56" ] || [ "${MYSQL_VERSION}" == "57" ] || [ "${MYSQL_VERSION}" == "8" ]; then
-    echo "${red}Please change your \$MYSQL_VERSION variable to ghcr.io/shyim/shopware-docker/mysql:${MYSQL_VERSION}${reset}"
-    exit 1
-  fi
-
-  if [ -n "${ELASTICSEARCH_VERSION}" ]; then
-    echo "${red}ELASTICSEARCH_VERSION is removed. Please replace it with ELASTICSEARCH_IMAGE=blacktop/elasticsearch:${ELASTICSEARCH_VERSION} in your $HOME/.config/swdc/env file${reset}"
-    exit 1
-  fi
-}
-
 function platform_component() {
   NAME=$1
 
