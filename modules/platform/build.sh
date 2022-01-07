@@ -42,7 +42,7 @@ MAILER_URL="smtp://smtp:1025?encryption=&auth_mode="
 hook=$(fire_hook build-pre-composer-install "$@")
 eval "$hook"
 
-composer install -o
+composer update -o
 
 hook=$(fire_hook build-post-composer-install "$@")
 eval "$hook"
