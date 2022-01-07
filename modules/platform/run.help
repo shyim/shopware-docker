@@ -1,0 +1,1 @@
+Runs specified command in CLI. f.e. swdc run myfolder npm install --prefix custom/plugins/MyPlugin/src/Resources
