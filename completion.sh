@@ -67,6 +67,10 @@ function __list_swdc_commands {
 
         # shellcheck disable=SC2207
         COMPREPLY=($(compgen -W 'ecs static-analyse phpstan psalm' -- "${COMP_WORDS[COMP_CWORD]}"))
+    elif [[ "$build_arg" == "config-add" || "$build_arg" == "config-remove" ]]; then
+
+        # shellcheck disable=SC2207
+        COMPREPLY=($(compgen -W '-e disable-csrf array-cache redis-session redis-message-queue-stats disable-profiler' -- "${COMP_WORDS[COMP_CWORD]}"))
     fi
 
     return 0;
