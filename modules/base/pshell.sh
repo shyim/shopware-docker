@@ -38,7 +38,7 @@ else
       -w "/var/www/html/$PROJECT_NAME" \
       --env-file="${REALDIR}/docker.env" \
       --env-file="${REALDIR}/.env.dist" \
-      --env=file=~/.config/swdc/env \
+      --env=file="${HOME}/.config/swdc/env" \
       --network shopware-docker_default \
       -v shopware-docker_nvm_cache:/nvm \
       -v "$CODE_DIRECTORY:/var/www/html/" \

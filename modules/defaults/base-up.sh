@@ -22,7 +22,7 @@ function create_nginx() {
           echo "    image: ${IMAGE}"
           echo "    env_file:"
           echo "      - ${REALDIR}/docker.env"
-          echo "      - ~/.config/swdc/env"
+          echo "      - ${HOME}/.config/swdc/env"
           echo "    networks:"
           echo "      default:"
           echo "        aliases:"
@@ -137,7 +137,7 @@ function create_cli() {
     echo "    env_file:"
     echo "      - ${REALDIR}/docker.env"
     echo "      - ${REALDIR}/.env.dist"
-    echo "      - ~/.config/swdc/env"
+    echo "      - ${HOME}/.config/swdc/env"
     echo "    tty: true"
     echo "    ports:"
     echo "      - 8181:8181"
@@ -148,7 +148,7 @@ function create_cli() {
     echo "      - ${REALDIR}:/opt/swdc/"
     echo "      - nvm_cache:/nvm"
     echo "      - tool_cache:/tmp/swdc-tool-cache"
-    echo "      - ~/.config/swdc/:/swdc-cfg"
+    echo "      - ${HOME}/.config/swdc/:/swdc-cfg"
   } >>"${DOCKER_COMPOSE_FILE}"
 
   # Add volume stuff to service
@@ -193,14 +193,12 @@ function create_es() {
       echo "      opendistro_security.ssl.http.enabled: 'false'"
     fi
 
-    if [[ "${ELASTICSEARCH_IMAGE}" == *"opensearchproject"* ]]; then
-      echo "      plugins.security.disabled: 'true'"
-    fi
+    #if [[ "${ELASTICSEARCH_IMAGE}" == *"opensearchproject"* ]]; then
+    #  echo "      plugins.security.disabled: 'true'"
+    #fi
 
     echo "  kibana:"
     echo "    image: ${KIBANA_IMAGE}"
-    echo "    links:"
-    echo "      - elastic:elasticsearch"
     echo "    environment:"
     echo "      VIRTUAL_HOST: kibana.${DEFAULT_SERVICES_DOMAIN}"
     echo "      VIRTUAL_PORT: 5601"
@@ -278,17 +276,6 @@ function create_selenium() {
     ports:
       - 5900:5900
 EOF
-
-  if [[ ${CODE_FOLDER_CONTENT} ]]; then
-    echo "    links:" >>"${DOCKER_COMPOSE_FILE}"
-
-    while IFS= read -r NAME; do
-      hosts=$(get_hosts "$NAME")
-      for i in ${hosts//,/ }; do
-        echo "      - app_${NAME}:${i}" >>"${DOCKER_COMPOSE_FILE}"
-      done
-    done <<<"$(get_serve_folders)"
-  fi
 }
 
 function create_cypress() {
@@ -298,7 +285,7 @@ function create_cypress() {
     echo "    env_file:"
     echo "      - ${REALDIR}/docker.env"
     echo "    volumes:"
-    echo "      - /var/run/docker.sock:/var/run/docker.sock"
+    echo "      - $XDG_RUNTIME_DIR/podman/podman.sock:/var/run/docker.sock"
   } >>"${DOCKER_COMPOSE_FILE}"
 }
 

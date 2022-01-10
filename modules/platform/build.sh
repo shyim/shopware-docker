@@ -31,6 +31,8 @@ done
 hook=$(fire_hook build-pre-setup "$@")
 eval "$hook"
 
+export SHOPWARE_INSTALL=1
+
 mysql -h "$mysqlHost" -u root -p"$MYSQL_ROOT_PASSWORD" -e "DROP DATABASE IF EXISTS \`$SHOPWARE_PROJECT\`"
 mysql -h "$mysqlHost" -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE DATABASE \`$SHOPWARE_PROJECT\`"
 cd "/var/www/html/${SHOPWARE_PROJECT}" || exit 1
