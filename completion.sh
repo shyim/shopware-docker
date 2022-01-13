@@ -20,8 +20,6 @@ if [[ -e "$HOME/.config/swdc/modules/" ]]; then
     AVAILABLE_CMDS=$(find $DIR/modules/* $HOME/.config/swdc/modules/* -maxdepth 1 -mindepth 1 -iname "*.sh")
 fi
 
-export AVAILABLE_CMDS
-
 function __list_swdc_commands {
 
     prev_arg="${COMP_WORDS[COMP_CWORD-2]}";
