@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+if [[ -z "${BASH_SOURCE}" ]]; then
+    # Fallback on ~/Apps/shopware-docker
+    BASH_SOURCE=~/Apps/shopware-docker/modules
+fi
+
 # shellcheck disable=SC2128
 DIR="$(dirname "${BASH_SOURCE}")"
 CONFIG_DIR=${XDG_CONFIG_HOME:-${HOME}/.config}
@@ -15,7 +20,10 @@ if [[ -e "$HOME/.config/swdc/modules/" ]]; then
     AVAILABLE_CMDS=$(find $DIR/modules/* $HOME/.config/swdc/modules/* -maxdepth 1 -mindepth 1 -iname "*.sh")
 fi
 
+export AVAILABLE_CMDS
+
 function __list_swdc_commands {
+
     prev_arg="${COMP_WORDS[COMP_CWORD-2]}";
     build_arg=$prev_arg
 
