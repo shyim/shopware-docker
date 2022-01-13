@@ -3,7 +3,7 @@
 checkParameter
 clearCache
 
-PROJECT_ROOT="/var/www/html/$SHOPWARE_PROJECT"
+PROJECT_ROOT="${CODE_DIRECTORY}/$SHOPWARE_PROJECT"
 cd "${PROJECT_ROOT}" || exit 1
 
 bin/console bundle:dump

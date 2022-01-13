@@ -3,7 +3,7 @@
 checkParameter
 clearCache
 
-export PROJECT_ROOT="/var/www/html/$SHOPWARE_PROJECT"
+export PROJECT_ROOT="${CODE_DIRECTORY}/$SHOPWARE_PROJECT"
 export ENV_FILE="${PROJECT_ROOT}/.env"
 
 B2B_ROOT="${PROJECT_ROOT}/custom/b2b"

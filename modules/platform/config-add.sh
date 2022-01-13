@@ -2,7 +2,7 @@
 
 checkParameter
 
-cd "/var/www/html/${SHOPWARE_PROJECT}" || exit 1
+cd "${SHOPWARE_FOLDER}" || exit 1
 
 FILE="config/packages/swdc.yml"
 

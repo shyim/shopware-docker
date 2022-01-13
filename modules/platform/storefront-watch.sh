@@ -3,8 +3,8 @@
 checkParameter
 clearCache
 
-PROJECT_ROOT="/var/www/html/$SHOPWARE_PROJECT/"
-URL=$(get_url "$SHOPWARE_PROJECT")
+cd "${SHOPWARE_FOLDER}" || exit 1
+export PROJECT_ROOT="${SHOPWARE_FOLDER}"
 
 cd "${PROJECT_ROOT}" || exit 1
 

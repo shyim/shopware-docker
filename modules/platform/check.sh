@@ -1,16 +1,18 @@
 #!/usr/bin/env bash
 
-cd "/var/www/html/${SHOPWARE_PROJECT}" || exit 1
+cd "${SHOPWARE_FOLDER}" || exit 1
 
-export SHOPWARE_TOOL_CACHE_ECS="/tmp/swdc-tool-cache/${SHOPWARE_PROJECT}/ecs/"
+if [[ "$RUN_MODE" != "local" ]]; then
+  export SHOPWARE_TOOL_CACHE_ECS="/tmp/swdc-tool-cache/${SHOPWARE_PROJECT}/ecs/"
 
-if [[ -e phpstan.neon.dist ]]; then
-echo "includes:
-    - phpstan.neon.dist
+  if [[ -e phpstan.neon.dist ]]; then
+  echo "includes:
+  - phpstan.neon.dist
 
 parameters:
     tmpDir: /tmp/swdc-tool-cache/${SHOPWARE_PROJECT}/phpstan
-" > phpstan.neon
+  " > phpstan.neon
+  fi
 fi
 
 shift 2

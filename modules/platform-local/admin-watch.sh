@@ -8,6 +8,13 @@ export USE_SSL_DEFAULT=false
 URL=$(get_url "$SHOPWARE_PROJECT")
 WATCHER_URL="admin-${SHOPWARE_PROJECT}.${DEFAULT_DOMAIN}"
 
+if [[ "$RUN_MODE" == "local" ]]; then
+    export PROJECT_ROOT=$LOCAL_PROJECT_ROOT
+    export APP_URL=$URL
+    export ESLINT_DISABLE=true
+    exec npm run --prefix "$PLATFORM_PATH"/Resources/app/administration/ dev
+fi
+
 if [[ -e "${LOCAL_WEBPACK_CONFIG}" ]]; then
     disabledHostCheck=$(grep disableHostCheck < "${LOCAL_WEBPACK_CONFIG}")
     

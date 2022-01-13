@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-cd "/var/www/html/${SHOPWARE_PROJECT}" || exit 1
+cd "${SHOPWARE_FOLDER}" || exit 1
 
 TRAP_PIDS="/tmp/${SHOPWARE_PROJECT}-worker.pid"
 WORKER_AMOUNT=$3

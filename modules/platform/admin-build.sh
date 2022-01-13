@@ -2,8 +2,8 @@
 
 checkParameter
 
-cd "/var/www/html/${SHOPWARE_PROJECT}" || exit 1
-export PROJECT_ROOT="/var/www/html/${SHOPWARE_PROJECT}"
+cd "${SHOPWARE_FOLDER}" || exit 1
+export PROJECT_ROOT="${SHOPWARE_FOLDER}"
 export ENV_FILE="${PROJECT_ROOT}/.env"
 
 bin/console bundle:dump

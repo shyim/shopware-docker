@@ -2,9 +2,7 @@
 
 checkParameter
 clearCache
-cd "/var/www/html/${SHOPWARE_PROJECT}" || exit 1
-
-export PROJECT_ROOT=$SHOPWARE_FOLDER
+cd "${SHOPWARE_FOLDER}" || exit 1
 
 composer dump-autoload
 
