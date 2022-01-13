@@ -22,23 +22,30 @@ if [[ ${CODE_FOLDER_CONTENT} ]]; then
           echo "    root $documentRoot;"
           echo "    location /recovery/install {"
           echo "        index index.php;"
+
+          # shellcheck disable=SC2016
           echo '        try_files $uri /recovery/install/index.php$is_args$args;'
           echo "    }"
           echo "    location /recovery/update/ {"
           echo "        location /recovery/update/assets {"
           echo "        }"
+
+          # shellcheck disable=SC2016
           echo '        if (!-e $request_filename){'
+          # shellcheck disable=SC2016
           echo '            rewrite . /recovery/update/index.php last;'
           echo "        }"
           echo "    }"
 
           echo "    location / {"
+          # shellcheck disable=SC2016
           echo '        try_files $uri /index.php$is_args$args;'
           echo "    }"
 
           echo "    location ~ \.php$ {"
           echo "        fastcgi_split_path_info ^(.+\.php)(/.+)$;"
           echo "        include fastcgi.conf;"
+          # shellcheck disable=SC2016
           echo '        fastcgi_param HTTP_PROXY "";'
           echo "        fastcgi_buffers 8 16k;"
           echo "        fastcgi_buffer_size 32k;"
