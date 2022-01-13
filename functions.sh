@@ -139,8 +139,12 @@ function get_document_root() {
     echo "$val"
   else
     ROOT="/var/www/html/${folder}"
+
+    if [[ "$RUN_MODE" == 'local' ]]; then
+      ROOT="${CODE_DIRECTORY}/${folder}"
+    fi
     if [[ -f "$2/public/index.php" ]]; then
-      ROOT="/var/www/html/${folder}/public"
+      ROOT="${ROOT}/public"
     fi
 
     echo "$ROOT"

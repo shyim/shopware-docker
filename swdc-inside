@@ -6,19 +6,27 @@ if [[ -e /nvm/.fnm ]]; then
   eval $(fnm --fnm-dir=/nvm/.fnm env --shell=bash)
 fi
 
-FILE="$0"
+if [[ -z "$FILE" ]]; then
+  FILE="$0"
 
-if [[ -L "$0" ]]; then
-  FILE=$(readlink "$0")
+  if [[ -L "$0" ]]; then
+    FILE=$(readlink "$0")
+  fi
+
+  DIR=$(dirname "${FILE}")
+
+  # shellcheck source=functions.sh
+  source "${DIR}/functions.sh"
 fi
 
-DIR=$(dirname "${FILE}")
-
-# shellcheck source=functions.sh
-source "${DIR}/functions.sh"
-
 SHOPWARE_PROJECT="$2"
-SHOPWARE_FOLDER="/var/www/html/$SHOPWARE_PROJECT"
+
+if [[ "$RUN_MODE" == "local" ]]; then
+  SHOPWARE_FOLDER="${CODE_DIRECTORY}/$SHOPWARE_PROJECT"
+else
+  SHOPWARE_FOLDER="/var/www/html/$SHOPWARE_PROJECT"
+  CODE_DIRECTORY="/var/www/html"
+fi
 export SWDC_IN_DOCKER=1
 
 modules=(base)

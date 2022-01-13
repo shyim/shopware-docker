@@ -3,8 +3,15 @@
 # shellcheck source=/dev/null
 source "${HOME}/.config/swdc/env"
 
+if [[ "$RUN_MODE" == 'local' ]]; then
+  # shellcheck source=modules/defaults/local-up.sh
+  source "${REALDIR}/modules/defaults/local-up.sh"
+
+  exit 0
+fi
+
 # shellcheck source=modules/defaults/base-up.sh
-source "${DIR}/modules/defaults/base-up.sh"
+source "${REALDIR}/modules/defaults/base-up.sh"
 
 CODE_FOLDER_CONTENT="$(ls -A "${CODE_DIRECTORY}")"
 export CODE_FOLDER_CONTENT="${CODE_FOLDER_CONTENT}"

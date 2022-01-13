@@ -5,7 +5,7 @@ clearCache
 
 generateDemoData=1
 buildJS=1
-mysqlHost="mysql"
+mysqlHost="${DEFAULT_MYSQL_HOST}"
 
 shift 2
 
@@ -33,7 +33,7 @@ eval "$hook"
 
 mysql -h "$mysqlHost" -u root -p"$MYSQL_ROOT_PASSWORD" -e "DROP DATABASE IF EXISTS \`$SHOPWARE_PROJECT\`"
 mysql -h "$mysqlHost" -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE DATABASE \`$SHOPWARE_PROJECT\`"
-cd "/var/www/html/${SHOPWARE_PROJECT}" || exit 1
+cd "${CODE_DIRECTORY}/${SHOPWARE_PROJECT}" || exit 1
 URL=$(get_url "$SHOPWARE_PROJECT")
 SECRET=$(openssl rand -hex 32)
 INSTANCE_ID=$(openssl rand -hex 32)

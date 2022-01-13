@@ -10,7 +10,8 @@ if [[ -L "$0" ]]; then
 fi
 
 DIR="$(dirname "${FILE}")"
-REALDIR="$(realpath "${DIR}")"
+REALDIR="$(cd "$(dirname "${DIR}")" && pwd)/$(basename "${DIR}")"
+DIR=$REALDIR
 CONFIG_DIR=${XDG_CONFIG_HOME:-${HOME}/.config}
 export DIR="${DIR}"
 export REALDIR="${REALDIR}"
@@ -75,4 +76,8 @@ for module in "${modules[@]}"; do
   fi
 done
 
-compose exec cli bash /opt/swdc/swdc-inside "$@"
+if [[ "$RUN_MODE" == 'local' ]]; then
+  source "$REALDIR/swdc-inside"
+else
+  compose exec cli bash /opt/swdc/swdc-inside "$@"
+fi
