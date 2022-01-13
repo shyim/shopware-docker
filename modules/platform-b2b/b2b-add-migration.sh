@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-B2B_ROOT="/var/www/html/$SHOPWARE_PROJECT/custom/b2b/components/SwagB2bPlatform"
+B2B_ROOT="${CODE_DIRECTORY}/$SHOPWARE_PROJECT/custom/b2b/components/SwagB2bPlatform"
 
 TIMESTAMP=$(date +%s)
 
