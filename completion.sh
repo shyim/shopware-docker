@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+# shellcheck disable=SC2128
 if [[ -z "${BASH_SOURCE}" ]]; then
     # Fallback on ~/Apps/shopware-docker
     BASH_SOURCE=~/Apps/shopware-docker/modules
