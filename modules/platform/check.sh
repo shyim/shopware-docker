@@ -57,7 +57,7 @@ if grep -q static-analyze composer.json; then
   fi
 
   if [[ "$RUN_PSALM" == "1" ]]; then
-    composer run psalm src
+    composer run psalm
   fi
 
   exit 0
