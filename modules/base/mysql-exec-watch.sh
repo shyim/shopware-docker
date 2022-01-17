@@ -5,7 +5,6 @@ if [[ -e "${HOME}/.config/swdc/services.yml" ]]; then
   additionalArgs=" -f ${HOME}/.config/swdc/services.yml"
 fi
 
-FILE=$(mktemp)
 DB=$2
 
 
