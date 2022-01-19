@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+# shellcheck disable=SC2086
 FOUND_CMDS=$(find $DIR/modules/* -maxdepth 1 -mindepth 1 -iname "*.sh")
 
 if [[ -e "$HOME/.config/swdc/modules/" ]]; then
