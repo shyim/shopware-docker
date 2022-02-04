@@ -3,8 +3,6 @@
 checkParameter
 cd "${CODE_DIRECTORY}/${SHOPWARE_PROJECT}" || exit
 
-compose exec cli php "/var/www/html/${SHOPWARE_PROJECT}/src/Core/DevOps/Locust/setup.php"
-
 shift 2
 
 USERS=20
@@ -35,7 +33,7 @@ docker run \
     -u 1000 \
     -e "VIRTUAL_HOST=$LOCUST_URL" \
     -e "VIRTUAL_PORT=8089" \
-    locustio/locust \
+    ghcr.io/shyim/shopware-docker/locust:latest \
     -f  "/var/www/html/${SHOPWARE_PROJECT}/src/Core/DevOps/Locust/locustfile.py"\
     -H "$SHOPWARE_URL" \
     "--users=$USERS" \
