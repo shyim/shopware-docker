@@ -11,9 +11,7 @@ fi
 
 cd "${CODE_DIRECTORY}/${SHOPWARE_PROJECT}" || exit
 
-E2E_DIR=$(platform_component $MODULE)
-
-E2E_DIR="${E2E_DIR}Resources/app/${MODULE,}/test/e2e"
+E2E_DIR="tests/e2e"
 E2E_PATH="/var/www/html/${SHOPWARE_PROJECT}/${E2E_DIR}"
 
 if [[ ! -d "${E2E_DIR}/node_modules" ]]; then
@@ -26,7 +24,7 @@ usedCypressVersion=$(docker run \
     -v "${CODE_DIRECTORY}:/var/www/html" \
     -u 1000 \
     node:12-alpine \
-    node "${E2E_PATH}/node_modules/.bin/cypress" --version | grep 'version: ' | head -1 | cut -d':' -f2)
+    node "/var/www/html/${SHOPWARE_PROJECT}/tests/e2e/node_modules/.bin/cypress" --version | grep 'version: ' | head -1 | cut -d':' -f2)
 
 usedCypressVersion=$(trim_whitespace "$usedCypressVersion")
 
