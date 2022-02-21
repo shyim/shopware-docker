@@ -12,6 +12,7 @@ if [[ -e "${LOCAL_WEBPACK_CONFIG}" ]]; then
     localhostPound=$(grep "host: '127.0.0.1'" < "${LOCAL_WEBPACK_CONFIG}")
     
     if [[ -n "$localhostPound" ]]; then
+        docker exec -t -w "/var/www/html/${SHOPWARE_PROJECT}/" shopware-docker_cli_1 ./bin/console bundle:dump
         docker exec -t -w "/var/www/html/${SHOPWARE_PROJECT}/" shopware-docker_cli_1 ./bin/console theme:dump
 
         echo "Starting watcher at host http://${WATCHER_URL}"
