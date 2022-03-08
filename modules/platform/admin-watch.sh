@@ -3,6 +3,8 @@
 checkParameter
 cd "${SHOPWARE_FOLDER}" || exit 1
 
+setup_node_version
+
 export USE_SSL_DEFAULT=false
 URL=$(get_url "$SHOPWARE_PROJECT")
 export PROJECT_ROOT=$SHOPWARE_FOLDER

@@ -3,6 +3,9 @@
 checkParameter
 
 cd "${SHOPWARE_FOLDER}" || exit 1
+
+setup_node_version
+
 export PROJECT_ROOT="${SHOPWARE_FOLDER}"
 export ENV_FILE="${PROJECT_ROOT}/.env"
 

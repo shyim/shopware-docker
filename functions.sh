@@ -207,3 +207,13 @@ function fire_hook() {
     echo ". $HOOKS_DIR/$EVENT.sh $@"
   fi
 }
+
+function setup_node_version() {
+  ADMIN_PATH=$(platform_component Administration)
+
+  if [[ -e "$ADMIN_PATH" ]]; then
+    NODE_VERSION=$(jq .engines.node "${ADMIN_PATH}Resources/app/administration/package.json" -r | grep -E '\d{1,2}' -o | head -1)
+
+    fnm use "$NODE_VERSION" --install-if-missing
+  fi
+}

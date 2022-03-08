@@ -8,6 +8,8 @@ export PROJECT_ROOT="${SHOPWARE_FOLDER}"
 
 cd "${PROJECT_ROOT}" || exit 1
 
+setup_node_version
+
 bin/console theme:dump
 export APP_URL=$URL
 export PROJECT_ROOT=$PROJECT_ROOT

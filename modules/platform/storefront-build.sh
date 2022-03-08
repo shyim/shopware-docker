@@ -6,6 +6,8 @@ clearCache
 cd "${SHOPWARE_FOLDER}" || exit 1
 export PROJECT_ROOT="${SHOPWARE_FOLDER}"
 
+setup_node_version
+
 PLATFORM_PATH=$(platform_component Storefront)
 
 bin/console bundle:dump

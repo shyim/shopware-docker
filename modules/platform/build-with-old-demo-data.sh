@@ -20,6 +20,9 @@ done
 mysql -h "$mysqlHost" -u root -p"$MYSQL_ROOT_PASSWORD" -e "DROP DATABASE IF EXISTS \`$SHOPWARE_PROJECT\`"
 mysql -h "$mysqlHost" -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE DATABASE \`$SHOPWARE_PROJECT\`"
 cd "${SHOPWARE_FOLDER}" || exit 1
+
+setup_node_version
+
 URL=$(get_url "$SHOPWARE_PROJECT")
 SECRET=$(openssl rand -hex 32)
 INSTANCE_ID=$(openssl rand -hex 32)
