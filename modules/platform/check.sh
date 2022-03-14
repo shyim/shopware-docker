@@ -103,3 +103,5 @@ fi
 if [[ "$RUN_PSALM" == "1" ]]; then
   php dev-ops/analyze/vendor/bin/psalm --config=vendor/shopware/platform/psalm.xml --threads=$(($(nproc) / 2)) --show-info=false
 fi
+
+composer run bc-check
