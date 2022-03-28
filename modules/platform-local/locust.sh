@@ -29,6 +29,7 @@ echo ""
 echo "Started locust ui at http://${LOCUST_URL}"
 echo ""
 
+# shellcheck disable=SC2086
 docker run \
     --rm \
     -it \
