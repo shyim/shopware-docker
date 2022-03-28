@@ -214,6 +214,10 @@ function setup_node_version() {
   if [[ -e "$ADMIN_PATH" ]]; then
     NODE_VERSION=$(jq .engines.node "${ADMIN_PATH}Resources/app/administration/package.json" -r | grep -E '\d{1,2}' -o | head -1)
 
+    if [[ "$NODE_VERSION" == "" ]]; then
+      NODE_VERSION=$(jq .engines.node "${ADMIN_PATH}Resources/app/administration/package.json" -r | grep -P '\d{1,2}' -o | head -1)
+    fi
+
     fnm use "$NODE_VERSION" --install-if-missing
   fi
 }
