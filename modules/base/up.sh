@@ -92,10 +92,6 @@ fi
   echo "    driver: local"
 } >>"${DOCKER_COMPOSE_FILE}"
 
-if [[ ${CACHE_VOLUMES} == "true" ]]; then
-  create_caching
-fi
-
 compose run --rm start_mysql
 compose up -d --remove-orphans "${@:2}"
 

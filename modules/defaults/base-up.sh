@@ -48,22 +48,7 @@ function create_nginx() {
           echo "    volumes:"
           echo "      - ${REALDIR}:/opt/swdc/"
         } >>"${DOCKER_COMPOSE_FILE}"
-        if [[ ${Platform} != "Linux" ]]; then
-          echo "      - ${CODE_DIRECTORY}:/var/www/html:cached" >>"${DOCKER_COMPOSE_FILE}"
-          if [[ ${CACHE_VOLUMES} == "true" ]]; then
-            {
-              echo "      - ${NAME}_web_cache:/var/www/html/${NAME}/web/cache:delegated"
-              echo "      - ${NAME}_var_cache:/var/www/html/${NAME}/var/cache:delegated"
-            } >>"${DOCKER_COMPOSE_FILE}"
-          else
-            {
-              echo "      - ${CODE_DIRECTORY}/${NAME}/var/cache:/var/www/html/${NAME}/var/cache:delegated"
-              echo "      - ${CODE_DIRECTORY}/${NAME}/web/cache:/var/www/html/${NAME}/web/cache:delegated"
-            } >>"${DOCKER_COMPOSE_FILE}"
-          fi
-        else
           echo "      - ${CODE_DIRECTORY}:/var/www/html" >>"${DOCKER_COMPOSE_FILE}"
-        fi
       fi
     done <<<"$(get_serve_folders)"
   fi
@@ -151,32 +136,8 @@ function create_cli() {
     echo "      - ~/.config/swdc/:/swdc-cfg"
   } >>"${DOCKER_COMPOSE_FILE}"
 
-  # Add volume stuff to service
   if [[ ${CODE_FOLDER_CONTENT} ]]; then
-    if [[ ${Platform} != "Linux" ]]; then
-      echo "      - ${CODE_DIRECTORY}:/var/www/html:cached" >>"${DOCKER_COMPOSE_FILE}"
-
-      while IFS= read -r NAME; do
-        {
-          echo "      - ${CODE_DIRECTORY}/${NAME}/media:/var/www/html/${NAME}/media:cached"
-          echo "      - ${CODE_DIRECTORY}/${NAME}/files:/var/www/html/${NAME}/files:cached"
-        } >>"${DOCKER_COMPOSE_FILE}"
-
-        if [[ ${CACHE_VOLUMES} == "true" ]]; then
-          {
-            echo "      - ${NAME}_var_cache:/var/www/html/${NAME}/var/cache:delegated"
-            echo "      - ${NAME}_web_cache:/var/www/html/${NAME}/web/cache:delegated"
-          } >>"${DOCKER_COMPOSE_FILE}"
-        else
-          {
-            echo "      - ${CODE_DIRECTORY}/${NAME}/var/cache:/var/www/html/${NAME}/var/cache:delegated"
-            echo "      - ${CODE_DIRECTORY}/${NAME}/web/cache:/var/www/html/${NAME}/web/cache:delegated"
-          } >>"${DOCKER_COMPOSE_FILE}"
-        fi
-      done <<<"$(get_serve_folders)"
-    else
-      echo "      - ${CODE_DIRECTORY}:/var/www/html" >>"${DOCKER_COMPOSE_FILE}"
-    fi
+    echo "      - ${CODE_DIRECTORY}:/var/www/html" >>"${DOCKER_COMPOSE_FILE}"
   fi
 }
 
@@ -311,19 +272,6 @@ function create_blackfire() {
     echo "      BLACKFIRE_SERVER_TOKEN: ${BLACKFIRE_SERVER_TOKEN}"
     echo "      BLACKFIRE_DISABLE_LEGACY_PORT: 1"
   } >>"${DOCKER_COMPOSE_FILE}"
-}
-
-function create_caching() {
-  if [[ ${CODE_FOLDER_CONTENT} ]]; then
-    while IFS= read -r NAME; do
-      {
-        echo "  ${NAME}_var_cache:"
-        echo "    driver: local"
-        echo "  ${NAME}_web_cache:"
-        echo "    driver: local"
-      } >>"${DOCKER_COMPOSE_FILE}"
-    done <<<"$(get_serve_folders)"
-  fi
 }
 
 function create_varnish() {
