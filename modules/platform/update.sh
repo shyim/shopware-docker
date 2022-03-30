@@ -4,6 +4,8 @@ checkParameter
 clearCache
 cd "${SHOPWARE_FOLDER}" || exit 1
 
+setup_node_version
+
 CORE_PATH=$(platform_component Core)
 
 composer update
