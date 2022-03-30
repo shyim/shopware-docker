@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [[ -e /nvm/.fnm ]]; then
+if [[ -e /usr/local/bin/setup_nvm ]]; then
   # shellcheck source=/dev/null
   # shellcheck disable=SC2046
   source /usr/local/bin/setup_nvm

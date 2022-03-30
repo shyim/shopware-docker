@@ -7,6 +7,7 @@ LOCAL_WEBPACK_CONFIG="${LOCAL_PROJECT_ROOT}/${PLATFORM_PATH}Resources/app/storef
 export USE_SSL_DEFAULT=false
 URL=$(get_url "$SHOPWARE_PROJECT")
 WATCHER_URL="storefront-${SHOPWARE_PROJECT}.${DEFAULT_DOMAIN}"
+NODE_VERSION=$(get_node_version)
 
 if [[ -e "${LOCAL_WEBPACK_CONFIG}" ]]; then
     localhostPound=$(grep "host: '127.0.0.1'" < "${LOCAL_WEBPACK_CONFIG}")
@@ -32,7 +33,7 @@ if [[ -e "${LOCAL_WEBPACK_CONFIG}" ]]; then
             -e "VIRTUAL_HOST=$WATCHER_URL" \
             -w "/var/www/html/${SHOPWARE_PROJECT}" \
             --expose 80 \
-            node:12-alpine \
+            node:"$NODE_VERSION" \
             npm run --prefix "$PLATFORM_PATH"/Resources/app/storefront/ hot-proxy
         exit 0
     fi

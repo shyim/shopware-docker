@@ -210,6 +210,16 @@ function fire_hook() {
 
 function setup_node_version() {
   ADMIN_PATH=$(platform_component Administration)
+  NODE_VERSION=$(get_node_version)
+
+  if [[ -n "$NODE_VERSION" ]]; then
+    fnm use "$NODE_VERSION" --install-if-missing
+  fi
+}
+
+function get_node_version() {
+  ADMIN_PATH=$(platform_component Administration)
+  NODE_VERSION=""
 
   if [[ -e "$ADMIN_PATH" ]]; then
     NODE_VERSION=$(jq .engines.node "${ADMIN_PATH}Resources/app/administration/package.json" -r | grep -E '\d{1,2}' -o | head -1)
@@ -217,7 +227,11 @@ function setup_node_version() {
     if [[ "$NODE_VERSION" == "" ]]; then
       NODE_VERSION=$(jq .engines.node "${ADMIN_PATH}Resources/app/administration/package.json" -r | grep -P '\d{1,2}' -o | head -1)
     fi
-
-    fnm use "$NODE_VERSION" --install-if-missing
   fi
+
+  if [[ -z "$NODE_VERSION" ]]; then
+    echo "12"
+  fi
+
+  echo "$NODE_VERSION"
 }

@@ -7,6 +7,7 @@ LOCAL_WEBPACK_CONFIG="${LOCAL_PROJECT_ROOT}/${PLATFORM_PATH}Resources/app/admini
 export USE_SSL_DEFAULT=false
 URL=$(get_url "$SHOPWARE_PROJECT")
 WATCHER_URL="admin-${SHOPWARE_PROJECT}.${DEFAULT_DOMAIN}"
+NODE_VERSION=$(get_node_version)
 
 if [[ "$RUN_MODE" == "local" ]]; then
     export PROJECT_ROOT=$LOCAL_PROJECT_ROOT
@@ -37,7 +38,7 @@ if [[ -e "${LOCAL_WEBPACK_CONFIG}" ]]; then
             -e "VIRTUAL_HOST=$WATCHER_URL" \
             -w "/var/www/html" \
             --expose 80 \
-            node:12-alpine \
+            node:"$NODE_VERSION" \
             npm run --prefix "$PLATFORM_PATH"/Resources/app/administration/ dev
         exit 0
     fi
