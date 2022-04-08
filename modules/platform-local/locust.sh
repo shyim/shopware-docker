@@ -5,20 +5,20 @@ cd "${CODE_DIRECTORY}/${SHOPWARE_PROJECT}" || exit
 
 shift 2
 
-USERS=20
-SPAWN_RATE=5
-TASKS=""
+USERS=10
+SPAWN_RATE=2
+SCENARIO="integration"
 
 if [[ -n "$1" ]]; then
-    USERS=$1
+    SCENARIO=$1
 fi
 
 if [[ -n "$2" ]]; then
-    SPAWN_RATE=$2
+    USERS=$2
 fi
 
 if [[ -n "$3" ]]; then
-    TASKS="$3"
+    SPAWN_RATE=$3
 fi
 
 export USE_SSL_DEFAULT=false
@@ -40,8 +40,7 @@ docker run \
     -e "VIRTUAL_HOST=$LOCUST_URL" \
     -e "VIRTUAL_PORT=8089" \
     ghcr.io/shyim/shopware-docker/locust:latest \
-    -f  "/var/www/html/${SHOPWARE_PROJECT}/src/Core/DevOps/Locust/locustfile.py"\
-    $TASKS \
+    -f  "/var/www/html/${SHOPWARE_PROJECT}/src/Core/DevOps/Locust/scenarios/${SCENARIO}-benchmark.py"\
     -H "$SHOPWARE_URL" \
     "--users=$USERS" \
     "--spawn-rate=$SPAWN_RATE" \
