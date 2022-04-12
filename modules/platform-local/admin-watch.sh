@@ -26,6 +26,7 @@ if [[ -e "${LOCAL_WEBPACK_CONFIG}" ]]; then
         echo "Starting watcher at host http://${WATCHER_URL}"
         docker run \
             --rm \
+            -it \
             --name "${SHOPWARE_PROJECT}_admin_watch" \
             --network shopware-docker_default \
             -v "$LOCAL_PROJECT_ROOT:/var/www/html" \

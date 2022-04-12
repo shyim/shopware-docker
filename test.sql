@@ -1,3 +1,0 @@
-SELECT COUNT(*) FROM product;
-UNION ALL
-SELECT COUNT(*) FROM product;
