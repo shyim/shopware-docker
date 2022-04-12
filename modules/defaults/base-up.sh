@@ -17,9 +17,14 @@ function create_nginx() {
       if [[ -e "$d/.swdc/service.yml" ]]; then
         sed 's/^/    /' "$d/.swdc/service.yml" >> "${DOCKER_COMPOSE_FILE}"
       else
-        IMAGE=$(get_image "$NAME" "$d")
+        if [[ -e "$d/.swdc/Dockerfile" ]]; then
+          echo "    build: ${d}/.swdc/" >>"${DOCKER_COMPOSE_FILE}"
+        else
+          IMAGE=$(get_image "$NAME" "$d")
+          echo "    image: ${IMAGE}" >>"${DOCKER_COMPOSE_FILE}"
+        fi
+
         {
-          echo "    image: ${IMAGE}"
           echo "    env_file:"
           echo "      - ${REALDIR}/docker.env"
           echo "      - ~/.config/swdc/env"
