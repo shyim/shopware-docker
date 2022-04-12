@@ -48,6 +48,10 @@ function create_nginx() {
           echo "    volumes:"
           echo "      - ${REALDIR}:/opt/swdc/"
         } >>"${DOCKER_COMPOSE_FILE}"
+          if [[ -e "${d}/php.ini" ]]; then
+            echo "      - ${d}/php.ini:/usr/local/etc/php/conf.d/swdc-custom.ini" >>"${DOCKER_COMPOSE_FILE}"
+          fi
+
           echo "      - ${CODE_DIRECTORY}:/var/www/html" >>"${DOCKER_COMPOSE_FILE}"
       fi
     done <<<"$(get_serve_folders)"
