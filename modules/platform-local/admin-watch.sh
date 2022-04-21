@@ -20,8 +20,8 @@ if [[ -e "${LOCAL_WEBPACK_CONFIG}" ]]; then
     disabledHostCheck=$(grep disableHostCheck < "${LOCAL_WEBPACK_CONFIG}")
     
     if [[ -n "$disabledHostCheck" ]]; then
-        docker exec -t -w "/var/www/html/${SHOPWARE_PROJECT}/" shopware-docker_cli_1 ./bin/console bundle:dump
-        docker exec -t -w "/var/www/html/${SHOPWARE_PROJECT}/" shopware-docker_cli_1 ./bin/console feature:dump || true
+        compose exec cli bash /opt/swdc/swdc-inside console ${SHOPWARE_PROJECT} bundle:dump
+        compose exec cli bash /opt/swdc/swdc-inside console ${SHOPWARE_PROJECT} feature:dump || true
 
         echo "Starting watcher at host http://${WATCHER_URL}"
         docker run \
