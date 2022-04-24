@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+export DOCKER_COMPOSE_FILE="/tmp/swdc-docker-compose.yml"
 LOCAL_PROJECT_ROOT="${CODE_DIRECTORY}/${SHOPWARE_PROJECT}"
 cd "$LOCAL_PROJECT_ROOT" || exit
 PLATFORM_PATH=$(platform_component Administration)
@@ -8,6 +9,7 @@ export USE_SSL_DEFAULT=false
 URL=$(get_url "$SHOPWARE_PROJECT")
 WATCHER_URL="admin-${SHOPWARE_PROJECT}.${DEFAULT_DOMAIN}"
 NODE_VERSION=$(get_node_version)
+set -e
 
 if [[ "$RUN_MODE" == "local" ]]; then
     export PROJECT_ROOT=$LOCAL_PROJECT_ROOT
@@ -20,8 +22,8 @@ if [[ -e "${LOCAL_WEBPACK_CONFIG}" ]]; then
     disabledHostCheck=$(grep disableHostCheck < "${LOCAL_WEBPACK_CONFIG}")
     
     if [[ -n "$disabledHostCheck" ]]; then
-        compose exec cli bash /opt/swdc/swdc-inside console ${SHOPWARE_PROJECT} bundle:dump
-        compose exec cli bash /opt/swdc/swdc-inside console ${SHOPWARE_PROJECT} feature:dump || true
+        "$0" console ${SHOPWARE_PROJECT} bundle:dump
+        "$0" console ${SHOPWARE_PROJECT} feature:dump || true
 
         echo "Starting watcher at host http://${WATCHER_URL}"
         docker run \
