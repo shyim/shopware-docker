@@ -1,3 +1,7 @@
 #!/usr/bin/env bash
 
-editor "${HOME}/.config/swdc/env"
+if [[ -z "$EDITOR" ]]; then
+    EDITOR="vi"
+fi
+
+$EDITOR "${HOME}/.config/swdc/env"
