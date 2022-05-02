@@ -28,7 +28,7 @@ if ! command -v wget &>/dev/null; then
 fi
 
 dist=$(dialog --clear --backtitle "Shopware Installation" --title "Choose Distribution" --menu "Choose one of the following options:" 15 80 4 \
-  development "Shopware 6 - Development Template (recommended for extension development)" \
+  development "Shopware 6 - Development Template (deprecated)" \
   production "Shopware 6 - Production Template (recommended for projects)" \
   platform "Shopware 6 - Platform Repository (recommended for contribution)" \
   sw6Zip "Shopware 6 - Zip Distribution" \
