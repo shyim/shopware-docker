@@ -18,6 +18,7 @@ if [[ -e "${LOCAL_WEBPACK_CONFIG}" ]]; then
 
         echo "Starting watcher at host http://${WATCHER_URL}"
         docker run \
+            -it \
             --rm \
             --name "${SHOPWARE_PROJECT}_storefront_watch" \
             --network shopware-docker_default \
