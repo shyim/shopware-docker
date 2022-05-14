@@ -4,6 +4,13 @@ LOCAL_PROJECT_ROOT="${CODE_DIRECTORY}/${SHOPWARE_PROJECT}"
 cd "$LOCAL_PROJECT_ROOT" || exit
 PLATFORM_PATH=$(platform_component Storefront)
 LOCAL_WEBPACK_CONFIG="${LOCAL_PROJECT_ROOT}/${PLATFORM_PATH}Resources/app/storefront/webpack.config.js"
+
+WATCHER_SCHEME="http"
+
+if [[ "${USE_SSL_DEFAULT}" == "true" ]]; then
+  WATCHER_SCHEME="https"
+fi
+
 export USE_SSL_DEFAULT=false
 URL=$(get_url "$SHOPWARE_PROJECT")
 WATCHER_URL="storefront-${SHOPWARE_PROJECT}.${DEFAULT_DOMAIN}"
@@ -30,7 +37,7 @@ if [[ -e "${LOCAL_WEBPACK_CONFIG}" ]]; then
             -e PROJECT_ROOT="/var/www/html/${SHOPWARE_PROJECT}" \
             -e ENV_FILE="/var/www/html/${SHOPWARE_PROJECT}/.env" \
             -e STOREFRONT_PROXY_PORT=80 \
-            -e PROXY_URL="http://${WATCHER_URL}" \
+            -e PROXY_URL="${WATCHER_SCHEME}://${WATCHER_URL}" \
             -e "VIRTUAL_HOST=$WATCHER_URL" \
             -w "/var/www/html/${SHOPWARE_PROJECT}" \
             --expose 80 \
