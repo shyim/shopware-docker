@@ -13,5 +13,5 @@ This is an Docker Setup for Shopware 5 and Shopware 6.
 
 ## Get Started
 
-[Getting Started](https://github.com/shyim/shopware-docker/wiki/Installation)
+[Getting Started](https://github.com/shyim/shopware-docker/wiki)
 
