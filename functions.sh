@@ -170,7 +170,7 @@ function compose() {
     additionalArgs=(-f "${HOME}/.config/swdc/services.yml")
   fi
 
-  docker-compose -f "${DOCKER_COMPOSE_FILE}" "${additionalArgs[@]}" "$@"
+  docker compose -f "${DOCKER_COMPOSE_FILE}" "${additionalArgs[@]}" "$@"
 }
 
 function generate_wildcard_certs() {

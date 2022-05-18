@@ -3,6 +3,11 @@
 export COMPOSE_PROJECT_NAME="shopware-docker"
 export DOCKER_COMPOSE_FILE="/tmp/swdc-docker-compose.yml"
 
+if ! docker compose 1> /dev/null 2> /dev/null; then
+  echo "> docker-compose v2 is now required. Please install from https://docs.docker.com/compose/install/"
+  exit 1
+fi
+
 FILE="$0"
 
 if [[ -L "$0" ]]; then

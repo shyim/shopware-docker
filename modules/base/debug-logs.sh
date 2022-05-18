@@ -23,7 +23,7 @@
   echo "=== mysql logs"
   echo ""
 
-  docker-compose logs mysql
+  docker compose logs mysql
 } >debug.txt
 
 echo "Generated a debug.txt file. Please post it on Github"
