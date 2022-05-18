@@ -209,11 +209,15 @@ function fire_hook() {
 }
 
 function setup_node_version() {
-  ADMIN_PATH=$(platform_component Administration)
-  NODE_VERSION=$(get_node_version)
+  if [[ -e .nvmrc || -e .node-version ]]; then
+    fnm use --install-if-missing
+  else
+    ADMIN_PATH=$(platform_component Administration)
+    NODE_VERSION=$(get_node_version)
 
-  if [[ -n "$NODE_VERSION" ]]; then
-    fnm use "$NODE_VERSION" --install-if-missing
+    if [[ -n "$NODE_VERSION" ]]; then
+      fnm use "$NODE_VERSION" --install-if-missing
+    fi
   fi
 }
 
