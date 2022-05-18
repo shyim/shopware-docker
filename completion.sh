@@ -2,8 +2,8 @@
 
 # shellcheck disable=SC2128
 if [[ -z "${BASH_SOURCE}" ]]; then
-    # Fallback on ~/Apps/shopware-docker
-    BASH_SOURCE=~/Apps/shopware-docker/modules
+    # Fallback on ~/Documents/shopware-docker
+    BASH_SOURCE=~/Documents/shopware-docker/modules
 fi
 
 # shellcheck disable=SC2128
