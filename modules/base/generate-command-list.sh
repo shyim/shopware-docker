@@ -23,9 +23,9 @@ for module in ./modules/*; do
       fi
 
       if [[ "$moduleBasename" == "base" ]]; then
-        printf "| \`swdc ${name}\` | "
+        printf "| \`swdc %s\` | " "${name}"
       else
-        printf "| \`swdc ${name} <project-name>\` | "
+        printf "| \`swdc %s <project-name>\` | " "${name}"
       fi
       echo "${usage} | "
     done
@@ -41,9 +41,9 @@ for module in ./modules/*; do
         fi
 
         if [[ "$moduleBasename" == "base" ]]; then
-          printf "| \`swdc ${name}\` | "
+          printf "| \`swdc %s\` | " "${name}"
         else
-          printf "| \`swdc ${name} <project-name>\` | "
+          printf "| \`swdc %s <project-name>\` | " "${name}"
         fi
         echo "${usage} | "
       done

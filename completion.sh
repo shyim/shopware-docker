@@ -2,6 +2,7 @@
 
 # shellcheck disable=SC2128
 if [[ -z "${BASH_SOURCE}" ]]; then
+    # shellcheck disable=SC2296
     BASH_SOURCE=${(%):-%N}
 fi
 
