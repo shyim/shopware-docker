@@ -82,3 +82,5 @@ bin/console database:migrate --all
 bin/console database:migrate-destructive --all
 bin/console theme:compile
 bin/console assets:install
+
+touch install.lock
