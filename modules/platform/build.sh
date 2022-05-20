@@ -156,5 +156,7 @@ fi
 bin/console theme:refresh
 bin/console theme:change Storefront --all
 
+touch install.lock
+
 hook=$(fire_hook build-post-install "$@")
 eval "$hook"
