@@ -51,7 +51,7 @@ function create_nginx() {
         fi
         {
           echo "    volumes:"
-          echo "      - ${REALDIR}:/opt/swdc/"
+          echo "      - ${REALDIR}:/opt/swdc"
         } >>"${DOCKER_COMPOSE_FILE}"
           if [[ -e "${d}/php.ini" ]]; then
             echo "      - ${d}/php.ini:/usr/local/etc/php/conf.d/swdc-custom.ini" >>"${DOCKER_COMPOSE_FILE}"
@@ -139,7 +139,7 @@ function create_cli() {
     echo "      - 9998:9998"
     echo "      - 9999:9999"
     echo "    volumes:"
-    echo "      - ${REALDIR}:/opt/swdc/"
+    echo "      - ${REALDIR}:/opt/swdc"
     echo "      - nvm_cache:/nvm"
     echo "      - tool_cache:/tmp/swdc-tool-cache"
     echo "      - ~/.config/swdc/:/swdc-cfg"
