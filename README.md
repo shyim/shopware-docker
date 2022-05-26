@@ -8,7 +8,7 @@ This is an Docker Setup for Shopware 5 and Shopware 6.
 - Each Project has a own Container. 
   - Allows changing Docker Image (PHP Version, Nginx / Apache)
 - Many usefull commands for Shopware Development
-- Highly [configureable](https://github.com/shyim/shopware-docker/wiki/Configuration)
+- Highly [configureable](https://github.com/shyim/shopware-docker/wiki/Global-Configuration)
 - Blackfire / XDebug / Pcov Included
 
 ## Get Started
