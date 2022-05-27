@@ -19,7 +19,7 @@ shift 2
 
 RUN_ECS=1
 RUN_PHPSTAN=1
-RUN_PSALM=1
+RUN_PSALM=0
 
 if [[ "$#" != 0 ]]; then
   RUN_ECS=0
