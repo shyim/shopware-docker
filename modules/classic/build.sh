@@ -82,3 +82,5 @@ fixHooks
 if [[ $patchConfig == 1 ]]; then
   php "${DIR}"/modules/classic/fix-config.php "$SHOPWARE_FOLDER/config.php"
 fi
+
+mysqldump -h "$mysqlHost" -u root -p"${MYSQL_ROOT_PASSWORD}" "$SHOPWARE_PROJECT" > "build_backup.sql"
