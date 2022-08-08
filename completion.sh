@@ -78,6 +78,27 @@ function __list_swdc_commands {
 
         # shellcheck disable=SC2207
         COMPREPLY=($(compgen -W '-e disable-csrf array-cache redis-session redis-message-queue-stats disable-profiler' -- "${COMP_WORDS[COMP_CWORD]}"))
+    elif [[ "$build_arg" == "e2e" ]]; then
+
+        if [[ "${#COMP_WORDS[@]}" == "5" ]]; then
+          project="${COMP_WORDS[COMP_CWORD-2]}"
+
+          local cmds
+
+          # shellcheck disable=SC2044
+          for file in $(find "$CODE_DIRECTORY/$project/custom/plugins" -maxdepth 1 -mindepth 1); do
+            file=$(basename "$file" | cut -d '-' -f 2)
+            file=${file%.*}
+
+            cmds="$cmds $file"
+          done
+
+          # shellcheck disable=SC2207
+          COMPREPLY=($(compgen -W "$cmds" -- "${COMP_WORDS[COMP_CWORD]}"))
+        else
+          # shellcheck disable=SC2207
+          COMPREPLY=($(compgen -W 'Administration Storefront' -- "${COMP_WORDS[COMP_CWORD]}"))
+        fi
     fi
 
     return 0;
