@@ -33,11 +33,6 @@ fi
   echo "      VIRTUAL_HOST: mail.${DEFAULT_SERVICES_DOMAIN}"
   echo "      VIRTUAL_PORT: 8025"
 
-  echo "  dump-server:"
-  echo "    image: ghcr.io/shyim/php-dump-server:latest"
-  echo "    environment:"
-  echo "      VIRTUAL_HOST: debug.${DEFAULT_SERVICES_DOMAIN}"
-
   echo "  proxy:"
   echo "    image: ghcr.io/shyim/shopware-docker/proxy"
   echo "    volumes:"
