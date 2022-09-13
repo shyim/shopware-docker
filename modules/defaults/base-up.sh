@@ -127,7 +127,11 @@ EOF
 function create_cli() {
   {
     echo "  cli:"
-    echo "    image: ghcr.io/shyim/shopware-docker/cli:php${PHP_VERSION}"
+    if [[ -e "$HOME/.config/swdc/cli/Dockerfile" ]]; then
+      echo "    build: $HOME/.config/swdc/cli" >>"${DOCKER_COMPOSE_FILE}"
+    else
+      echo "    image: ghcr.io/shyim/shopware-docker/cli:php${PHP_VERSION}"
+    fi
     echo "    env_file:"
     echo "      - ${REALDIR}/docker.env"
     echo "      - ${REALDIR}/.env.dist"

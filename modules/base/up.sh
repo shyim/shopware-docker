@@ -13,6 +13,10 @@ fi
 # shellcheck source=modules/defaults/base-up.sh
 source "${REALDIR}/modules/defaults/base-up.sh"
 
+if [[ ! -d "${CODE_DIRECTORY}" ]]; then
+  mkdir -p "${CODE_DIRECTORY}"
+fi
+
 CODE_FOLDER_CONTENT="$(ls -A "${CODE_DIRECTORY}")"
 export CODE_FOLDER_CONTENT="${CODE_FOLDER_CONTENT}"
 
