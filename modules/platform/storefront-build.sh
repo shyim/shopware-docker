@@ -11,6 +11,7 @@ setup_node_version
 PLATFORM_PATH=$(platform_component Storefront)
 
 bin/console bundle:dump
+bin/console feature:dump
 
 npm --prefix "${PLATFORM_PATH}/Resources/app/storefront/" run production
 
