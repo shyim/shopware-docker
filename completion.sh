@@ -83,15 +83,8 @@ function __list_swdc_commands {
         if [[ "${#COMP_WORDS[@]}" == "5" ]]; then
           project="${COMP_WORDS[COMP_CWORD-2]}"
 
-          local cmds
-
-          # shellcheck disable=SC2044
-          for file in $(find "$CODE_DIRECTORY/$project/custom/plugins" -maxdepth 1 -mindepth 1); do
-            file=$(basename "$file" | cut -d '-' -f 2)
-            file=${file%.*}
-
-            cmds="$cmds $file"
-          done
+          # shellcheck disable=SC2207
+          cmds=$(list_sw6_project_plugins "$project")
 
           # shellcheck disable=SC2207
           COMPREPLY=($(compgen -W "$cmds" -- "${COMP_WORDS[COMP_CWORD]}"))
@@ -99,9 +92,32 @@ function __list_swdc_commands {
           # shellcheck disable=SC2207
           COMPREPLY=($(compgen -W 'Administration Storefront' -- "${COMP_WORDS[COMP_CWORD]}"))
         fi
+    elif [[ "$build_arg" == "admin-jest" ]]; then
+        project="${COMP_WORDS[COMP_CWORD-1]}"
+
+        # shellcheck disable=SC2207
+        cmds=$(list_sw6_project_plugins "$project")
+
+        # shellcheck disable=SC2207
+        COMPREPLY=($(compgen -W "$cmds" -- "${COMP_WORDS[COMP_CWORD]}"))
     fi
 
     return 0;
+}
+
+function list_sw6_project_plugins()
+{
+    local cmds
+
+    # shellcheck disable=SC2044
+    for file in $(find "$CODE_DIRECTORY/$1/custom/plugins" -maxdepth 1 -mindepth 1); do
+        file=$(basename "$file" | cut -d '-' -f 2)
+        file=${file%.*}
+
+        cmds="$cmds $file"
+    done
+
+    echo "$cmds"
 }
 
 complete -F __list_swdc_commands swdc
