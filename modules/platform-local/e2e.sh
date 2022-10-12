@@ -1,14 +1,12 @@
 #!/usr/bin/env bash
 
 SHOPWARE_PROJECT=$2
-MODULE=$3
-PLUGIN=$4
+PLUGIN=$3
+MODULE=$4
 export USE_SSL_DEFAULT=false
 URL=$(get_url "$SHOPWARE_PROJECT")
 
-if [[ -z $MODULE ]]; then
-  MODULE="Administration"
-fi
+DEFAULT_MODULES=( "Administration" "Storefront" )
 
 cd "${CODE_DIRECTORY}/${SHOPWARE_PROJECT}" || exit
 
@@ -16,10 +14,45 @@ if [[ -z $PLUGIN ]]; then
   E2E_PATH="${SHOPWARE_PROJECT}/tests/e2e"
   CYPRESS_BIN="/var/www/html/${SHOPWARE_PROJECT}/tests/e2e/node_modules/.bin/cypress"
 else
-  PLUGIN_MODULE=$(if [ $MODULE = "Administration" ]; then echo "administration"; else echo "storefront"; fi)
+  PLUGIN_PATH="${SHOPWARE_PROJECT}/custom/plugins/${PLUGIN}"
 
-  E2E_PATH="${SHOPWARE_PROJECT}/custom/plugins/${PLUGIN}/src/Resources/app/${PLUGIN_MODULE}/test/e2e"
+  if [[ ! -d "${CODE_DIRECTORY}/${PLUGIN_PATH}" ]]; then
+    echo "${red:-}Plugin ${PLUGIN} does not exist${reset:-}"
+    exit 1
+  fi
+
+  E2E_PATH="${PLUGIN_PATH}/tests/e2e"
+
+  if [[ -z $MODULE ]]; then
+    # fallback to legacy setup
+    if [[ ! -f "${CODE_DIRECTORY}/${E2E_PATH}/package.json" ]]; then
+      echo "${warn:-}No combined e2e setup was found. Trying to fallback to legacy setup.${reset:-}"
+
+      for m in "${DEFAULT_MODULES[@]}"; do
+        CHECK_PATH="${PLUGIN_PATH}/src/Resources/app/${m,,}/test/e2e"
+
+        if [[ -f "${CODE_DIRECTORY}/${CHECK_PATH}/package.json" ]]; then
+          E2E_PATH="$CHECK_PATH"
+          echo "${blue:-}Found e2e setup for module: ${m}${reset:-}"
+          break
+        fi
+      done
+    fi
+  else
+    E2E_PATH="${PLUGIN_PATH}/src/Resources/app/${MODULE,,}/test/e2e"
+  fi
+
   CYPRESS_BIN="/var/www/html/${E2E_PATH}/node_modules/.bin/cypress"
+
+  if [[ ! -f "${CODE_DIRECTORY}/${E2E_PATH}/package.json" ]]; then
+    if [[ -z $MODULE ]]; then
+      echo "${red:-}No e2e setup found for plugin ${PLUGIN}${reset:-}"
+    else
+      echo "${red:-}No e2e setup found for module ${MODULE} in plugin ${PLUGIN}${reset:-}"
+    fi
+
+    exit 1
+  fi
 
   compose exec -w "/var/www/html/${SHOPWARE_PROJECT}" cli php bin/console plugin:refresh
 
