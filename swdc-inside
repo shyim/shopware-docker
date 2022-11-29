@@ -49,6 +49,11 @@ if [[ -n "$SHOPWARE_PROJECT" ]]; then
   if [[ -f "$SHOPWARE_FOLDER/PLATFORM_COMMIT_SHA" ]]; then
     modules=(base platform-prod platform)
   fi
+
+  if [[ -f "$SHOPWARE_FOLDER/symfony.lock" ]]; then
+    modules=(base platform-prod platform)
+  fi
+
 fi
 
 # Need to be in docker folder for docker-compose
