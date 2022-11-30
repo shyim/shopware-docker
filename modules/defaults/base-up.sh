@@ -126,11 +126,16 @@ EOF
 
 function create_cli() {
   {
+    SUFFIX=""
+    if [[ $XDEBUG_ENABLE == "xdebug" ]]; then
+        SUFFIX="-xdebug"
+    fi
+
     echo "  cli:"
     if [[ -e "$HOME/.config/swdc/cli/Dockerfile" ]]; then
       echo "    build: $HOME/.config/swdc/cli" >>"${DOCKER_COMPOSE_FILE}"
     else
-      echo "    image: ghcr.io/shyim/shopware-docker/cli:php${PHP_VERSION}"
+      echo "    image: ghcr.io/shyim/shopware-docker/cli:php${PHP_VERSION}${SUFFIX}"
     fi
     echo "    env_file:"
     echo "      - ${REALDIR}/docker.env"
