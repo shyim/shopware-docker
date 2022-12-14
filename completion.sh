@@ -69,7 +69,7 @@ function __list_swdc_commands {
     elif [[ "$build_arg" == "build" ]]; then
 
         # shellcheck disable=SC2207
-        COMPREPLY=($(compgen -W '--mysql-host --without-demo-data --without-building' -- "${COMP_WORDS[COMP_CWORD]}"))
+        COMPREPLY=($(compgen -W '--mysql-host --without-demo-data --without-building --docker-build' -- "${COMP_WORDS[COMP_CWORD]}"))
     elif [[ "$build_arg" == "check" ]]; then
 
         # shellcheck disable=SC2207
