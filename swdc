@@ -56,7 +56,7 @@ cd "${DIR}" || exit 1
 
 modules=(base)
 
-if [[ -f "${CODE_DIRECTORY}/${2}/src/Kernel.php" || -f "${CODE_DIRECTORY}/${2}/src/Core/composer.json" || -f "$SHOPWARE_FOLDER/build-js.sh" ]]; then
+if [[ -f "${CODE_DIRECTORY}/${2}/src/Kernel.php" || -f "${CODE_DIRECTORY}/${2}/src/Core/composer.json" || -f "$SHOPWARE_FOLDER/bin/build-js.sh" ]]; then
   modules=(base platform-local)
 fi
 
